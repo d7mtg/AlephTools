@@ -1,15 +1,103 @@
 import SwiftUI
 import Carbon
+import ServiceManagement
 
 struct SettingsView: View {
     var body: some View {
         TabView {
+            GeneralSettingsTab()
+                .tabItem {
+                    Label("General", systemImage: "gearshape")
+                }
             ShortcutsSettingsTab()
                 .tabItem {
                     Label("Shortcuts", systemImage: "command")
                 }
+            ServicesSettingsTab()
+                .tabItem {
+                    Label("Services", systemImage: "square.and.arrow.up.on.square")
+                }
+            AboutSettingsTab()
+                .tabItem {
+                    Label("About", systemImage: "info.circle")
+                }
         }
         .frame(width: 520, height: 440)
+    }
+}
+
+// MARK: - General Tab
+
+private struct GeneralSettingsTab: View {
+    @AppStorage("launchAtLogin") private var launchAtLogin = false
+    @AppStorage("defaultTransform") private var defaultTransform = TransformationType.hebrewKeyboard.rawValue
+    @AppStorage("showInMenuBar") private var showInMenuBar = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("General")
+                .font(.headline)
+
+            VStack(alignment: .leading, spacing: 16) {
+                Toggle("Launch Aleph Tools at login", isOn: $launchAtLogin)
+                    .onChange(of: launchAtLogin) { _, newValue in
+                        LaunchAtLoginManager.setEnabled(newValue)
+                    }
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Picker("Default transformation:", selection: $defaultTransform) {
+                        ForEach(TransformationType.allCases) { t in
+                            Text(t.rawValue).tag(t.rawValue)
+                        }
+                    }
+                    .fixedSize()
+
+                    Text("Used when opening the app and for new windows.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Toggle("Show in menu bar", isOn: $showInMenuBar)
+
+                    Text("Quick access to transformations from the menu bar. (Coming soon)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .disabled(true)
+                .opacity(0.5)
+            }
+            .padding(16)
+            .background(.background, in: RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.separator, lineWidth: 0.5)
+            )
+
+            Spacer()
+        }
+        .padding(20)
+    }
+}
+
+// MARK: - Launch at Login
+
+enum LaunchAtLoginManager {
+    static func setEnabled(_ enabled: Bool) {
+        let service = SMAppService.mainApp
+        do {
+            if enabled {
+                try service.register()
+            } else {
+                try service.unregister()
+            }
+        } catch {
+            print("Launch at login error: \(error)")
+        }
     }
 }
 
@@ -196,6 +284,155 @@ private struct ShortcutRow: View {
             NSEvent.removeMonitor(localMonitor)
         }
         localMonitor = nil
+    }
+}
+
+// MARK: - Services Tab
+
+private struct ServicesSettingsTab: View {
+    @AppStorage("enabledServices") private var enabledServicesData = Data()
+
+    private var enabledServices: Set<String> {
+        get {
+            (try? JSONDecoder().decode(Set<String>.self, from: enabledServicesData))
+                ?? Set(TransformationType.allCases.map(\.rawValue))
+        }
+    }
+
+    private func setEnabled(_ transform: TransformationType, enabled: Bool) {
+        var current = enabledServices
+        if enabled {
+            current.insert(transform.rawValue)
+        } else {
+            current.remove(transform.rawValue)
+        }
+        enabledServicesData = (try? JSONEncoder().encode(current)) ?? Data()
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Services Menu")
+                .font(.headline)
+
+            Text("Aleph Tools registers transformations in the system Services menu. Select text in any app, then use the app menu \u{2192} Services \u{2192} Aleph Tools.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            VStack(spacing: 0) {
+                ForEach(TransformationType.allCases) { t in
+                    HStack(spacing: 10) {
+                        Image(systemName: t.icon)
+                            .frame(width: 20)
+                            .foregroundStyle(.secondary)
+
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(t.rawValue)
+                                .font(.body.weight(.medium))
+                            Text(t.subtitle)
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+
+                        Spacer()
+
+                        Toggle("", isOn: Binding(
+                            get: { enabledServices.contains(t.rawValue) },
+                            set: { setEnabled(t, enabled: $0) }
+                        ))
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 12)
+
+                    if t != TransformationType.allCases.last {
+                        Divider()
+                            .padding(.leading, 44)
+                    }
+                }
+            }
+            .padding(8)
+            .background(.background, in: RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.separator, lineWidth: 0.5)
+            )
+
+            HStack(spacing: 6) {
+                Image(systemName: "info.circle")
+                    .foregroundStyle(.secondary)
+                Text("Services are registered when the app launches. Restart may be needed after changes.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(20)
+    }
+}
+
+// MARK: - About Tab
+
+private struct AboutSettingsTab: View {
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
+
+    private var buildNumber: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    }
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+
+            Image(nsImage: NSApp.applicationIconImage)
+                .resizable()
+                .frame(width: 96, height: 96)
+
+            VStack(spacing: 4) {
+                Text("Aleph Tools")
+                    .font(.title2.weight(.semibold))
+
+                Text("Version \(appVersion) (\(buildNumber))")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+
+            Text("Hebrew text transformation utility for macOS.\nConvert keyboard layouts, strip niqqud, transliterate\nbetween modern and paleo-Hebrew scripts, and more.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack(spacing: 16) {
+                Link(destination: URL(string: "https://github.com/d7mtg/AlephTools")!) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left.forwardslash.chevron.right")
+                        Text("Source Code")
+                    }
+                }
+                .buttonStyle(.link)
+
+                Link(destination: URL(string: "https://github.com/d7mtg/AlephTools/issues")!) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "ladybug")
+                        Text("Report Issue")
+                    }
+                }
+                .buttonStyle(.link)
+            }
+
+            Spacer()
+
+            Text("\u{00A9} 2025 d7mtg")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(20)
     }
 }
 
