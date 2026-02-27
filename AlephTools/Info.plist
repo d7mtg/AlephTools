@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSServices</key>
+	<array>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformToHebrew</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/To Hebrew</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformToEnglish</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/To English</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformStripNiqqud</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/Strip Niqqud</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformToPaleo</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/To Paleo</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformToModern</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/To Modern</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformGematria</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/Gematria</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMessage</key>
+			<string>transformReverse</string>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Aleph Tools/Reverse</string>
+			</dict>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
