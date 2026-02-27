@@ -3,11 +3,11 @@ import Foundation
 // MARK: - Transformation Type
 
 enum TransformationType: String, CaseIterable, Identifiable {
-    case hebrewKeyboard = "Hebrew Keyboard"
-    case englishKeyboard = "English Keyboard"
-    case removeNiqqud = "Remove Niqqud"
-    case squareHebrew = "Square Hebrew"
-    case paleoHebrew = "Paleo-Hebrew"
+    case hebrewKeyboard = "To Hebrew"
+    case englishKeyboard = "To English"
+    case removeNiqqud = "Strip Niqqud"
+    case squareHebrew = "To Modern"
+    case paleoHebrew = "To Paleo"
     case gematria = "Gematria"
     case reverse = "Reverse"
 
@@ -15,21 +15,21 @@ enum TransformationType: String, CaseIterable, Identifiable {
 
     var subtitle: String {
         switch self {
-        case .hebrewKeyboard: "English keyboard → Hebrew (קראטון)"
-        case .englishKeyboard: "Hebrew keyboard → English (QWERTY)"
-        case .removeNiqqud: "Strip vowel points and diacritics"
-        case .squareHebrew: "Convert Paleo to modern Hebrew"
-        case .paleoHebrew: "Convert to ancient Hebrew script"
-        case .gematria: "Calculate numerological value"
-        case .reverse: "Reverse text line by line (keeps Niqqud)"
+        case .hebrewKeyboard: "QWERTY \u{2192} \u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF}"
+        case .englishKeyboard: "\u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF} \u{2192} QWERTY"
+        case .removeNiqqud: "Strip vowel points & diacritics"
+        case .squareHebrew: "\u{10900}\u{10901}\u{10902} \u{2192} \u{05D0}\u{05D1}\u{05D2}"
+        case .paleoHebrew: "\u{05D0}\u{05D1}\u{05D2} \u{2192} \u{10900}\u{10901}\u{10902}"
+        case .gematria: "Numerological value"
+        case .reverse: "Mirror text, keep Niqqud"
         }
     }
 
     var icon: String {
         switch self {
-        case .hebrewKeyboard: "keyboard"
-        case .englishKeyboard: "keyboard.badge.globe"
-        case .removeNiqqud: "textformat.abc.dottedunderline"
+        case .hebrewKeyboard: "text.bubble"
+        case .englishKeyboard: "globe"
+        case .removeNiqqud: "strikethrough"
         case .squareHebrew: "character.textbox"
         case .paleoHebrew: "scroll"
         case .gematria: "number"

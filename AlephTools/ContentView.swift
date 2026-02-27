@@ -15,16 +15,23 @@ struct ContentView: View {
         ChangeStats.compute(input: inputText, output: outputText, mode: selectedTransform)
     }
 
+    private var inputLineCount: Int {
+        max(inputText.components(separatedBy: "\n").count, 1)
+    }
+
+    private var outputLines: [String] {
+        guard !outputText.isEmpty else { return [] }
+        return outputText.components(separatedBy: "\n")
+    }
+
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            Divider()
-            HSplitView {
-                inputPanel
-                outputPanel
-            }
+        HSplitView {
+            inputPanel
+            outputPanel
         }
         .frame(minWidth: 640, minHeight: 400)
+        .navigationTitle("Aleph Tools")
+        .toolbar { toolbarContent }
         .overlay(alignment: .bottom) {
             if showCopiedToast {
                 copiedToast
@@ -35,42 +42,55 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.2), value: showCopiedToast)
     }
 
-    // MARK: - Header
+    // MARK: - Toolbar
 
-    private var header: some View {
-        HStack(spacing: 12) {
-            Text("א")
-                .font(.system(size: 20, weight: .bold, design: .serif))
-                .foregroundStyle(.primary)
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            HStack(spacing: 12) {
+                Menu {
+                    ForEach(TransformationType.allCases) { t in
+                        Button {
+                            selectedTransform = t
+                        } label: {
+                            Label(t.rawValue, systemImage: t.icon)
+                        }
+                        .disabled(t == selectedTransform)
+                    }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: selectedTransform.icon)
+                            .foregroundStyle(.secondary)
+                        Text(selectedTransform.rawValue)
+                        Image(systemName: "chevron.down")
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .font(.system(.body, weight: .medium))
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
 
-            Text("Aleph Tools")
-                .font(.headline)
+                if selectedTransform.supportsPunctuationToggle {
+                    Divider()
+                        .frame(height: 16)
 
-            Text("v3.3")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            Spacer()
-
-            if selectedTransform.supportsPunctuationToggle {
-                Toggle("Keep Punctuation", isOn: $keepPunctuation)
-                    .toggleStyle(.checkbox)
-                    .font(.caption)
-                    .controlSize(.small)
-            }
-
-            Picker("Transform", selection: $selectedTransform) {
-                ForEach(TransformationType.allCases) { t in
-                    Label(t.rawValue, systemImage: t.icon)
-                        .tag(t)
+                    Toggle("Keep Punctuation", isOn: $keepPunctuation)
+                        .toggleStyle(.checkbox)
+                        .controlSize(.small)
                 }
             }
-            .pickerStyle(.menu)
-            .frame(width: 200)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .background(.bar)
+
+        ToolbarItem(placement: .primaryAction) {
+            Button {
+                copyToClipboard()
+            } label: {
+                Label("Copy Output", systemImage: "doc.on.doc")
+            }
+            .disabled(outputText.isEmpty)
+            .keyboardShortcut("c", modifiers: [.command, .shift])
+        }
     }
 
     // MARK: - Input Panel
@@ -78,17 +98,19 @@ struct ContentView: View {
     private var inputPanel: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Label("Input", systemImage: "text.cursor")
+                Text("Input")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
                 Spacer()
                 if !inputText.isEmpty {
-                    Button("Clear") {
+                    Button {
                         inputText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(.secondary)
                     }
-                    .buttonStyle(.borderless)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal, 12)
@@ -96,10 +118,27 @@ struct ContentView: View {
 
             Divider()
 
-            TextEditor(text: $inputText)
-                .font(.system(size: 16, design: .default))
-                .scrollContentBackground(.hidden)
-                .padding(8)
+            ZStack(alignment: .topLeading) {
+                if inputText.isEmpty {
+                    Text("Type or paste text\u{2026}")
+                        .foregroundStyle(.tertiary)
+                        .font(.system(size: 13, design: .monospaced))
+                        .padding(.top, 8)
+                        .padding(.leading, 44)
+                }
+                HStack(alignment: .top, spacing: 0) {
+                    lineNumberGutter(count: inputLineCount)
+                        .padding(.top, 5)
+
+                    TextEditor(text: $inputText)
+                        .font(.system(size: 13, design: .monospaced))
+                        .lineSpacing(3)
+                        .scrollContentBackground(.hidden)
+                        .padding(.top, 1)
+                        .padding(.leading, 4)
+                        .padding(.trailing, 8)
+                }
+            }
         }
         .frame(minWidth: 280)
         .background(.background)
@@ -109,51 +148,65 @@ struct ContentView: View {
 
     private var outputPanel: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Label(selectedTransform.rawValue, systemImage: selectedTransform.icon)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.secondary)
-                    Text(selectedTransform.subtitle)
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
+            HStack(alignment: .firstTextBaseline) {
+                Text("Output")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                Text(selectedTransform.subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
 
                 Spacer()
 
                 if !inputText.isEmpty {
                     statsView
                 }
-
-                Button {
-                    copyToClipboard()
-                } label: {
-                    Label("Copy", systemImage: "doc.on.doc")
-                        .font(.caption)
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-                .disabled(outputText.isEmpty)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
 
             Divider()
 
-            ScrollView {
-                if selectedTransform == .gematria && !outputText.isEmpty {
-                    gematriaOutput
-                } else {
-                    Text(outputText)
-                        .font(.system(size: 16, design: selectedTransform == .paleoHebrew ? .serif : .default))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(12)
+            if selectedTransform == .gematria && !outputText.isEmpty {
+                gematriaOutput
+            } else {
+                ScrollView {
+                    HStack(alignment: .top, spacing: 0) {
+                        lineNumberGutter(count: outputLines.count)
+
+                        Text(outputText)
+                            .font(.system(size: 13))
+                            .lineSpacing(3)
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 8)
+                            .padding(.leading, 8)
+                            .padding(.trailing, 12)
+                    }
+                    .padding(.bottom, 12)
                 }
             }
         }
         .frame(minWidth: 280)
         .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+    }
+
+    // MARK: - Line Number Gutter
+
+    private func lineNumberGutter(count: Int) -> some View {
+        Text(
+            (1...max(count, 1))
+                .map { String($0) }
+                .joined(separator: "\n")
+        )
+        .font(.system(size: 13, design: .monospaced))
+        .lineSpacing(3)
+        .foregroundStyle(.quaternary)
+        .frame(minWidth: 28, alignment: .trailing)
+        .padding(.top, 8)
+        .padding(.leading, 8)
     }
 
     // MARK: - Gematria Output
@@ -177,24 +230,23 @@ struct ContentView: View {
     // MARK: - Stats
 
     private var statsView: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             if stats.changed > 0 {
-                Label("\(stats.changed)", systemImage: "arrow.triangle.2.circlepath")
-                    .font(.caption2)
+                Text("\(stats.changed) changed")
                     .foregroundStyle(.orange)
             }
             if stats.unchanged > 0 {
-                Label("\(stats.unchanged)", systemImage: "equal.circle")
-                    .font(.caption2)
+                Text("\(stats.unchanged) kept")
                     .foregroundStyle(.secondary)
             }
         }
+        .font(.caption)
     }
 
     // MARK: - Toast
 
     private var copiedToast: some View {
-        Text("Copied!")
+        Label("Copied", systemImage: "checkmark")
             .font(.caption.weight(.medium))
             .padding(.horizontal, 16)
             .padding(.vertical, 8)

@@ -11,7 +11,38 @@
 		E81000012B0000010000000C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000D /* ContentView.swift */; };
 		E81000012B0000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
 		E81000012B00000100000020 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
+		F00000010000000A /* AlephToolsiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000000100000009 /* AlephToolsiOSApp.swift */; };
+		F00000010000000C /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000010000000B /* iOSContentView.swift */; };
+		F00000010000000D /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
+		F00000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
+		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
+		K000000100000006 /* PaleoKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000003 /* PaleoKeyboardView.swift */; };
+		K000000100000012 /* AlephKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = K000000100000001 /* AlephKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		K00000010000000F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E81000012B00000100000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = K00000010000000B;
+			remoteInfo = AlephKeyboard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		K000000100000011 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				K000000100000012 /* AlephKeyboard.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E81000012B00000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -20,6 +51,13 @@
 		E81000012B0000010000000F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E81000012B00000100000011 /* AlephTools.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlephTools.entitlements; sourceTree = "<group>"; };
 		E81000012B00000100000021 /* HebrewTransformations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HebrewTransformations.swift; sourceTree = "<group>"; };
+		F000000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F000000100000009 /* AlephToolsiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsiOSApp.swift; sourceTree = "<group>"; };
+		F00000010000000B /* iOSContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSContentView.swift; sourceTree = "<group>"; };
+		K000000100000001 /* AlephKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AlephKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		K000000100000002 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		K000000100000003 /* PaleoKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaleoKeyboardView.swift; sourceTree = "<group>"; };
+		K000000100000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,13 +68,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F000000100000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		K000000100000009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E81000012B00000100000003 /* root */ = {
+		E81000012B00000100000003 = {
 			isa = PBXGroup;
 			children = (
 				E81000012B00000100000004 /* AlephTools */,
+				F00000010000000F /* AlephToolsiOS */,
+				K000000100000007 /* AlephKeyboard */,
 				E81000012B00000100000005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -57,8 +111,29 @@
 			isa = PBXGroup;
 			children = (
 				E81000012B00000100000001 /* Aleph Tools.app */,
+				F000000100000001 /* Aleph Tools.app */,
+				K000000100000001 /* AlephKeyboard.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F00000010000000F /* AlephToolsiOS */ = {
+			isa = PBXGroup;
+			children = (
+				F000000100000009 /* AlephToolsiOSApp.swift */,
+				F00000010000000B /* iOSContentView.swift */,
+			);
+			path = AlephToolsiOS;
+			sourceTree = "<group>";
+		};
+		K000000100000007 /* AlephKeyboard */ = {
+			isa = PBXGroup;
+			children = (
+				K000000100000002 /* KeyboardViewController.swift */,
+				K000000100000003 /* PaleoKeyboardView.swift */,
+				K000000100000004 /* Info.plist */,
+			);
+			path = AlephKeyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -81,6 +156,42 @@
 			productReference = E81000012B00000100000001 /* Aleph Tools.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F000000100000002 /* AlephToolsiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F000000100000006 /* Build configuration list for PBXNativeTarget "AlephToolsiOS" */;
+			buildPhases = (
+				F000000100000003 /* Sources */,
+				F000000100000004 /* Frameworks */,
+				F000000100000005 /* Resources */,
+				K000000100000011 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				K000000100000010 /* PBXTargetDependency */,
+			);
+			name = AlephToolsiOS;
+			productName = AlephToolsiOS;
+			productReference = F000000100000001 /* Aleph Tools.app */;
+			productType = "com.apple.product-type.application";
+		};
+		K00000010000000B /* AlephKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = K00000010000000E /* Build configuration list for PBXNativeTarget "AlephKeyboard" */;
+			buildPhases = (
+				K000000100000008 /* Sources */,
+				K000000100000009 /* Frameworks */,
+				K00000010000000A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AlephKeyboard;
+			productName = AlephKeyboard;
+			productReference = K000000100000001 /* AlephKeyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -94,6 +205,12 @@
 					E81000012B00000100000006 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					F000000100000002 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					K00000010000000B = {
+						CreatedOnToolsVersion = 16.0;
+					};
 				};
 			};
 			buildConfigurationList = E81000012B0000010000001A /* Build configuration list for PBXProject "AlephTools" */;
@@ -103,13 +220,16 @@
 			knownRegions = (
 				en,
 				Base,
+				he,
 			);
-			mainGroup = E81000012B00000100000003 /* root */;
+			mainGroup = E81000012B00000100000003;
 			productRefGroup = E81000012B00000100000005 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				E81000012B00000100000006 /* AlephTools */,
+				F000000100000002 /* AlephToolsiOS */,
+				K00000010000000B /* AlephKeyboard */,
 			);
 		};
 /* End PBXProject section */
@@ -120,6 +240,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				E81000012B0000010000000E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F000000100000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F00000010000000E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		K00000010000000A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +271,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F000000100000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F00000010000000A /* AlephToolsiOSApp.swift in Sources */,
+				F00000010000000C /* iOSContentView.swift in Sources */,
+				F00000010000000D /* HebrewTransformations.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		K000000100000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				K000000100000005 /* KeyboardViewController.swift in Sources */,
+				K000000100000006 /* PaleoKeyboardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		K000000100000010 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = K00000010000000B /* AlephKeyboard */;
+			targetProxy = K00000010000000F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E81000012B00000100000012 /* Debug */ = {
@@ -305,6 +467,122 @@
 			};
 			name = Release;
 		};
+		F000000100000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 444XUVT54V;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Aleph Tools";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationAllButUpsideDown;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alephtools.AlephToolsiOS;
+				PRODUCT_NAME = "Aleph Tools";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F000000100000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 444XUVT54V;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Aleph Tools";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationAllButUpsideDown;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alephtools.AlephToolsiOS;
+				PRODUCT_NAME = "Aleph Tools";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		K00000010000000C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 444XUVT54V;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AlephKeyboard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alephtools.AlephToolsiOS.AlephKeyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		K00000010000000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 444XUVT54V;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AlephKeyboard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alephtools.AlephToolsiOS.AlephKeyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -322,6 +600,24 @@
 			buildConfigurations = (
 				E81000012B00000100000012 /* Debug */,
 				E81000012B00000100000013 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F000000100000006 /* Build configuration list for PBXNativeTarget "AlephToolsiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F000000100000007 /* Debug */,
+				F000000100000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		K00000010000000E /* Build configuration list for PBXNativeTarget "AlephKeyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				K00000010000000C /* Debug */,
+				K00000010000000D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
