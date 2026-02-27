@@ -128,12 +128,12 @@ struct ContentView: View {
                     if inputText.isEmpty {
                         Text("Type or paste text\u{2026}")
                             .foregroundStyle(.tertiary)
-                            .font(.system(size: 13, design: .monospaced))
+                            .font(.system(size: 13))
                             .padding(.top, 7)
                             .padding(.leading, 5)
                     }
                     TextEditor(text: $inputText)
-                        .font(.system(size: 13, design: .monospaced))
+                        .font(.system(size: 13))
                         .lineSpacing(3)
                         .scrollContentBackground(.hidden)
                 }
@@ -200,7 +200,7 @@ struct ContentView: View {
                 .map { String($0) }
                 .joined(separator: "\n")
         )
-        .font(.system(size: 13, design: .monospaced))
+        .font(.system(size: 13))
         .lineSpacing(3)
         .foregroundStyle(.quaternary)
         .frame(minWidth: 28, alignment: .trailing)
