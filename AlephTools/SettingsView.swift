@@ -46,7 +46,7 @@ private struct ShortcutsSettingsTab: View {
                 )
             }
 
-            HStack {
+            HStack(spacing: 6) {
                 Image(systemName: "info.circle")
                     .foregroundStyle(.secondary)
                 Text("Shortcuts work system-wide when Aleph Tools is running. They copy the selected text, transform it, and paste it back.")
@@ -64,8 +64,9 @@ private struct ShortcutRow: View {
     let transform: TransformationType
     @ObservedObject var manager: GlobalShortcutManager
     @State private var isRecording = false
+    @State private var localMonitor: Any?
 
-    private var binding: StoredShortcut? {
+    private var shortcut: StoredShortcut? {
         manager.shortcuts[transform]
     }
 
@@ -86,13 +87,22 @@ private struct ShortcutRow: View {
             Spacer()
 
             if isRecording {
-                ShortcutRecorderField { shortcut in
-                    if let shortcut {
-                        manager.setShortcut(shortcut, for: transform)
-                    }
-                    isRecording = false
+                Text("Type shortcut\u{2026}")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(.orange, in: RoundedRectangle(cornerRadius: 5))
+                    .onAppear { startLocalMonitor() }
+                    .onDisappear { stopLocalMonitor() }
+
+                Button("Cancel") {
+                    stopRecording()
                 }
-            } else if let shortcut = binding {
+                .buttonStyle(.borderless)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            } else if let shortcut {
                 HStack(spacing: 4) {
                     Text(shortcut.displayString)
                         .font(.system(.caption, design: .rounded).weight(.medium))
@@ -106,16 +116,12 @@ private struct ShortcutRow: View {
                         Image(systemName: "xmark.circle.fill")
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(.secondary)
-                            .font(.caption)
                     }
                     .buttonStyle(.plain)
                 }
-
-                Button("Change") {
+                .onTapGesture {
                     isRecording = true
                 }
-                .buttonStyle(.borderless)
-                .font(.caption)
             } else {
                 Button("Record Shortcut") {
                     isRecording = true
@@ -128,72 +134,45 @@ private struct ShortcutRow: View {
         .padding(.horizontal, 4)
     }
 
-}
+    private func startLocalMonitor() {
+        localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
 
-// MARK: - Shortcut Recorder (NSView)
-
-private struct ShortcutRecorderField: NSViewRepresentable {
-    let onRecord: (StoredShortcut?) -> Void
-
-    func makeNSView(context: Context) -> ShortcutRecorderNSView {
-        let view = ShortcutRecorderNSView(onRecord: onRecord)
-        DispatchQueue.main.async { view.window?.makeFirstResponder(view) }
-        return view
-    }
-
-    func updateNSView(_ nsView: ShortcutRecorderNSView, context: Context) {}
-}
-
-private class ShortcutRecorderNSView: NSView {
-    let onRecord: (StoredShortcut?) -> Void
-
-    init(onRecord: @escaping (StoredShortcut?) -> Void) {
-        self.onRecord = onRecord
-        super.init(frame: NSRect(x: 0, y: 0, width: 160, height: 24))
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    override var acceptsFirstResponder: Bool { true }
-
-    override var intrinsicContentSize: NSSize {
-        NSSize(width: 160, height: 24)
-    }
-
-    override func draw(_ dirtyRect: NSRect) {
-        let path = NSBezierPath(roundedRect: bounds.insetBy(dx: 0.5, dy: 0.5), xRadius: 5, yRadius: 5)
-        NSColor.orange.withAlphaComponent(0.1).setFill()
-        path.fill()
-        NSColor.orange.withAlphaComponent(0.4).setStroke()
-        path.lineWidth = 1
-        path.stroke()
-
-        let str = "Press shortcut\u{2026}" as NSString
-        let attrs: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 11, weight: .medium),
-            .foregroundColor: NSColor.orange,
-        ]
-        let size = str.size(withAttributes: attrs)
-        let point = NSPoint(x: (bounds.width - size.width) / 2, y: (bounds.height - size.height) / 2)
-        str.draw(at: point, withAttributes: attrs)
-    }
-
-    override func keyDown(with event: NSEvent) {
-        let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        guard mods.contains(.command) || mods.contains(.control) || mods.contains(.option) else {
-            if event.keyCode == 53 { // Escape
-                onRecord(nil)
+            // Escape cancels
+            if event.keyCode == 53 {
+                stopRecording()
+                return nil
             }
-            return
+
+            // Require at least one modifier (not just shift)
+            guard mods.contains(.command) || mods.contains(.control) || mods.contains(.option) else {
+                return event
+            }
+
+            let char = event.charactersIgnoringModifiers ?? ""
+            guard !char.isEmpty else { return event }
+
+            let recorded = StoredShortcut(
+                keyCode: UInt32(event.keyCode),
+                character: char,
+                modifiers: mods.rawValue
+            )
+            manager.setShortcut(recorded, for: transform)
+            stopRecording()
+            return nil // consume the event
         }
-        let char = event.charactersIgnoringModifiers ?? ""
-        guard !char.isEmpty else { return }
-        let shortcut = StoredShortcut(
-            keyCode: UInt32(event.keyCode),
-            character: char,
-            modifiers: mods.rawValue
-        )
-        onRecord(shortcut)
+    }
+
+    private func stopRecording() {
+        isRecording = false
+        stopLocalMonitor()
+    }
+
+    private func stopLocalMonitor() {
+        if let localMonitor {
+            NSEvent.removeMonitor(localMonitor)
+        }
+        localMonitor = nil
     }
 }
 
