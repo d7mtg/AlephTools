@@ -123,14 +123,12 @@ struct iOSContentView: View {
     private var transformPill: some View {
         HStack(spacing: 10) {
             Menu {
-                ForEach(TransformationType.allCases) { t in
-                    Button {
-                        withAnimation(.smooth) { selectedTransform = t }
-                    } label: {
+                Picker(selection: $selectedTransform.animation(.smooth)) {
+                    ForEach(TransformationType.allCases) { t in
                         Label(t.rawValue, systemImage: t.icon)
+                            .tag(t)
                     }
-                    .disabled(t == selectedTransform)
-                }
+                } label: {}
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: selectedTransform.icon)

@@ -49,14 +49,12 @@ struct ContentView: View {
         ToolbarItem(placement: .principal) {
             HStack(spacing: 12) {
                 Menu {
-                    ForEach(TransformationType.allCases) { t in
-                        Button {
-                            selectedTransform = t
-                        } label: {
+                    Picker(selection: $selectedTransform) {
+                        ForEach(TransformationType.allCases) { t in
                             Label(t.rawValue, systemImage: t.icon)
+                                .tag(t)
                         }
-                        .disabled(t == selectedTransform)
-                    }
+                    } label: {}
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: selectedTransform.icon)
