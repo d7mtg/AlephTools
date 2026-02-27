@@ -118,26 +118,23 @@ struct ContentView: View {
 
             Divider()
 
-            ZStack(alignment: .topLeading) {
-                if inputText.isEmpty {
-                    Text("Type or paste text\u{2026}")
-                        .foregroundStyle(.tertiary)
-                        .font(.system(size: 13, design: .monospaced))
-                        .padding(.top, 8)
-                        .padding(.leading, 44)
-                }
-                HStack(alignment: .top, spacing: 0) {
-                    lineNumberGutter(count: inputLineCount)
-                        .padding(.top, 5)
+            HStack(alignment: .top, spacing: 0) {
+                lineNumberGutter(count: inputLineCount)
 
+                ZStack(alignment: .topLeading) {
+                    if inputText.isEmpty {
+                        Text("Type or paste text\u{2026}")
+                            .foregroundStyle(.tertiary)
+                            .font(.system(size: 13, design: .monospaced))
+                            .padding(.top, 7)
+                            .padding(.leading, 5)
+                    }
                     TextEditor(text: $inputText)
                         .font(.system(size: 13, design: .monospaced))
                         .lineSpacing(3)
                         .scrollContentBackground(.hidden)
-                        .padding(.top, 1)
-                        .padding(.leading, 4)
-                        .padding(.trailing, 8)
                 }
+                .padding(.trailing, 8)
             }
         }
         .frame(minWidth: 280)
@@ -181,8 +178,7 @@ struct ContentView: View {
                             .lineSpacing(3)
                             .textSelection(.enabled)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 8)
-                            .padding(.leading, 8)
+                            .padding(.top, 7)
                             .padding(.trailing, 12)
                     }
                     .padding(.bottom, 12)
@@ -205,8 +201,9 @@ struct ContentView: View {
         .lineSpacing(3)
         .foregroundStyle(.quaternary)
         .frame(minWidth: 28, alignment: .trailing)
-        .padding(.top, 8)
+        .padding(.top, 7)
         .padding(.leading, 8)
+        .padding(.trailing, 4)
     }
 
     // MARK: - Gematria Output
