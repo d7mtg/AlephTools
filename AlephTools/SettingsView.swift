@@ -46,12 +46,35 @@ private struct ShortcutsSettingsTab: View {
                 )
             }
 
-            HStack(spacing: 6) {
-                Image(systemName: "info.circle")
-                    .foregroundStyle(.secondary)
-                Text("Shortcuts work system-wide when Aleph Tools is running. They copy the selected text, transform it, and paste it back.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            if !AXIsProcessTrusted() {
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Accessibility Access Required")
+                            .font(.callout.weight(.medium))
+                        Text("Global shortcuts need Accessibility permission to simulate copy/paste in other apps.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button("Open Settings") {
+                        let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
+                        AXIsProcessTrustedWithOptions(options)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+                .padding(10)
+                .background(.orange.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
+            } else {
+                HStack(spacing: 6) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                    Text("Accessibility access granted. Shortcuts work system-wide.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .padding(20)
