@@ -38,7 +38,7 @@ struct LineNumberTextEditor: NSViewRepresentable {
         textView.delegate = context.coordinator
 
         // Line number gutter
-        let rulerView = LineNumberRulerView(textView: textView, font: font)
+        let rulerView = LineNumberRulerView(scrollView: scrollView, textView: textView, font: font)
         scrollView.verticalRulerView = rulerView
         scrollView.hasVerticalRuler = true
         scrollView.rulersVisible = true
@@ -107,9 +107,9 @@ struct LineNumberTextEditor: NSViewRepresentable {
 class LineNumberRulerView: NSRulerView {
     var font: NSFont
 
-    init(textView: NSTextView, font: NSFont) {
+    init(scrollView: NSScrollView, textView: NSTextView, font: NSFont) {
         self.font = font
-        super.init(scrollView: textView.enclosingScrollView!, orientation: .verticalRuler)
+        super.init(scrollView: scrollView, orientation: .verticalRuler)
         self.clientView = textView
         self.ruleThickness = 32
     }
@@ -121,9 +121,10 @@ class LineNumberRulerView: NSRulerView {
     override func drawHashMarksAndLabels(in rect: NSRect) {
         guard let textView = clientView as? NSTextView,
               let layoutManager = textView.layoutManager,
-              let container = textView.textContainer else { return }
+              let container = textView.textContainer,
+              let scrollView = scrollView else { return }
 
-        let visibleRect = scrollView!.contentView.bounds
+        let visibleRect = scrollView.contentView.bounds
         let visibleGlyphRange = layoutManager.glyphRange(forBoundingRect: visibleRect, in: container)
         let visibleCharRange = layoutManager.characterRange(forGlyphRange: visibleGlyphRange, actualGlyphRange: nil)
 
@@ -186,7 +187,7 @@ struct LineNumberOutputView: NSViewRepresentable {
         textView.isHorizontallyResizable = false
         textView.autoresizingMask = [.width]
 
-        let rulerView = LineNumberRulerView(textView: textView, font: font)
+        let rulerView = LineNumberRulerView(scrollView: scrollView, textView: textView, font: font)
         scrollView.verticalRulerView = rulerView
         scrollView.hasVerticalRuler = true
         scrollView.rulersVisible = true
