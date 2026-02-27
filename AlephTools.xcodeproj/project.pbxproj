@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001 /* LineNumberTextEditor.swift */; };
 		E81000012B0000010000000A /* AlephToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000B /* AlephToolsApp.swift */; };
 		E81000012B0000010000000C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000D /* ContentView.swift */; };
 		E81000012B0000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D400000001 /* LineNumberTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineNumberTextEditor.swift; sourceTree = "<group>"; };
 		E81000012B00000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E81000012B0000010000000B /* AlephToolsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsApp.swift; sourceTree = "<group>"; };
 		E81000012B0000010000000D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				E81000012B0000010000000B /* AlephToolsApp.swift */,
 				E81000012B0000010000000D /* ContentView.swift */,
+				A1B2C3D400000001 /* LineNumberTextEditor.swift */,
 				E81000012B00000100000021 /* HebrewTransformations.swift */,
 				E81000012B0000010000000F /* Assets.xcassets */,
 				E81000012B00000100000011 /* AlephTools.entitlements */,
@@ -267,6 +270,7 @@
 			files = (
 				E81000012B0000010000000A /* AlephToolsApp.swift in Sources */,
 				E81000012B0000010000000C /* ContentView.swift in Sources */,
+				A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */,
 				E81000012B00000100000020 /* HebrewTransformations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -15,15 +15,6 @@ struct ContentView: View {
         ChangeStats.compute(input: inputText, output: outputText, mode: selectedTransform)
     }
 
-    private var inputLineCount: Int {
-        max(inputText.components(separatedBy: "\n").count, 1)
-    }
-
-    private var outputLines: [String] {
-        guard !outputText.isEmpty else { return [] }
-        return outputText.components(separatedBy: "\n")
-    }
-
     var body: some View {
         HSplitView {
             inputPanel
@@ -121,24 +112,7 @@ struct ContentView: View {
 
             Divider()
 
-            HStack(alignment: .top, spacing: 0) {
-                lineNumberGutter(count: inputLineCount)
-
-                ZStack(alignment: .topLeading) {
-                    if inputText.isEmpty {
-                        Text("Type or paste text\u{2026}")
-                            .foregroundStyle(.tertiary)
-                            .font(.system(size: 13))
-                            .padding(.top, 7)
-                            .padding(.leading, 5)
-                    }
-                    TextEditor(text: $inputText)
-                        .font(.system(size: 13))
-                        .lineSpacing(3)
-                        .scrollContentBackground(.hidden)
-                }
-                .padding(.trailing, 8)
-            }
+            LineNumberTextEditor(text: $inputText)
         }
         .frame(minWidth: 280)
         .background(.background)
@@ -172,41 +146,11 @@ struct ContentView: View {
             if selectedTransform == .gematria && !outputText.isEmpty {
                 gematriaOutput
             } else {
-                ScrollView {
-                    HStack(alignment: .top, spacing: 0) {
-                        lineNumberGutter(count: outputLines.count)
-
-                        Text(outputText)
-                            .font(.system(size: 13))
-                            .lineSpacing(3)
-                            .textSelection(.enabled)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 7)
-                            .padding(.trailing, 12)
-                    }
-                    .padding(.bottom, 12)
-                }
+                LineNumberOutputView(text: outputText)
             }
         }
         .frame(minWidth: 280)
         .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-    }
-
-    // MARK: - Line Number Gutter
-
-    private func lineNumberGutter(count: Int) -> some View {
-        Text(
-            (1...max(count, 1))
-                .map { String($0) }
-                .joined(separator: "\n")
-        )
-        .font(.system(size: 13))
-        .lineSpacing(3)
-        .foregroundStyle(.quaternary)
-        .frame(minWidth: 28, alignment: .trailing)
-        .padding(.top, 7)
-        .padding(.leading, 8)
-        .padding(.trailing, 4)
     }
 
     // MARK: - Gematria Output
