@@ -27,9 +27,9 @@ enum TransformationType: String, CaseIterable, Identifiable {
 
     var icon: String {
         switch self {
-        case .hebrewKeyboard: "character.hebrew"
-        case .englishKeyboard: "character.latin"
-        case .removeNiqqud: "strikethrough"
+        case .hebrewKeyboard: "keyboard"
+        case .englishKeyboard: "globe"
+        case .removeNiqqud: "eraser"
         case .squareHebrew: "character.textbox"
         case .paleoHebrew: "scroll"
         case .gematria: "number"
