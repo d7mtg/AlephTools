@@ -137,7 +137,7 @@ private struct ShortcutsSettingsTab: View {
             if !AXIsProcessTrusted() {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.accent)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Accessibility Access Required")
                             .font(.callout.weight(.medium))
@@ -154,7 +154,7 @@ private struct ShortcutsSettingsTab: View {
                     .controlSize(.small)
                 }
                 .padding(10)
-                .background(.orange.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
+                .background(.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
             } else {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.circle.fill")
@@ -203,7 +203,7 @@ private struct ShortcutRow: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
-                    .background(.orange, in: RoundedRectangle(cornerRadius: 5))
+                    .background(.accent, in: RoundedRectangle(cornerRadius: 5))
                     .onAppear { startLocalMonitor() }
                     .onDisappear { stopLocalMonitor() }
 

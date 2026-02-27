@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var inputText = ""
+    @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
     @State private var selectedTransform: TransformationType = .hebrewKeyboard
     @State private var keepPunctuation = false
     @State private var showCopiedToast = false
@@ -31,6 +32,11 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: showCopiedToast)
+        .onAppear {
+            if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
+                selectedTransform = saved
+            }
+        }
     }
 
     // MARK: - Toolbar
@@ -177,7 +183,7 @@ struct ContentView: View {
         HStack(spacing: 6) {
             if stats.changed > 0 {
                 Text("\(stats.changed) changed")
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.accent)
             }
             if stats.unchanged > 0 {
                 Text("\(stats.unchanged) kept")

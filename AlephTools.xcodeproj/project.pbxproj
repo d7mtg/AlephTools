@@ -16,6 +16,7 @@
 		E81000012B00000100000020 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
 		F00000010000000A /* AlephToolsiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000000100000009 /* AlephToolsiOSApp.swift */; };
 		F00000010000000C /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000010000000B /* iOSContentView.swift */; };
+		8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */; };
 		F00000010000000D /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
 		F00000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
 		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
@@ -61,6 +62,7 @@
 		F000000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F000000100000009 /* AlephToolsiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsiOSApp.swift; sourceTree = "<group>"; };
 		F00000010000000B /* iOSContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSContentView.swift; sourceTree = "<group>"; };
+		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
 		K000000100000001 /* AlephKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AlephKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		K000000100000002 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		K000000100000003 /* PaleoKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaleoKeyboardView.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			children = (
 				F000000100000009 /* AlephToolsiOSApp.swift */,
 				F00000010000000B /* iOSContentView.swift */,
+				0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */,
 			);
 			path = AlephToolsiOS;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 			files = (
 				F00000010000000A /* AlephToolsiOSApp.swift in Sources */,
 				F00000010000000C /* iOSContentView.swift in Sources */,
+				8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */,
 				F00000010000000D /* HebrewTransformations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

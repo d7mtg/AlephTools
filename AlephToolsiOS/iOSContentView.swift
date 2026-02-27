@@ -3,8 +3,10 @@ import UIKit
 
 struct iOSContentView: View {
     @State private var inputText = ""
+    @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
     @State private var selectedTransform: TransformationType = .hebrewKeyboard
     @State private var keepPunctuation = false
+    @State private var showSettings = false
     @State private var showCopiedToast = false
     @FocusState private var isInputFocused: Bool
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -30,6 +32,14 @@ struct iOSContentView: View {
             .navigationTitle("Aleph Tools")
             .toolbarTitleDisplayMode(.inline)
             .toolbar { toolbarItems }
+            .sheet(isPresented: $showSettings) {
+                iOSSettingsView()
+            }
+        }
+        .onAppear {
+            if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
+                selectedTransform = saved
+            }
         }
         .overlay(alignment: .bottom) {
             if showCopiedToast {
@@ -228,17 +238,17 @@ struct iOSContentView: View {
     // MARK: - Stats
 
     private var statsLabel: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             if stats.changed > 0 {
-                Label("\(stats.changed)", systemImage: "arrow.triangle.2.circlepath")
-                    .foregroundStyle(.orange)
+                Text("\(stats.changed) changed")
+                    .foregroundStyle(.accent)
             }
             if stats.unchanged > 0 {
-                Label("\(stats.unchanged)", systemImage: "equal.circle")
-                    .foregroundStyle(.tertiary)
+                Text("\(stats.unchanged) kept")
+                    .foregroundStyle(.secondary)
             }
         }
-        .font(.caption2)
+        .font(.caption)
     }
 
     // MARK: - Toast
@@ -255,6 +265,13 @@ struct iOSContentView: View {
 
     @ToolbarContentBuilder
     private var toolbarItems: some ToolbarContent {
+        ToolbarItem(placement: .navigation) {
+            Button {
+                showSettings = true
+            } label: {
+                Image(systemName: "gearshape")
+            }
+        }
         ToolbarItem(placement: .primaryAction) {
             Button {
                 copyOutput()
