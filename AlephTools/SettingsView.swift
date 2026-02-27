@@ -427,9 +427,23 @@ private struct AboutSettingsTab: View {
 
             Spacer()
 
-            Text("\u{00A9} 2025 d7mtg")
+            VStack(spacing: 6) {
+                HStack(spacing: 4) {
+                    Text("Made by")
+                        .foregroundStyle(.tertiary)
+                    Link("D7mtg", destination: URL(string: "https://d7mtg.com")!)
+                        .buttonStyle(.link)
+                    Text("with")
+                        .foregroundStyle(.tertiary)
+                    Link("Claude Code", destination: URL(string: "https://claude.ai/claude-code")!)
+                        .buttonStyle(.link)
+                }
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+
+                Text("\u{00A9} 2025 D7mtg")
+                    .font(.caption2)
+                    .foregroundStyle(.quaternary)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(20)
