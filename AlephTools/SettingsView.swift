@@ -86,33 +86,12 @@ private struct ShortcutRow: View {
             Spacer()
 
             if isRecording {
-                Text("Press shortcut\u{2026}")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(.orange)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 5))
-                    .onKeyPress { press in
-                        let modifiers = press.modifiers
-                        guard modifiers.contains(.command) || modifiers.contains(.control) || modifiers.contains(.option) else {
-                            return .ignored
-                        }
-                        let shortcut = StoredShortcut(
-                            keyCode: UInt32(press.key.character.asciiValue ?? 0),
-                            character: String(press.key.character),
-                            modifiers: modifierFlags(from: modifiers)
-                        )
+                ShortcutRecorderField { shortcut in
+                    if let shortcut {
                         manager.setShortcut(shortcut, for: transform)
-                        isRecording = false
-                        return .handled
                     }
-                    .focusable()
-
-                Button("Cancel") {
                     isRecording = false
                 }
-                .buttonStyle(.borderless)
-                .font(.caption)
             } else if let shortcut = binding {
                 HStack(spacing: 4) {
                     Text(shortcut.displayString)
@@ -149,13 +128,72 @@ private struct ShortcutRow: View {
         .padding(.horizontal, 4)
     }
 
-    private func modifierFlags(from mods: SwiftUI.EventModifiers) -> UInt {
-        var flags: UInt = 0
-        if mods.contains(.command) { flags |= UInt(NSEvent.ModifierFlags.command.rawValue) }
-        if mods.contains(.option) { flags |= UInt(NSEvent.ModifierFlags.option.rawValue) }
-        if mods.contains(.control) { flags |= UInt(NSEvent.ModifierFlags.control.rawValue) }
-        if mods.contains(.shift) { flags |= UInt(NSEvent.ModifierFlags.shift.rawValue) }
-        return flags
+}
+
+// MARK: - Shortcut Recorder (NSView)
+
+private struct ShortcutRecorderField: NSViewRepresentable {
+    let onRecord: (StoredShortcut?) -> Void
+
+    func makeNSView(context: Context) -> ShortcutRecorderNSView {
+        let view = ShortcutRecorderNSView(onRecord: onRecord)
+        DispatchQueue.main.async { view.window?.makeFirstResponder(view) }
+        return view
+    }
+
+    func updateNSView(_ nsView: ShortcutRecorderNSView, context: Context) {}
+}
+
+private class ShortcutRecorderNSView: NSView {
+    let onRecord: (StoredShortcut?) -> Void
+
+    init(onRecord: @escaping (StoredShortcut?) -> Void) {
+        self.onRecord = onRecord
+        super.init(frame: NSRect(x: 0, y: 0, width: 160, height: 24))
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    override var acceptsFirstResponder: Bool { true }
+
+    override var intrinsicContentSize: NSSize {
+        NSSize(width: 160, height: 24)
+    }
+
+    override func draw(_ dirtyRect: NSRect) {
+        let path = NSBezierPath(roundedRect: bounds.insetBy(dx: 0.5, dy: 0.5), xRadius: 5, yRadius: 5)
+        NSColor.orange.withAlphaComponent(0.1).setFill()
+        path.fill()
+        NSColor.orange.withAlphaComponent(0.4).setStroke()
+        path.lineWidth = 1
+        path.stroke()
+
+        let str = "Press shortcut\u{2026}" as NSString
+        let attrs: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: 11, weight: .medium),
+            .foregroundColor: NSColor.orange,
+        ]
+        let size = str.size(withAttributes: attrs)
+        let point = NSPoint(x: (bounds.width - size.width) / 2, y: (bounds.height - size.height) / 2)
+        str.draw(at: point, withAttributes: attrs)
+    }
+
+    override func keyDown(with event: NSEvent) {
+        let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        guard mods.contains(.command) || mods.contains(.control) || mods.contains(.option) else {
+            if event.keyCode == 53 { // Escape
+                onRecord(nil)
+            }
+            return
+        }
+        let char = event.charactersIgnoringModifiers ?? ""
+        guard !char.isEmpty else { return }
+        let shortcut = StoredShortcut(
+            keyCode: UInt32(event.keyCode),
+            character: char,
+            modifiers: mods.rawValue
+        )
+        onRecord(shortcut)
     }
 }
 
