@@ -3,6 +3,7 @@ import SwiftUI
 struct iOSSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
+    @State private var showKeyboardSetup = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -27,6 +28,25 @@ struct iOSSettingsView: View {
                     Text("General")
                 } footer: {
                     Text("Used when opening the app.")
+                }
+
+                // MARK: - Keyboard
+                Section {
+                    Button {
+                        showKeyboardSetup = true
+                    } label: {
+                        HStack {
+                            Label("Paleo-Hebrew Keyboard", systemImage: "keyboard")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                } header: {
+                    Text("Keyboard")
+                } footer: {
+                    Text("Set up the Paleo-Hebrew keyboard extension.")
                 }
 
                 // MARK: - About
@@ -79,6 +99,9 @@ struct iOSSettingsView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                 }
+            }
+            .sheet(isPresented: $showKeyboardSetup) {
+                KeyboardSetupView()
             }
         }
     }

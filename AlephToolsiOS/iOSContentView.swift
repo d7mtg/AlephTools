@@ -8,6 +8,8 @@ struct iOSContentView: View {
     @State private var keepPunctuation = false
     @State private var showSettings = false
     @State private var showCopiedToast = false
+    @AppStorage("hasCompletedKeyboardSetup") private var hasCompletedKeyboardSetup = false
+    @State private var showKeyboardSetup = false
     @FocusState private var isInputFocused: Bool
     @Environment(\.horizontalSizeClass) private var sizeClass
 
@@ -35,10 +37,16 @@ struct iOSContentView: View {
             .sheet(isPresented: $showSettings) {
                 iOSSettingsView()
             }
+            .sheet(isPresented: $showKeyboardSetup) {
+                KeyboardSetupView()
+            }
         }
         .onAppear {
             if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
                 selectedTransform = saved
+            }
+            if !hasCompletedKeyboardSetup {
+                showKeyboardSetup = true
             }
         }
         .overlay(alignment: .bottom) {
