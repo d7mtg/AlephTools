@@ -14,14 +14,30 @@ enum TransformationType: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 
     var subtitle: String {
+        "\(inputLabel) \u{2192} \(outputLabel)"
+    }
+
+    var inputLabel: String {
         switch self {
-        case .hebrewKeyboard: "QWERTY \u{2192} \u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF}"
-        case .englishKeyboard: "\u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF} \u{2192} QWERTY"
-        case .removeNiqqud: "Strip vowel points & diacritics"
-        case .squareHebrew: "\u{10900}\u{10901}\u{10902} \u{2192} \u{05D0}\u{05D1}\u{05D2}"
-        case .paleoHebrew: "\u{05D0}\u{05D1}\u{05D2} \u{2192} \u{10900}\u{10901}\u{10902}"
+        case .hebrewKeyboard: "QWERTY English"
+        case .englishKeyboard: "\u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF} Hebrew"
+        case .removeNiqqud: "Hebrew with Niqqud"
+        case .squareHebrew: "\u{10900}\u{10901}\u{10902} Paleo-Hebrew"
+        case .paleoHebrew: "\u{05D0}\u{05D1}\u{05D2} Modern Hebrew"
+        case .gematria: "Hebrew text"
+        case .reverse: "Any text"
+        }
+    }
+
+    var outputLabel: String {
+        switch self {
+        case .hebrewKeyboard: "\u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF} Hebrew"
+        case .englishKeyboard: "QWERTY English"
+        case .removeNiqqud: "Clean Hebrew"
+        case .squareHebrew: "\u{05D0}\u{05D1}\u{05D2} Modern Hebrew"
+        case .paleoHebrew: "\u{10900}\u{10901}\u{10902} Paleo-Hebrew"
         case .gematria: "Numerological value"
-        case .reverse: "Mirror text, keep Niqqud"
+        case .reverse: "Mirrored text"
         }
     }
 

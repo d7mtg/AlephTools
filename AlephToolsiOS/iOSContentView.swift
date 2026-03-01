@@ -97,9 +97,14 @@ struct iOSContentView: View {
     private var inputCard: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Input")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Input")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    Text(selectedTransform.inputLabel)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
                 Spacer()
 
                 Button {
@@ -207,30 +212,32 @@ struct iOSContentView: View {
 
     private var outputCard: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .firstTextBaseline) {
+            HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Output")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
-                    Text(selectedTransform.subtitle)
+                    Text(selectedTransform.outputLabel)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }
                 Spacer()
-                if !inputText.isEmpty {
-                    statsLabel
-                }
-                if !outputText.isEmpty {
-                    Button {
-                        copyOutput()
-                    } label: {
+
+                statsLabel
+                    .opacity(inputText.isEmpty ? 0 : 1)
+
+                Button {
+                    copyOutput()
+                } label: {
+                    HStack(spacing: 4) {
                         Image(systemName: "doc.on.doc")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
-                            .font(.title3)
+                        Text("Copy")
                     }
-                    .buttonStyle(.plain)
+                    .font(.caption.weight(.medium))
                 }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .disabled(outputText.isEmpty)
             }
             .padding(.horizontal, 16)
             .padding(.top, 14)

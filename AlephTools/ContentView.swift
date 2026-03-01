@@ -136,6 +136,12 @@ struct ContentView: View {
                 Text("Input")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
+
+                Text(selectedTransform.inputLabel)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
+
                 Spacer()
 
                 Button {
@@ -171,44 +177,45 @@ struct ContentView: View {
             Divider()
 
             LineNumberTextEditor(text: $inputText)
+                .clipped()
         }
         .frame(minWidth: 280)
         .background(.background)
+        .clipped()
     }
 
     // MARK: - Output Panel
 
     private var outputPanel: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .firstTextBaseline) {
+            HStack {
                 Text("Output")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
 
-                Text(selectedTransform.subtitle)
+                Text(selectedTransform.outputLabel)
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .lineLimit(1)
+                    .truncationMode(.tail)
 
-                Spacer()
+                Spacer(minLength: 4)
 
-                if !inputText.isEmpty {
-                    statsView
-                }
+                statsView
+                    .opacity(inputText.isEmpty ? 0 : 1)
 
-                if !outputText.isEmpty {
-                    Button {
-                        copyToClipboard()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "doc.on.doc")
-                            Text("Copy")
-                        }
-                        .font(.caption.weight(.medium))
+                Button {
+                    copyToClipboard()
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "doc.on.doc")
+                        Text("Copy")
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
+                    .font(.caption.weight(.medium))
                 }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .disabled(outputText.isEmpty)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -219,10 +226,12 @@ struct ContentView: View {
                 gematriaOutput
             } else {
                 LineNumberOutputView(text: outputText)
+                    .clipped()
             }
         }
         .frame(minWidth: 280)
         .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+        .clipped()
     }
 
     // MARK: - Gematria Output
@@ -257,6 +266,8 @@ struct ContentView: View {
             }
         }
         .font(.caption)
+        .lineLimit(1)
+        .fixedSize()
     }
 
     // MARK: - Toast
