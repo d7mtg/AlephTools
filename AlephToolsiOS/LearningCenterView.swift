@@ -804,6 +804,7 @@ extension LearningTopic {
         gematria,
         keyboardLayouts,
         squareScript,
+        textReversal,
         atbash,
     ]
 
@@ -915,20 +916,42 @@ extension LearningTopic {
         widget: nil
     )
 
-    static let atbash = LearningTopic(
-        title: "Text Reversal & Atbash",
-        subtitle: "Mirror writing and Hebrew ciphers",
-        icon: "arrow.left.arrow.right",
-        color: .mint,
-        example: nil,
+    static let textReversal = LearningTopic(
+        title: "Text Reversal (RTL Fix)",
+        subtitle: "Fix Hebrew in non-RTL software",
+        icon: "arrow.uturn.left",
+        color: .cyan,
+        example: "\u{05E9}\u{05DC}\u{05D5}\u{05DD} \u{2192} \u{05DD}\u{05D5}\u{05DC}\u{05E9}",
         sections: [
-            Section(heading: nil, body: "The Reverse tool mirrors Hebrew text character by character while preserving niqqud (vowel marks) attached to each letter. This is useful for fixing text that was pasted in the wrong direction or for creative typography."),
-            Section(heading: "Boustrophedon", body: "Some ancient inscriptions were written in \u{201C}boustrophedon\u{201D} style \u{2014} alternating between right-to-left and left-to-right on successive lines (like an ox plowing a field). Reversing text can help read these inscriptions."),
-            Section(heading: "Atbash Cipher", body: "Atbash is one of the oldest known ciphers, originating in Hebrew. It substitutes each letter with its reverse-alphabet counterpart: Aleph (\u{05D0}) becomes Tav (\u{05EA}), Bet (\u{05D1}) becomes Shin (\u{05E9}), and so on. The name \u{201C}Atbash\u{201D} itself comes from A-T, B-Sh. It appears in the Book of Jeremiah, where \u{201C}Sheshakh\u{201D} is an Atbash cipher for \u{201C}Babel.\u{201D}"),
+            Section(heading: nil, body: "Hebrew is a right-to-left language, but many programs don\u{2019}t support RTL text. When you paste Hebrew into these apps, the characters appear in reverse order \u{2014} rendered left-to-right instead of right-to-left. The Reverse tool flips the character order so the text displays correctly in LTR-only software."),
+            Section(heading: "The Problem", body: "Software that lacks RTL support ignores the Unicode Bidirectional Algorithm. It treats all text as left-to-right, so the word \u{201C}\u{05E9}\u{05DC}\u{05D5}\u{05DD}\u{201D} (shalom) appears as \u{201C}\u{05DD}\u{05D5}\u{05DC}\u{05E9}\u{201D} \u{2014} the first letter ends up on the left instead of the right. Pre-reversing the text compensates for this: when the software lays it out LTR, it looks correct."),
+            Section(heading: "Adobe Creative Suite", body: "This is one of the most common use cases. Adobe apps historically lacked RTL support:\n\n\u{2022} After Effects \u{2014} No RTL until CC 2019, and many templates and plugins still ignore it. Motion designers working with Hebrew titles frequently need text reversal.\n\n\u{2022} Premiere Pro \u{2014} The title tool had no RTL support for years. Basic support arrived in CC 2019 but still has issues with mixed-direction text.\n\n\u{2022} Photoshop & Illustrator \u{2014} RTL requires manually enabling the \u{201C}Middle Eastern\u{201D} text engine in Preferences \u{203A} Type. Many users don\u{2019}t know about this setting.\n\nEven in recent versions, the ME text engine is opt-in, not the default."),
+            Section(heading: "Video Editors", body: "DaVinci Resolve is a major offender \u{2014} its text tools have limited or no RTL support even in the latest versions. Hebrew-speaking filmmakers routinely pre-reverse text before pasting it into Resolve titles and subtitles. Vegas Pro and many open-source editors (Shotcut, OpenShot) have the same problem."),
+            Section(heading: "Other Software", body: "The RTL problem appears across many categories:\n\n\u{2022} Game engines \u{2014} Unity (legacy UI), older Godot, RPG Maker, GameMaker\n\u{2022} 3D software \u{2014} Cinema 4D text objects, Blender (pre-3.1), 3ds Max\n\u{2022} Subtitles \u{2014} SRT files have no directionality metadata; some players render Hebrew reversed\n\u{2022} LED signage \u{2014} Many sign controllers are LTR-only\n\u{2022} Laser/CNC engraving \u{2014} Label printers and engravers often lack BiDi"),
+            Section(heading: "Niqqud-Aware Reversal", body: "A simple character-level reversal would detach niqqud (vowel marks) from their letters, since niqqud are combining Unicode characters that attach to the preceding letter. Aleph Tools reverses text in groups \u{2014} each letter with its attached diacritics stays together \u{2014} so vocalized text reverses correctly."),
+        ],
+        links: [
+            WikiLink(title: "Bidirectional text \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Bidirectional_text"),
+            WikiLink(title: "Unicode BiDi Algorithm", url: "https://en.wikipedia.org/wiki/Unicode_bidirectional_algorithm"),
+        ],
+        widget: nil
+    )
+
+    static let atbash = LearningTopic(
+        title: "Atbash Cipher",
+        subtitle: "Ancient Hebrew letter substitution",
+        icon: "lock.rotation",
+        color: .mint,
+        example: "\u{05D0}\u{2192}\u{05EA}  \u{05D1}\u{2192}\u{05E9}  \u{05D2}\u{2192}\u{05E8}",
+        sections: [
+            Section(heading: nil, body: "Atbash is one of the oldest known ciphers, originating in Hebrew. It substitutes each letter with its reverse-alphabet counterpart: the first letter (Aleph, \u{05D0}) becomes the last (Tav, \u{05EA}), the second (Bet, \u{05D1}) becomes the second-to-last (Shin, \u{05E9}), and so on."),
+            Section(heading: "The Name", body: "The word \u{201C}Atbash\u{201D} (\u{05D0}\u{05EA}\u{05D1}\u{05E9}) itself encodes the pattern: \u{05D0}-\u{05EA} (Aleph-Tav, first swaps with last) and \u{05D1}-\u{05E9} (Bet-Shin, second swaps with second-to-last)."),
+            Section(heading: "In the Bible", body: "Atbash appears in the Book of Jeremiah. The word \u{201C}Sheshakh\u{201D} (\u{05E9}\u{05E9}\u{05DA}) is an Atbash cipher for \u{201C}Babel\u{201D} (\u{05D1}\u{05D1}\u{05DC}) \u{2014} \u{05D1} (Bet) becomes \u{05E9} (Shin), and \u{05DC} (Lamed) becomes \u{05DA} (Kaf). This is one of the earliest documented uses of encryption in history."),
+            Section(heading: "In Gematria", body: "Atbash is also used as a gematria method. Instead of using a letter\u{2019}s standard numerical value, you substitute it via Atbash first, then calculate the value of the resulting text. This is one of dozens of gematria methods used in traditional biblical interpretation."),
         ],
         links: [
             WikiLink(title: "Atbash \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Atbash"),
-            WikiLink(title: "Boustrophedon", url: "https://en.wikipedia.org/wiki/Boustrophedon"),
+            WikiLink(title: "Hebrew cipher methods", url: "https://en.wikipedia.org/wiki/Gematria#Methods"),
         ],
         widget: .atbashExplorer
     )
