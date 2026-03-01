@@ -7,18 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80E8FB572F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
+		80E8FB582F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
+		80E8FB592F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
+		8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */; };
+		A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001 /* LineNumberTextEditor.swift */; };
 		B1B2C3D400000002 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000001 /* ServiceProvider.swift */; };
 		B1B2C3D400000004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000003 /* SettingsView.swift */; };
-		A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001 /* LineNumberTextEditor.swift */; };
 		E81000012B0000010000000A /* AlephToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000B /* AlephToolsApp.swift */; };
 		E81000012B0000010000000C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000D /* ContentView.swift */; };
 		E81000012B0000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
-		AE6B11739069B3C9D436F66C /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */; };
-		071DB026B526F497EE596F78 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */; };
 		E81000012B00000100000020 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
 		F00000010000000A /* AlephToolsiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000000100000009 /* AlephToolsiOSApp.swift */; };
 		F00000010000000C /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000010000000B /* iOSContentView.swift */; };
-		8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */; };
 		F00000010000000D /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
 		F00000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
 		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
@@ -51,21 +52,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
+		80E8FB562F53E1B40055F722 /* aleph.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = aleph.icon; sourceTree = "<group>"; };
+		A1B2C3D400000001 /* LineNumberTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineNumberTextEditor.swift; sourceTree = "<group>"; };
 		B1B2C3D400000001 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		B1B2C3D400000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B1B2C3D400000005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A1B2C3D400000001 /* LineNumberTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineNumberTextEditor.swift; sourceTree = "<group>"; };
 		E81000012B00000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E81000012B0000010000000B /* AlephToolsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsApp.swift; sourceTree = "<group>"; };
 		E81000012B0000010000000D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E81000012B0000010000000F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcon.icon; sourceTree = "<group>"; };
 		E81000012B00000100000011 /* AlephTools.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlephTools.entitlements; sourceTree = "<group>"; };
 		E81000012B00000100000021 /* HebrewTransformations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HebrewTransformations.swift; sourceTree = "<group>"; };
 		F000000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F000000100000009 /* AlephToolsiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsiOSApp.swift; sourceTree = "<group>"; };
 		F00000010000000B /* iOSContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSContentView.swift; sourceTree = "<group>"; };
-		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
 		K000000100000001 /* AlephKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AlephKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		K000000100000002 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		K000000100000003 /* PaleoKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaleoKeyboardView.swift; sourceTree = "<group>"; };
@@ -118,8 +119,7 @@
 				A1B2C3D400000001 /* LineNumberTextEditor.swift */,
 				E81000012B00000100000021 /* HebrewTransformations.swift */,
 				E81000012B0000010000000F /* Assets.xcassets */,
-				39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */,
-				E81000012B00000100000011 /* AlephTools.entitlements */,
+						E81000012B00000100000011 /* AlephTools.entitlements */,
 			);
 			path = AlephTools;
 			sourceTree = "<group>";
@@ -147,6 +147,7 @@
 		K000000100000007 /* AlephKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				80E8FB562F53E1B40055F722 /* aleph.icon */,
 				K000000100000002 /* KeyboardViewController.swift */,
 				K000000100000003 /* PaleoKeyboardView.swift */,
 				K000000100000004 /* Info.plist */,
@@ -258,7 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E81000012B0000010000000E /* Assets.xcassets in Resources */,
-				AE6B11739069B3C9D436F66C /* AppIcon.icon in Resources */,
+						80E8FB592F53E1B40055F722 /* aleph.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F00000010000000E /* Assets.xcassets in Resources */,
-				071DB026B526F497EE596F78 /* AppIcon.icon in Resources */,
+						80E8FB572F53E1B40055F722 /* aleph.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80E8FB582F53E1B40055F722 /* aleph.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,9 +452,9 @@
 		E81000012B00000100000014 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = aleph;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = AlephTools/AlephTools.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -477,9 +479,9 @@
 		E81000012B00000100000015 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = aleph;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = AlephTools/AlephTools.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -504,9 +506,9 @@
 		F000000100000007 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = aleph;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -537,9 +539,9 @@
 		F000000100000008 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = aleph;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
