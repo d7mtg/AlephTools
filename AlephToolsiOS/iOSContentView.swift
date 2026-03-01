@@ -39,6 +39,10 @@ struct iOSContentView: View {
             }
             .sheet(isPresented: $showKeyboardSetup) {
                 KeyboardSetupView()
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(32)
+                    .presentationBackground(.ultraThinMaterial)
             }
         }
         .onAppear {
