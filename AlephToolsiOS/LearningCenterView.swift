@@ -1,5 +1,15 @@
 import SwiftUI
 
+// MARK: - Platform Fill Color
+
+private let cardFillColor: Color = {
+    #if os(iOS)
+    return cardFillColor
+    #else
+    return Color(.controlBackgroundColor)
+    #endif
+}()
+
 // MARK: - Learning Center
 
 struct LearningCenterView: View {
@@ -33,13 +43,15 @@ struct LearningCenterView: View {
             }
         }
         .navigationTitle("Learning Center")
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.large)
+        #endif
     }
 }
 
 // MARK: - Topic Detail
 
-private struct TopicDetailView: View {
+struct TopicDetailView: View {
     let topic: LearningTopic
 
     var body: some View {
@@ -69,22 +81,7 @@ private struct TopicDetailView: View {
                     }
                 }
 
-                // Body sections
-                ForEach(topic.sections.indices, id: \.self) { i in
-                    let section = topic.sections[i]
-                    VStack(alignment: .leading, spacing: 8) {
-                        if let heading = section.heading {
-                            Text(heading)
-                                .font(.headline)
-                        }
-                        Text(section.body)
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-
-                // Interactive widget
+                // Interactive widget FIRST (above text)
                 if let widget = topic.widget {
                     switch widget {
                     case .alphabetChart:
@@ -97,6 +94,23 @@ private struct TopicDetailView: View {
                         GematriaCalculatorView()
                     case .atbashExplorer:
                         AtbashExplorerView()
+                    case .reversalDemo:
+                        ReversalDemoView()
+                    }
+                }
+
+                // Body sections (below widget)
+                ForEach(topic.sections.indices, id: \.self) { i in
+                    let section = topic.sections[i]
+                    VStack(alignment: .leading, spacing: 8) {
+                        if let heading = section.heading {
+                            Text(heading)
+                                .font(.headline)
+                        }
+                        Text(section.body)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
 
@@ -131,7 +145,9 @@ private struct TopicDetailView: View {
             .padding(20)
         }
         .navigationTitle(topic.title)
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 
@@ -141,32 +157,33 @@ private struct AlphabetChartView: View {
     @State private var selectedLetter: HebrewLetter?
 
     private let letters = HebrewLetter.all
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 6)
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Tap a letter to explore")
-                .font(.headline)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 
-            LazyVGrid(columns: columns, spacing: 6) {
+            LazyVGrid(columns: columns, spacing: 8) {
                 ForEach(letters) { letter in
                     Button {
                         withAnimation(.smooth(duration: 0.25)) {
                             selectedLetter = selectedLetter?.id == letter.id ? nil : letter
                         }
                     } label: {
-                        VStack(spacing: 2) {
+                        VStack(spacing: 3) {
                             Text(String(letter.hebrew))
-                                .font(.system(size: 28))
+                                .font(.system(size: 30))
                             Text(letter.name)
-                                .font(.system(size: 8, weight: .medium))
+                                .font(.system(size: 9, weight: .medium))
                                 .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: 56)
+                        .frame(height: 62)
                         .background(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(selectedLetter?.id == letter.id ? Color.accent.opacity(0.15) : Color(.tertiarySystemFill))
+                                .fill(selectedLetter?.id == letter.id ? Color.accent.opacity(0.15) : cardFillColor)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -189,7 +206,7 @@ private struct AlphabetChartView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
 
-                HStack(spacing: 12) {
+                HStack(spacing: 10) {
                     ForEach(HebrewLetter.finals) { letter in
                         Button {
                             withAnimation(.smooth(duration: 0.25)) {
@@ -198,15 +215,16 @@ private struct AlphabetChartView: View {
                         } label: {
                             VStack(spacing: 2) {
                                 Text(String(letter.hebrew))
-                                    .font(.system(size: 24))
+                                    .font(.system(size: 26))
                                 Text(letter.name)
-                                    .font(.system(size: 7, weight: .medium))
+                                    .font(.system(size: 8, weight: .medium))
                                     .foregroundStyle(.secondary)
                             }
-                            .frame(width: 52, height: 48)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
                             .background(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(selectedLetter?.id == letter.id ? Color.accent.opacity(0.15) : Color(.tertiarySystemFill))
+                                    .fill(selectedLetter?.id == letter.id ? Color.accent.opacity(0.15) : cardFillColor)
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -226,7 +244,7 @@ private struct AlphabetChartView: View {
         VStack(spacing: 0) {
             HStack(spacing: 20) {
                 // Large letter
-                VStack(spacing: 4) {
+                VStack(spacing: 6) {
                     Text(String(letter.hebrew))
                         .font(.system(size: 52))
                     if let paleo = letter.paleo {
@@ -240,7 +258,7 @@ private struct AlphabetChartView: View {
                 // Info
                 VStack(alignment: .leading, spacing: 8) {
                     infoRow("Name", letter.name)
-                    infoRow("Pronunciation", letter.pronunciation)
+                    infoRow("Sound", letter.pronunciation)
                     infoRow("Position", "#\(letter.position)")
                     infoRow("Gematria", "\(letter.gematriaValue)")
                     if let finalForm = letter.finalForm {
@@ -292,8 +310,9 @@ private struct KeyboardLayoutView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Tap a key to see its mapping")
-                .font(.headline)
+            Text("Tap any key to see its mapping")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 
             VStack(spacing: 5) {
                 keyboardRow(qwertyRow1, indent: 0)
@@ -359,7 +378,7 @@ private struct KeyboardLayoutView: View {
                     .frame(height: 44)
                     .background(
                         RoundedRectangle(cornerRadius: 7)
-                            .fill(highlightedKey == key ? Color.accent.opacity(0.15) : Color(.tertiarySystemFill))
+                            .fill(highlightedKey == key ? Color.accent.opacity(0.15) : cardFillColor)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 7)
@@ -397,7 +416,8 @@ private struct NiqqudChartView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Niqqud Marks")
-                    .font(.headline)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
                 Spacer()
                 Button {
                     withAnimation(.smooth) { showWithNiqqud.toggle() }
@@ -454,7 +474,6 @@ private struct NiqqudChartView: View {
 
 private struct GematriaCalculatorView: View {
     @State private var input = ""
-    @FocusState private var isFocused: Bool
 
     private var value: Int {
         var sum = 0
@@ -475,14 +494,19 @@ private struct GematriaCalculatorView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Try it yourself")
-                .font(.headline)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Try it yourself")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Text("Type \u{05D7}\u{05D9} for a famous one")
+                    .font(.caption)
+                    .foregroundStyle(.quaternary)
+            }
 
             // Input field
             TextField("Type Hebrew text\u{2026}", text: $input)
                 .font(.title2)
                 .multilineTextAlignment(.trailing)
-                .focused($isFocused)
                 .padding(14)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
 
@@ -597,11 +621,66 @@ private struct GematriaCalculatorView: View {
     }
 }
 
+// MARK: - Reversal Demo
+
+private struct ReversalDemoView: View {
+    @State private var showFixed = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("The problem, visualized")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            // Before/After
+            VStack(spacing: 12) {
+                // "Broken" app mockup
+                VStack(spacing: 6) {
+                    HStack(spacing: 6) {
+                        Circle().fill(.red).frame(width: 8, height: 8)
+                        Circle().fill(.orange).frame(width: 8, height: 8)
+                        Circle().fill(.green).frame(width: 8, height: 8)
+                        Spacer()
+                        Text(showFixed ? "After reversal" : "Without RTL support")
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.top, 8)
+
+                    Text(showFixed ? "\u{05E9}\u{05DC}\u{05D5}\u{05DD} \u{05E2}\u{05D5}\u{05DC}\u{05DD}" : "\u{05DD}\u{05DC}\u{05D5}\u{05E2} \u{05DD}\u{05D5}\u{05DC}\u{05E9}")
+                        .font(.system(size: 32, weight: .medium))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .contentTransition(.interpolate)
+                }
+                .background(cardFillColor, in: RoundedRectangle(cornerRadius: 10))
+
+                Button {
+                    withAnimation(.smooth) { showFixed.toggle() }
+                } label: {
+                    Label(showFixed ? "Show broken" : "Fix with reversal", systemImage: showFixed ? "arrow.uturn.backward" : "arrow.uturn.left")
+                        .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.accent)
+            }
+
+            Text("Software like After Effects, DaVinci Resolve, and Premiere Pro renders Hebrew left-to-right, flipping the character order. Pre-reversing the text compensates \u{2014} when the app lays it out LTR, it looks correct.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(16)
+        .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 16))
+    }
+}
+
 // MARK: - Atbash Explorer
 
 private struct AtbashExplorerView: View {
     @State private var input = ""
-    @FocusState private var isFocused: Bool
 
     private static let atbashMap: [Character: Character] = {
         let aleph: [Character] = [
@@ -615,7 +694,6 @@ private struct AtbashExplorerView: View {
         for i in 0..<aleph.count {
             map[aleph[i]] = aleph[aleph.count - 1 - i]
         }
-        // Map finals to their atbash of the regular form
         let finals: [Character: Character] = [
             "\u{05DA}": "\u{05DB}", "\u{05DD}": "\u{05DE}",
             "\u{05DF}": "\u{05E0}", "\u{05E3}": "\u{05E4}",
@@ -635,14 +713,19 @@ private struct AtbashExplorerView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Try the Atbash cipher")
-                .font(.headline)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Try the Atbash cipher")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Text("Type \u{05D1}\u{05D1}\u{05DC} to see the biblical example")
+                    .font(.caption)
+                    .foregroundStyle(.quaternary)
+            }
 
             // Input
             TextField("Type Hebrew text\u{2026}", text: $input)
                 .font(.title3)
                 .multilineTextAlignment(.trailing)
-                .focused($isFocused)
                 .padding(14)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
 
@@ -658,7 +741,7 @@ private struct AtbashExplorerView: View {
                             .textSelection(.enabled)
                     }
                     Spacer()
-                    Image(systemName: "arrow.left.arrow.right")
+                    Image(systemName: "lock.rotation")
                         .foregroundStyle(.accent)
                 }
                 .padding(14)
@@ -768,6 +851,7 @@ enum LearningWidget {
     case niqqudChart
     case gematriaCalculator
     case atbashExplorer
+    case reversalDemo
 }
 
 // MARK: - Data Model
@@ -901,7 +985,7 @@ extension LearningTopic {
     static let squareScript = LearningTopic(
         title: "Square Script (Ktav Ashuri)",
         subtitle: "The modern Hebrew letterforms",
-        icon: "character.textbox",
+        icon: "square.text.square",
         color: .indigo,
         example: "\u{10900}\u{10901}\u{10902} \u{2192} \u{05D0}\u{05D1}\u{05D2}",
         sections: [
@@ -924,7 +1008,6 @@ extension LearningTopic {
         example: "\u{05E9}\u{05DC}\u{05D5}\u{05DD} \u{2192} \u{05DD}\u{05D5}\u{05DC}\u{05E9}",
         sections: [
             Section(heading: nil, body: "Hebrew is a right-to-left language, but many programs don\u{2019}t support RTL text. When you paste Hebrew into these apps, the characters appear in reverse order \u{2014} rendered left-to-right instead of right-to-left. The Reverse tool flips the character order so the text displays correctly in LTR-only software."),
-            Section(heading: "The Problem", body: "Software that lacks RTL support ignores the Unicode Bidirectional Algorithm. It treats all text as left-to-right, so the word \u{201C}\u{05E9}\u{05DC}\u{05D5}\u{05DD}\u{201D} (shalom) appears as \u{201C}\u{05DD}\u{05D5}\u{05DC}\u{05E9}\u{201D} \u{2014} the first letter ends up on the left instead of the right. Pre-reversing the text compensates for this: when the software lays it out LTR, it looks correct."),
             Section(heading: "Adobe Creative Suite", body: "This is one of the most common use cases. Adobe apps historically lacked RTL support:\n\n\u{2022} After Effects \u{2014} No RTL until CC 2019, and many templates and plugins still ignore it. Motion designers working with Hebrew titles frequently need text reversal.\n\n\u{2022} Premiere Pro \u{2014} The title tool had no RTL support for years. Basic support arrived in CC 2019 but still has issues with mixed-direction text.\n\n\u{2022} Photoshop & Illustrator \u{2014} RTL requires manually enabling the \u{201C}Middle Eastern\u{201D} text engine in Preferences \u{203A} Type. Many users don\u{2019}t know about this setting.\n\nEven in recent versions, the ME text engine is opt-in, not the default."),
             Section(heading: "Video Editors", body: "DaVinci Resolve is a major offender \u{2014} its text tools have limited or no RTL support even in the latest versions. Hebrew-speaking filmmakers routinely pre-reverse text before pasting it into Resolve titles and subtitles. Vegas Pro and many open-source editors (Shotcut, OpenShot) have the same problem."),
             Section(heading: "Other Software", body: "The RTL problem appears across many categories:\n\n\u{2022} Game engines \u{2014} Unity (legacy UI), older Godot, RPG Maker, GameMaker\n\u{2022} 3D software \u{2014} Cinema 4D text objects, Blender (pre-3.1), 3ds Max\n\u{2022} Subtitles \u{2014} SRT files have no directionality metadata; some players render Hebrew reversed\n\u{2022} LED signage \u{2014} Many sign controllers are LTR-only\n\u{2022} Laser/CNC engraving \u{2014} Label printers and engravers often lack BiDi"),
@@ -934,7 +1017,7 @@ extension LearningTopic {
             WikiLink(title: "Bidirectional text \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Bidirectional_text"),
             WikiLink(title: "Unicode BiDi Algorithm", url: "https://en.wikipedia.org/wiki/Unicode_bidirectional_algorithm"),
         ],
-        widget: nil
+        widget: .reversalDemo
     )
 
     static let atbash = LearningTopic(

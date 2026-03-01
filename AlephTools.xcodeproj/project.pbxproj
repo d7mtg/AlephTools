@@ -13,6 +13,7 @@
 		8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */; };
 		1162E88A320280C7111F621F /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */; };
 		7D1C6342B3EE6E244E76421B /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
+		F1A2B3C4D5E6F7A8B9C0D1E2 /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
 		A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001 /* LineNumberTextEditor.swift */; };
 		B1B2C3D400000002 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000001 /* ServiceProvider.swift */; };
 		B1B2C3D400000004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000003 /* SettingsView.swift */; };
@@ -295,6 +296,7 @@
 			files = (
 				E81000012B0000010000000A /* AlephToolsApp.swift in Sources */,
 				E81000012B0000010000000C /* ContentView.swift in Sources */,
+				F1A2B3C4D5E6F7A8B9C0D1E2 /* LearningCenterView.swift in Sources */,
 				B1B2C3D400000002 /* ServiceProvider.swift in Sources */,
 				B1B2C3D400000004 /* SettingsView.swift in Sources */,
 				A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */,
