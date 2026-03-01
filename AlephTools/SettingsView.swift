@@ -34,53 +34,34 @@ private struct GeneralSettingsTab: View {
     @AppStorage("showInMenuBar") private var showInMenuBar = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("General")
-                .font(.headline)
-
-            VStack(alignment: .leading, spacing: 16) {
+        Form {
+            Section {
                 Toggle("Launch Aleph Tools at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _, newValue in
                         LaunchAtLoginManager.setEnabled(newValue)
                     }
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Picker("Default transformation:", selection: $defaultTransform) {
-                        ForEach(TransformationType.allCases) { t in
-                            Text(t.rawValue).tag(t.rawValue)
-                        }
-                    }
-                    .fixedSize()
-
-                    Text("Used when opening the app and for new windows.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Toggle("Show in menu bar", isOn: $showInMenuBar)
-
-                    Text("Quick access to transformations from the menu bar. (Coming soon)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .disabled(true)
-                .opacity(0.5)
             }
-            .padding(16)
-            .background(.background, in: RoundedRectangle(cornerRadius: 8))
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.separator, lineWidth: 0.5)
-            )
 
-            Spacer()
+            Section {
+                Picker("Default transformation:", selection: $defaultTransform) {
+                    ForEach(TransformationType.allCases) { t in
+                        Text(t.rawValue).tag(t.rawValue)
+                    }
+                }
+                .fixedSize()
+            } footer: {
+                Text("Used when opening the app and for new windows.")
+            }
+
+            Section {
+                Toggle("Show in menu bar", isOn: $showInMenuBar)
+            } footer: {
+                Text("Quick access to transformations from the menu bar. (Coming soon)")
+            }
+            .disabled(true)
+            .opacity(0.5)
         }
-        .padding(20)
+        .formStyle(.grouped)
     }
 }
 
@@ -137,7 +118,7 @@ private struct ShortcutsSettingsTab: View {
             if !AXIsProcessTrusted() {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.accent)
+                        .foregroundColor(.accentColor)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Accessibility Access Required")
                             .font(.callout.weight(.medium))
@@ -154,7 +135,7 @@ private struct ShortcutsSettingsTab: View {
                     .controlSize(.small)
                 }
                 .padding(10)
-                .background(.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
+                .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
             } else {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.circle.fill")
@@ -203,7 +184,7 @@ private struct ShortcutRow: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
-                    .background(.accent, in: RoundedRectangle(cornerRadius: 5))
+                    .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 5))
                     .onAppear { startLocalMonitor() }
                     .onDisappear { stopLocalMonitor() }
 
@@ -376,6 +357,8 @@ private struct ServicesSettingsTab: View {
 // MARK: - About Tab
 
 private struct AboutSettingsTab: View {
+    @Environment(\.openWindow) private var openWindow
+
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
@@ -385,68 +368,121 @@ private struct AboutSettingsTab: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
-            Spacer()
+        VStack(spacing: 0) {
+            // App identity
+            VStack(spacing: 12) {
+                Image(nsImage: NSApp.applicationIconImage)
+                    .resizable()
+                    .frame(width: 80, height: 80)
 
-            Image(nsImage: NSApp.applicationIconImage)
-                .resizable()
-                .frame(width: 96, height: 96)
+                VStack(spacing: 2) {
+                    Text("Aleph Tools")
+                        .font(.title2.weight(.semibold))
 
-            VStack(spacing: 4) {
-                Text("Aleph Tools")
-                    .font(.title2.weight(.semibold))
-
-                Text("Version \(appVersion) (\(buildNumber))")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+                    Text("Version \(appVersion) (\(buildNumber))")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
             }
+            .padding(.top, 24)
+            .padding(.bottom, 20)
 
-            Text("Hebrew text transformation utility for macOS.\nConvert keyboard layouts, strip niqqud, transliterate\nbetween modern and paleo-Hebrew scripts, and more.")
+            // Description
+            Text("Hebrew text transformation utility for macOS. Convert keyboard layouts, strip niqqud, transliterate between modern and paleo-Hebrew scripts, and more.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 32)
+                .padding(.bottom, 20)
 
-            HStack(spacing: 16) {
-                Link(destination: URL(string: "https://github.com/d7mtg/AlephTools")!) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left.forwardslash.chevron.right")
-                        Text("Source Code")
-                    }
+            // Links
+            VStack(spacing: 0) {
+                aboutRow(icon: "book", label: "Learning Center") {
+                    openWindow(id: "learning-center")
                 }
-                .buttonStyle(.link)
 
-                Link(destination: URL(string: "https://github.com/d7mtg/AlephTools/issues")!) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "ladybug")
-                        Text("Report Issue")
-                    }
-                }
-                .buttonStyle(.link)
+                Divider().padding(.leading, 36)
+
+                aboutLinkRow(icon: "chevron.left.forwardslash.chevron.right", label: "Source Code", url: "https://github.com/d7mtg/AlephTools")
+
+                Divider().padding(.leading, 36)
+
+                aboutLinkRow(icon: "ladybug", label: "Report an Issue", url: "https://github.com/d7mtg/AlephTools/issues")
+
+                Divider().padding(.leading, 36)
+
+                aboutLinkRow(icon: "globe", label: "Website", url: "https://d7mtg.com")
             }
+            .padding(.vertical, 4)
+            .background(.background, in: RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.separator, lineWidth: 0.5)
+            )
+            .padding(.horizontal, 20)
 
             Spacer()
 
-            VStack(spacing: 6) {
+            // Footer
+            VStack(spacing: 4) {
                 HStack(spacing: 4) {
                     Text("Made by")
-                        .foregroundStyle(.tertiary)
                     Link("D7mtg", destination: URL(string: "https://d7mtg.com")!)
-                        .buttonStyle(.link)
                     Text("with")
-                        .foregroundStyle(.tertiary)
                     Link("Claude Code", destination: URL(string: "https://claude.ai/claude-code")!)
-                        .buttonStyle(.link)
                 }
                 .font(.caption)
+                .foregroundStyle(.tertiary)
+                .tint(.secondary)
 
                 Text("\u{00A9} 2025 D7mtg")
                     .font(.caption2)
                     .foregroundStyle(.quaternary)
             }
+            .padding(.bottom, 16)
         }
         .frame(maxWidth: .infinity)
-        .padding(20)
+    }
+
+    private func aboutRow(icon: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .frame(width: 20)
+                    .foregroundStyle(.secondary)
+                Text(label)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.quaternary)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func aboutLinkRow(icon: String, label: String, url: String) -> some View {
+        Link(destination: URL(string: url)!) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .frame(width: 20)
+                    .foregroundStyle(.secondary)
+                Text(label)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.quaternary)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }
 

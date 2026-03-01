@@ -1,5 +1,45 @@
 import SwiftUI
 
+// MARK: - Focused Values
+
+struct FocusedTransformValue: FocusedValueKey {
+    typealias Value = Binding<TransformationType>
+}
+
+struct FocusedInputTextValue: FocusedValueKey {
+    typealias Value = Binding<String>
+}
+
+struct FocusedOutputTextValue: FocusedValueKey {
+    typealias Value = String
+}
+
+struct FocusedKeepPunctuationValue: FocusedValueKey {
+    typealias Value = Binding<Bool>
+}
+
+extension FocusedValues {
+    var selectedTransform: Binding<TransformationType>? {
+        get { self[FocusedTransformValue.self] }
+        set { self[FocusedTransformValue.self] = newValue }
+    }
+
+    var inputText: Binding<String>? {
+        get { self[FocusedInputTextValue.self] }
+        set { self[FocusedInputTextValue.self] = newValue }
+    }
+
+    var outputText: String? {
+        get { self[FocusedOutputTextValue.self] }
+        set { self[FocusedOutputTextValue.self] = newValue }
+    }
+
+    var keepPunctuation: Binding<Bool>? {
+        get { self[FocusedKeepPunctuationValue.self] }
+        set { self[FocusedKeepPunctuationValue.self] = newValue }
+    }
+}
+
 struct ContentView: View {
     @State private var inputText = ""
     @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
@@ -32,6 +72,10 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: showCopiedToast)
+        .focusedSceneValue(\.selectedTransform, $selectedTransform)
+        .focusedSceneValue(\.inputText, $inputText)
+        .focusedSceneValue(\.outputText, outputText)
+        .focusedSceneValue(\.keepPunctuation, $keepPunctuation)
         .onAppear {
             if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
                 selectedTransform = saved
@@ -82,15 +126,6 @@ struct ContentView: View {
             }
         }
 
-        ToolbarItem(placement: .primaryAction) {
-            Button {
-                copyToClipboard()
-            } label: {
-                Label("Copy Output", systemImage: "doc.on.doc")
-            }
-            .disabled(outputText.isEmpty)
-            .keyboardShortcut("c", modifiers: [.command, .shift])
-        }
     }
 
     // MARK: - Input Panel
@@ -102,16 +137,33 @@ struct ContentView: View {
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
                 Spacer()
-                if !inputText.isEmpty {
-                    Button {
-                        inputText = ""
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
+
+                Button {
+                    inputText = NSPasteboard.general.string(forType: .string) ?? ""
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "doc.on.clipboard")
+                        Text("Paste")
                     }
-                    .buttonStyle(.plain)
+                    .font(.caption.weight(.medium))
                 }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .help("Paste from clipboard")
+
+                Button {
+                    inputText = ""
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                        Text("Clear")
+                    }
+                    .font(.caption.weight(.medium))
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .disabled(inputText.isEmpty)
+                .help("Clear input")
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -142,6 +194,20 @@ struct ContentView: View {
 
                 if !inputText.isEmpty {
                     statsView
+                }
+
+                if !outputText.isEmpty {
+                    Button {
+                        copyToClipboard()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "doc.on.doc")
+                            Text("Copy")
+                        }
+                        .font(.caption.weight(.medium))
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 }
             }
             .padding(.horizontal, 12)
@@ -183,7 +249,7 @@ struct ContentView: View {
         HStack(spacing: 6) {
             if stats.changed > 0 {
                 Text("\(stats.changed) changed")
-                    .foregroundStyle(.accent)
+                    .foregroundColor(.accentColor)
             }
             if stats.unchanged > 0 {
                 Text("\(stats.unchanged) kept")

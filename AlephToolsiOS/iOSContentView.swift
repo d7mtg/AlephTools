@@ -101,17 +101,33 @@ struct iOSContentView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
-                if !inputText.isEmpty {
-                    Button {
-                        withAnimation(.smooth) { inputText = "" }
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
-                            .font(.title3)
+
+                Button {
+                    if let clip = UIPasteboard.general.string {
+                        withAnimation(.smooth) { inputText = clip }
                     }
-                    .buttonStyle(.plain)
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "doc.on.clipboard")
+                        Text("Paste")
+                    }
+                    .font(.caption.weight(.medium))
                 }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+
+                Button {
+                    withAnimation(.smooth) { inputText = "" }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                        Text("Clear")
+                    }
+                    .font(.caption.weight(.medium))
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .disabled(inputText.isEmpty)
             }
             .padding(.horizontal, 16)
             .padding(.top, 14)
@@ -182,6 +198,7 @@ struct iOSContentView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
+        .geometryGroup()
         .animation(.smooth, value: selectedTransform.supportsPunctuationToggle)
         .glassEffect(.regular, in: .capsule)
     }
@@ -202,6 +219,17 @@ struct iOSContentView: View {
                 Spacer()
                 if !inputText.isEmpty {
                     statsLabel
+                }
+                if !outputText.isEmpty {
+                    Button {
+                        copyOutput()
+                    } label: {
+                        Image(systemName: "doc.on.doc")
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(.secondary)
+                            .font(.title3)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal, 16)
@@ -249,7 +277,7 @@ struct iOSContentView: View {
         HStack(spacing: 6) {
             if stats.changed > 0 {
                 Text("\(stats.changed) changed")
-                    .foregroundStyle(.accent)
+                    .foregroundColor(.accentColor)
             }
             if stats.unchanged > 0 {
                 Text("\(stats.unchanged) kept")
@@ -277,16 +305,8 @@ struct iOSContentView: View {
             Button {
                 showSettings = true
             } label: {
-                Image(systemName: "gearshape")
+                Image(systemName: "info.circle")
             }
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Button {
-                copyOutput()
-            } label: {
-                Label("Copy Output", systemImage: "doc.on.doc")
-            }
-            .disabled(outputText.isEmpty)
         }
         ToolbarItemGroup(placement: .keyboard) {
             Spacer()
