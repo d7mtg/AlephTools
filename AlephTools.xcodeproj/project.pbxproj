@@ -13,6 +13,8 @@
 		E81000012B0000010000000A /* AlephToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000B /* AlephToolsApp.swift */; };
 		E81000012B0000010000000C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000D /* ContentView.swift */; };
 		E81000012B0000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
+		AE6B11739069B3C9D436F66C /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */; };
+		071DB026B526F497EE596F78 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */; };
 		E81000012B00000100000020 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
 		F00000010000000A /* AlephToolsiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000000100000009 /* AlephToolsiOSApp.swift */; };
 		F00000010000000C /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000010000000B /* iOSContentView.swift */; };
@@ -57,6 +59,7 @@
 		E81000012B0000010000000B /* AlephToolsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsApp.swift; sourceTree = "<group>"; };
 		E81000012B0000010000000D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E81000012B0000010000000F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcon.icon; sourceTree = "<group>"; };
 		E81000012B00000100000011 /* AlephTools.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlephTools.entitlements; sourceTree = "<group>"; };
 		E81000012B00000100000021 /* HebrewTransformations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HebrewTransformations.swift; sourceTree = "<group>"; };
 		F000000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +118,7 @@
 				A1B2C3D400000001 /* LineNumberTextEditor.swift */,
 				E81000012B00000100000021 /* HebrewTransformations.swift */,
 				E81000012B0000010000000F /* Assets.xcassets */,
+				39FCE9F9FBF6E9E73C15E25B /* AppIcon.icon */,
 				E81000012B00000100000011 /* AlephTools.entitlements */,
 			);
 			path = AlephTools;
@@ -254,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E81000012B0000010000000E /* Assets.xcassets in Resources */,
+				AE6B11739069B3C9D436F66C /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F00000010000000E /* Assets.xcassets in Resources */,
+				071DB026B526F497EE596F78 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AlephTools/AlephTools.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -471,6 +478,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AlephTools/AlephTools.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -497,6 +505,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -529,6 +538,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
