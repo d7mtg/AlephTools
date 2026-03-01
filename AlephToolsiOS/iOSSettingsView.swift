@@ -49,6 +49,19 @@ struct iOSSettingsView: View {
                     Text("Set up the Paleo-Hebrew keyboard extension.")
                 }
 
+                // MARK: - Learn
+                Section {
+                    NavigationLink {
+                        LearningCenterView()
+                    } label: {
+                        Label("Learning Center", systemImage: "book")
+                    }
+                } header: {
+                    Text("Learn")
+                } footer: {
+                    Text("History and background on Hebrew scripts, niqqud, gematria, and more.")
+                }
+
                 // MARK: - About
                 Section {
                     HStack {

@@ -12,6 +12,7 @@
 		80E8FB592F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
 		8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */; };
 		1162E88A320280C7111F621F /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */; };
+		7D1C6342B3EE6E244E76421B /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
 		A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001 /* LineNumberTextEditor.swift */; };
 		B1B2C3D400000002 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000001 /* ServiceProvider.swift */; };
 		B1B2C3D400000004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000003 /* SettingsView.swift */; };
@@ -56,6 +57,7 @@
 		80E8FB562F53E1B40055F722 /* aleph.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = aleph.icon; sourceTree = "<group>"; };
 		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
 		3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
+		30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningCenterView.swift; sourceTree = "<group>"; };
 		A1B2C3D400000001 /* LineNumberTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineNumberTextEditor.swift; sourceTree = "<group>"; };
 		B1B2C3D400000001 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		B1B2C3D400000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				F00000010000000B /* iOSContentView.swift */,
 				0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */,
 				3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */,
+				30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */,
 			);
 			path = AlephToolsiOS;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				F00000010000000C /* iOSContentView.swift in Sources */,
 				8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */,
 				1162E88A320280C7111F621F /* KeyboardSetupView.swift in Sources */,
+				7D1C6342B3EE6E244E76421B /* LearningCenterView.swift in Sources */,
 				F00000010000000D /* HebrewTransformations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
