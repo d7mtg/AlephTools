@@ -52,8 +52,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
 		80E8FB562F53E1B40055F722 /* aleph.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = aleph.icon; sourceTree = "<group>"; };
+		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
 		A1B2C3D400000001 /* LineNumberTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineNumberTextEditor.swift; sourceTree = "<group>"; };
 		B1B2C3D400000001 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		B1B2C3D400000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -101,6 +101,7 @@
 		E81000012B00000100000003 = {
 			isa = PBXGroup;
 			children = (
+				80E8FB562F53E1B40055F722 /* aleph.icon */,
 				E81000012B00000100000004 /* AlephTools */,
 				F00000010000000F /* AlephToolsiOS */,
 				K000000100000007 /* AlephKeyboard */,
@@ -147,7 +148,6 @@
 		K000000100000007 /* AlephKeyboard */ = {
 			isa = PBXGroup;
 			children = (
-				80E8FB562F53E1B40055F722 /* aleph.icon */,
 				K000000100000002 /* KeyboardViewController.swift */,
 				K000000100000003 /* PaleoKeyboardView.swift */,
 				K000000100000004 /* Info.plist */,
