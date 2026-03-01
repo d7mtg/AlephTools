@@ -100,12 +100,8 @@ struct iOSSettingsView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .sheet(isPresented: $showKeyboardSetup) {
+            .fullScreenCover(isPresented: $showKeyboardSetup) {
                 KeyboardSetupView()
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(32)
-                    .presentationBackground(.ultraThinMaterial)
             }
         }
     }

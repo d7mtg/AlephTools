@@ -5,219 +5,184 @@ struct KeyboardSetupView: View {
     @AppStorage("hasCompletedKeyboardSetup") private var hasCompletedSetup = false
     @State private var isKeyboardInstalled = false
     @State private var checkTimer: Timer?
-    @State private var showSuccess = false
-    @State private var stage = 0
+    @State private var appeared = false
     @Environment(\.dismiss) private var dismiss
 
     private let keyboardBundleID = "com.alephtools.AlephToolsiOS.AlephKeyboard"
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: 20) {
-                    header
-                    preview
+            Spacer()
 
-                    if isKeyboardInstalled || showSuccess {
-                        successCard
-                            .transition(.blurReplace)
-                    } else {
-                        setupSteps
-                            .transition(.blurReplace)
-                    }
+            // MARK: - Hero
+
+            VStack(spacing: 24) {
+                Image("AppIcon")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .shadow(color: .accent.opacity(0.2), radius: 16, y: 8)
+                    .opacity(appeared ? 1 : 0)
+                    .scaleEffect(appeared ? 1 : 0.85)
+
+                VStack(spacing: 10) {
+                    Text("Paleo-Hebrew\nKeyboard")
+                        .font(.largeTitle.weight(.bold))
+                        .multilineTextAlignment(.center)
+
+                    Text("Type in ancient Hebrew script\nanywhere on your device.")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 20)
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 16)
             }
 
-            bottomButtons
+            Spacer()
+
+            // MARK: - Content
+
+            if isKeyboardInstalled {
+                successView
+                    .transition(.blurReplace)
+            } else {
+                stepsView
+                    .transition(.blurReplace)
+            }
+
+            Spacer()
+
+            // MARK: - Actions
+
+            VStack(spacing: 14) {
+                if isKeyboardInstalled {
+                    Button {
+                        hasCompletedSetup = true
+                        dismiss()
+                    } label: {
+                        Text("Get Started")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.accent)
+                } else {
+                    Button {
+                        openKeyboardSettings()
+                    } label: {
+                        Label("Open Settings", systemImage: "arrow.up.forward.app")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.accent)
+
+                    Button("Skip for now") {
+                        hasCompletedSetup = true
+                        dismiss()
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 32)
+            .animation(.smooth, value: isKeyboardInstalled)
         }
+        .background(Color(.systemBackground))
         .onAppear {
             checkKeyboardStatus()
             startPolling()
-            withAnimation(.smooth(duration: 0.5).delay(0.15)) { stage = 1 }
+            withAnimation(.smooth(duration: 0.6).delay(0.1)) {
+                appeared = true
+            }
         }
         .onDisappear {
             stopPolling()
         }
-        .interactiveDismissDisabled(!hasCompletedSetup)
         .onChange(of: isKeyboardInstalled) { _, installed in
             if installed {
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
-                withAnimation(.smooth(duration: 0.5)) {
-                    showSuccess = true
-                }
             }
         }
     }
 
-    // MARK: - Header
+    // MARK: - Success
 
-    private var header: some View {
-        HStack(spacing: 14) {
-            Image("AppIcon")
-                .resizable()
-                .frame(width: 56, height: 56)
-                .clipShape(RoundedRectangle(cornerRadius: 13, style: .continuous))
-                .shadow(color: .accent.opacity(0.25), radius: 8, y: 4)
-                .opacity(stage >= 1 ? 1 : 0)
-                .scaleEffect(stage >= 1 ? 1 : 0.8)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Paleo-Hebrew Keyboard")
-                    .font(.headline)
-
-                Text("Type in ancient script anywhere.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .opacity(stage >= 1 ? 1 : 0)
-            .offset(x: stage >= 1 ? 0 : -8)
-
-            Spacer()
-        }
-        .padding(.top, 8)
-    }
-
-    // MARK: - Preview
-
-    private var preview: some View {
-        HStack(spacing: 5) {
-            ForEach(Array("\u{10900}\u{10901}\u{10902}\u{10903}\u{10904}\u{10905}\u{10906}".enumerated()), id: \.offset) { i, char in
-                Text(String(char))
-                    .font(.system(size: 20))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 38)
-                    .background(.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 7))
-                    .opacity(stage >= 1 ? 1 : 0)
-                    .scaleEffect(stage >= 1 ? 1 : 0.6)
-                    .animation(.smooth(duration: 0.35).delay(0.3 + Double(i) * 0.05), value: stage)
-            }
-        }
-    }
-
-    // MARK: - Success Card
-
-    private var successCard: some View {
-        HStack(spacing: 14) {
+    private var successView: some View {
+        VStack(spacing: 12) {
             Image(systemName: "checkmark.circle.fill")
-                .font(.title2)
+                .font(.system(size: 48))
                 .foregroundStyle(.green)
-                .contentTransition(.symbolEffect(.replace))
+                .symbolEffect(.bounce, value: isKeyboardInstalled)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Ready to go")
-                    .font(.callout.weight(.semibold))
-                Text("Switch keyboards with the globe key while typing.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text("Ready to go")
+                .font(.title3.weight(.semibold))
 
-            Spacer()
+            Text("Switch keyboards with the\nglobe key while typing.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
-        .padding(14)
-        .glassEffect(.regular, in: .rect(cornerRadius: 14))
     }
 
-    // MARK: - Setup Steps
+    // MARK: - Steps
 
-    private var setupSteps: some View {
+    private var stepsView: some View {
         VStack(alignment: .leading, spacing: 0) {
             stepRow(
                 number: 1,
-                title: "General \u{203A} Keyboard",
-                detail: "In Settings, go to General, then Keyboard."
+                title: "Open Keyboard Settings",
+                detail: "Go to Settings \u{203A} General \u{203A} Keyboard"
             )
             stepConnector()
             stepRow(
                 number: 2,
                 title: "Add New Keyboard",
-                detail: "Tap \"Keyboards\", then \"Add New Keyboard...\""
+                detail: "Tap Keyboards, then Add New Keyboard..."
             )
             stepConnector()
             stepRow(
                 number: 3,
-                title: "Select Paleo-Hebrew",
-                detail: "Find \"Aleph Tools\" and tap it."
+                title: "Choose Paleo-Hebrew",
+                detail: "Find Aleph Tools in the list and tap it"
             )
         }
-        .padding(14)
-        .glassEffect(.regular, in: .rect(cornerRadius: 14))
+        .padding(.horizontal, 32)
     }
 
     private func stepRow(number: Int, title: String, detail: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: 16) {
             ZStack {
                 Circle()
-                    .fill(.accent.opacity(0.12))
-                    .frame(width: 28, height: 28)
+                    .fill(.accent)
+                    .frame(width: 32, height: 32)
                 Text("\(number)")
-                    .font(.system(.caption2, design: .rounded).weight(.bold))
-                    .foregroundStyle(.accent)
+                    .font(.system(.subheadline, design: .rounded).weight(.bold))
+                    .foregroundStyle(.white)
             }
 
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.body.weight(.semibold))
                 Text(detail)
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.top, 2)
-
-            Spacer(minLength: 0)
+            .padding(.top, 4)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
     }
 
     private func stepConnector() -> some View {
-        RoundedRectangle(cornerRadius: 1)
-            .fill(.accent.opacity(0.2))
-            .frame(width: 2, height: 14)
-            .padding(.leading, 13)
-    }
-
-    // MARK: - Bottom Buttons
-
-    private var bottomButtons: some View {
-        VStack(spacing: 10) {
-            if isKeyboardInstalled {
-                Button {
-                    hasCompletedSetup = true
-                    dismiss()
-                } label: {
-                    Text("Get Started")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.accent)
-            } else {
-                Button {
-                    openKeyboardSettings()
-                } label: {
-                    Label("Open Settings", systemImage: "arrow.up.forward.app")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.accent)
-
-                Button("Skip for now") {
-                    hasCompletedSetup = true
-                    dismiss()
-                }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 12)
-        .animation(.smooth, value: isKeyboardInstalled)
+        RoundedRectangle(cornerRadius: 1.5)
+            .fill(.accent.opacity(0.25))
+            .frame(width: 2.5, height: 24)
+            .padding(.leading, 14.75)
     }
 
     // MARK: - Detection
