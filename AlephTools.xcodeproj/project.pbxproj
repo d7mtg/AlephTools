@@ -27,6 +27,7 @@
 		F00000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
 		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
 		K000000100000006 /* PaleoKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000003 /* PaleoKeyboardView.swift */; };
+		PKG000000000001 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = PKG000000000002 /* KeyboardKit */; };
 		K000000100000012 /* AlephKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = K000000100000001 /* AlephKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C1A2B3D400000002 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A2B3D400000001 /* AppIntents.swift */; };
 		C1A2B3D400000004 /* AlephScriptCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A2B3D400000003 /* AlephScriptCommand.swift */; };
@@ -126,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				PKG000000000001 /* KeyboardKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +270,9 @@
 			dependencies = (
 			);
 			name = AlephKeyboard;
+			packageProductDependencies = (
+				PKG000000000002 /* KeyboardKit */,
+			);
 			productName = AlephKeyboard;
 			productReference = K000000100000001 /* AlephKeyboard.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -323,6 +328,9 @@
 				he,
 			);
 			mainGroup = E81000012B00000100000003;
+			packageReferences = (
+				PKG000000000003 /* XCRemoteSwiftPackageReference "KeyboardKit" */,
+			);
 			productRefGroup = E81000012B00000100000005 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -840,6 +848,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		PKG000000000003 /* XCRemoteSwiftPackageReference "KeyboardKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/KeyboardKit/KeyboardKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		PKG000000000002 /* KeyboardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = PKG000000000003 /* XCRemoteSwiftPackageReference "KeyboardKit" */;
+			productName = KeyboardKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E81000012B00000100000000 /* Project object */;
 }
