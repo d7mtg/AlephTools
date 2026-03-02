@@ -198,13 +198,24 @@ struct LineNumberTextEditor: NSViewRepresentable {
             if parent.text != textView.string {
                 parent.text = textView.string
             }
-            scrollSync?.refreshRulers()
-            textView.enclosingScrollView?.verticalRulerView?.needsDisplay = true
+            updateActiveLine()
         }
 
         func textViewDidChangeSelection(_ notification: Notification) {
+            updateActiveLine()
+        }
+
+        private func updateActiveLine() {
+            guard let textView else { return }
+            let text = textView.string as NSString
+            let cursorLocation = min(textView.selectedRange().location, text.length)
+            var line = 1
+            for char in text.substring(to: cursorLocation).unicodeScalars {
+                if char == "\n" { line += 1 }
+            }
+            scrollSync?.activeLine = line
             scrollSync?.refreshRulers()
-            textView?.enclosingScrollView?.verticalRulerView?.needsDisplay = true
+            textView.enclosingScrollView?.verticalRulerView?.needsDisplay = true
         }
 
         @objc func boundsDidChange(_ notification: Notification) {
@@ -265,19 +276,7 @@ class LineNumberRulerView: NSRulerView {
             .foregroundColor: NSColor.labelColor,
         ]
 
-        // Find which line the cursor is on
-        var activeLine = 0
-        if textView.isEditable {
-            let cursorLocation = min(textView.selectedRange().location, text.length)
-            let substring = text.substring(to: cursorLocation)
-            activeLine = 1
-            for char in substring.unicodeScalars {
-                if char == "\n" { activeLine += 1 }
-            }
-            scrollSync?.activeLine = activeLine
-        } else {
-            activeLine = scrollSync?.activeLine ?? 0
-        }
+        let activeLine = scrollSync?.activeLine ?? 0
 
         var lineNumber = 1
 
