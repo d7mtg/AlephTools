@@ -43,6 +43,45 @@ class OutputViewHandle: ObservableObject {
     var printAction: (() -> Void)?
 }
 
+// MARK: - Scroll Sync
+
+class ScrollSyncCoordinator: ObservableObject {
+    private var scrollViews: [NSScrollView] = []
+    private var isSyncing = false
+    var activeLine: Int = 0
+
+    func register(_ scrollView: NSScrollView) {
+        guard !scrollViews.contains(where: { $0 === scrollView }) else { return }
+        scrollViews.append(scrollView)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(syncScroll(_:)),
+            name: NSView.boundsDidChangeNotification,
+            object: scrollView.contentView
+        )
+    }
+
+    func refreshRulers() {
+        for scrollView in scrollViews {
+            scrollView.verticalRulerView?.needsDisplay = true
+        }
+    }
+
+    @objc private func syncScroll(_ notification: Notification) {
+        guard !isSyncing,
+              let sourceClipView = notification.object as? NSClipView,
+              let sourceScrollView = sourceClipView.enclosingScrollView else { return }
+        isSyncing = true
+        let sourceY = sourceClipView.bounds.origin.y
+        for scrollView in scrollViews where scrollView !== sourceScrollView {
+            scrollView.contentView.bounds.origin.y = sourceY
+            scrollView.reflectScrolledClipView(scrollView.contentView)
+            scrollView.verticalRulerView?.needsDisplay = true
+        }
+        isSyncing = false
+    }
+}
+
 // MARK: - Line Number Text Editor
 
 struct LineNumberTextEditor: NSViewRepresentable {
@@ -50,6 +89,7 @@ struct LineNumberTextEditor: NSViewRepresentable {
     var font: NSFont = .systemFont(ofSize: 13)
     var isEditable: Bool = true
     var command: TextEditorCommand?
+    var scrollSync: ScrollSyncCoordinator?
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -85,15 +125,18 @@ struct LineNumberTextEditor: NSViewRepresentable {
         textView.isIncrementalSearchingEnabled = true
 
         // Line number gutter
-        let rulerView = LineNumberRulerView(scrollView: scrollView, textView: textView, font: font)
+        let rulerView = LineNumberRulerView(scrollView: scrollView, textView: textView, font: font, scrollSync: scrollSync)
         scrollView.verticalRulerView = rulerView
         scrollView.hasVerticalRuler = true
         scrollView.rulersVisible = true
 
         scrollView.documentView = textView
         context.coordinator.textView = textView
+        context.coordinator.scrollSync = scrollSync
 
         textView.string = text
+
+        scrollSync?.register(scrollView)
 
         // Wire up undo-aware command
         command?.replaceAll = { [weak textView] newText in
@@ -144,6 +187,7 @@ struct LineNumberTextEditor: NSViewRepresentable {
     class Coordinator: NSObject, NSTextViewDelegate {
         var parent: LineNumberTextEditor
         weak var textView: NSTextView?
+        weak var scrollSync: ScrollSyncCoordinator?
 
         init(_ parent: LineNumberTextEditor) {
             self.parent = parent
@@ -157,6 +201,11 @@ struct LineNumberTextEditor: NSViewRepresentable {
             textView.enclosingScrollView?.verticalRulerView?.needsDisplay = true
         }
 
+        func textViewDidChangeSelection(_ notification: Notification) {
+            scrollSync?.refreshRulers()
+            textView?.enclosingScrollView?.verticalRulerView?.needsDisplay = true
+        }
+
         @objc func boundsDidChange(_ notification: Notification) {
             textView?.enclosingScrollView?.verticalRulerView?.needsDisplay = true
         }
@@ -167,9 +216,11 @@ struct LineNumberTextEditor: NSViewRepresentable {
 
 class LineNumberRulerView: NSRulerView {
     var font: NSFont
+    weak var scrollSync: ScrollSyncCoordinator?
 
-    init(scrollView: NSScrollView, textView: NSTextView, font: NSFont) {
+    init(scrollView: NSScrollView, textView: NSTextView, font: NSFont, scrollSync: ScrollSyncCoordinator? = nil) {
         self.font = font
+        self.scrollSync = scrollSync
         super.init(scrollView: scrollView, orientation: .verticalRuler)
         self.clientView = textView
         self.ruleThickness = 32
@@ -200,14 +251,31 @@ class LineNumberRulerView: NSRulerView {
                     [NSFontDescriptor.FeatureKey.typeIdentifier: kNumberCaseType,
                      NSFontDescriptor.FeatureKey.selectorIdentifier: kLowerCaseNumbersSelector],
                 ],
-                .traits: [NSFontDescriptor.TraitKey.width: -0.4],
+                .traits: [NSFontDescriptor.TraitKey.width: -0.2],
             ])
             return NSFont(descriptor: descriptor, size: size) ?? base
         }()
-        let attrs: [NSAttributedString.Key: Any] = [
+        let inactiveAttrs: [NSAttributedString.Key: Any] = [
             .font: lineNumFont,
             .foregroundColor: NSColor.tertiaryLabelColor,
         ]
+        let activeAttrs: [NSAttributedString.Key: Any] = [
+            .font: lineNumFont,
+            .foregroundColor: NSColor.labelColor,
+        ]
+
+        // Find which line the cursor is on
+        var activeLine = 0
+        if textView.isEditable {
+            let cursorLocation = textView.selectedRange().location
+            activeLine = 1
+            text.enumerateSubstrings(in: NSRange(location: 0, length: min(cursorLocation, text.length)), options: [.byLines, .substringNotRequired]) { _, _, _, _ in
+                activeLine += 1
+            }
+            scrollSync?.activeLine = activeLine
+        } else {
+            activeLine = scrollSync?.activeLine ?? 0
+        }
 
         var lineNumber = 1
 
@@ -222,13 +290,15 @@ class LineNumberRulerView: NSRulerView {
             var lineRect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: container)
             lineRect.origin.y += textView.textContainerInset.height
 
+            let isActive = lineNumber == activeLine
             let numStr = "\(lineNumber)" as NSString
-            let strSize = numStr.size(withAttributes: attrs)
+            let drawAttrs = isActive ? activeAttrs : inactiveAttrs
+            let strSize = numStr.size(withAttributes: drawAttrs)
             let drawPoint = NSPoint(
                 x: self.ruleThickness - strSize.width - 6,
                 y: lineRect.origin.y + (lineRect.height - strSize.height) / 2 - visibleRect.origin.y
             )
-            numStr.draw(at: drawPoint, withAttributes: attrs)
+            numStr.draw(at: drawPoint, withAttributes: drawAttrs)
             lineNumber += 1
         }
     }
@@ -238,8 +308,10 @@ class LineNumberRulerView: NSRulerView {
 
 struct LineNumberOutputView: NSViewRepresentable {
     let text: String
+    var inputText: String = ""
     var font: NSFont = .systemFont(ofSize: 13)
     var handle: OutputViewHandle?
+    var scrollSync: ScrollSyncCoordinator?
 
     func makeCoordinator() -> OutputCoordinator {
         OutputCoordinator()
@@ -265,7 +337,7 @@ struct LineNumberOutputView: NSViewRepresentable {
         let textView = NSTextView()
         textView.isEditable = false
         textView.isSelectable = true
-        textView.isRichText = false
+        textView.isRichText = true
         textView.font = font
         textView.textColor = .labelColor
         textView.backgroundColor = .clear
@@ -278,13 +350,15 @@ struct LineNumberOutputView: NSViewRepresentable {
         textView.usesFindBar = true
         textView.isIncrementalSearchingEnabled = true
 
-        let rulerView = LineNumberRulerView(scrollView: scrollView, textView: textView, font: font)
+        let rulerView = LineNumberRulerView(scrollView: scrollView, textView: textView, font: font, scrollSync: scrollSync)
         scrollView.verticalRulerView = rulerView
         scrollView.hasVerticalRuler = true
         scrollView.rulersVisible = true
 
         scrollView.documentView = textView
-        textView.string = text
+        textView.textStorage?.setAttributedString(highlightedOutput(text: text, inputText: inputText, font: font))
+
+        scrollSync?.register(scrollView)
 
         handle?.printAction = { [weak textView] in
             guard let tv = textView else { return }
@@ -305,15 +379,39 @@ struct LineNumberOutputView: NSViewRepresentable {
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         guard let textView = scrollView.documentView as? NSTextView else { return }
         if textView.string != text {
-            textView.string = text
+            textView.textStorage?.setAttributedString(highlightedOutput(text: text, inputText: inputText, font: font))
         }
-        textView.font = font
         scrollView.verticalRulerView?.needsDisplay = true
 
         handle?.printAction = { [weak textView] in
             guard let tv = textView else { return }
             PrintHelper.printOutput(text: tv.string, from: tv)
         }
+    }
+
+    private func highlightedOutput(text: String, inputText: String, font: NSFont) -> NSAttributedString {
+        guard !text.isEmpty, !inputText.isEmpty else {
+            return NSAttributedString(string: text, attributes: [
+                .font: font,
+                .foregroundColor: NSColor.labelColor,
+            ])
+        }
+
+        let outputChars = Array(text)
+        let inputChars = Array(inputText)
+        let result = NSMutableAttributedString()
+
+        for (i, char) in outputChars.enumerated() {
+            let changed = i >= inputChars.count || char != inputChars[i]
+            let color: NSColor = changed ? .controlAccentColor : .tertiaryLabelColor
+            let attrs: [NSAttributedString.Key: Any] = [
+                .font: font,
+                .foregroundColor: color,
+            ]
+            result.append(NSAttributedString(string: String(char), attributes: attrs))
+        }
+
+        return result
     }
 }
 

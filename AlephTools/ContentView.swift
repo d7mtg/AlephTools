@@ -82,6 +82,7 @@ struct ContentView: View {
     @StateObject private var editorCommand = TextEditorCommand()
     @StateObject private var outputHandle = OutputViewHandle()
     @StateObject private var niqqudGenerator = NiqqudGenerator()
+    @StateObject private var scrollSync = ScrollSyncCoordinator()
 
     private var outputText: String {
         guard !inputText.isEmpty else { return "" }
@@ -287,7 +288,7 @@ struct ContentView: View {
 
             Divider()
 
-            LineNumberTextEditor(text: $inputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), command: editorCommand)
+            LineNumberTextEditor(text: $inputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), command: editorCommand, scrollSync: scrollSync)
                 .clipped()
         }
         .frame(minWidth: 280)
@@ -340,7 +341,7 @@ struct ContentView: View {
             } else if selectedTransform == .addNiqqud {
                 niqqudOutputPanel
             } else {
-                LineNumberOutputView(text: outputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle)
+                LineNumberOutputView(text: outputText, inputText: inputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle, scrollSync: scrollSync)
                     .clipped()
             }
         }
@@ -382,7 +383,7 @@ struct ContentView: View {
     private var niqqudOutputPanel: some View {
         Group {
             if inputText.isEmpty {
-                LineNumberOutputView(text: "", font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle)
+                LineNumberOutputView(text: "", font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle, scrollSync: scrollSync)
                     .clipped()
             } else if niqqudGenerator.isGenerating {
                 VStack(spacing: 12) {
@@ -418,7 +419,7 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
             } else {
-                LineNumberOutputView(text: niqqudGenerator.output, font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle)
+                LineNumberOutputView(text: niqqudGenerator.output, inputText: inputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle, scrollSync: scrollSync)
                     .clipped()
             }
         }
