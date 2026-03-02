@@ -92,8 +92,7 @@ struct PaleoKeyboardView: View {
     ]
 
     var body: some View {
-        GlassEffectContainer {
-            VStack(spacing: 6) {
+        VStack(spacing: 6) {
                 if showNumbers {
                     symbolRow(numRow1)
                     symbolRow(numRow2)
@@ -115,7 +114,6 @@ struct PaleoKeyboardView: View {
                     }
                 }
                 bottomRow
-            }
         }
         .padding(.horizontal, 3)
         .padding(.top, 8)
@@ -154,7 +152,7 @@ struct PaleoKeyboardView: View {
                         .frame(height: 44)
                 }
                 .buttonStyle(.plain)
-                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
+                .background(.regularMaterial, in: .rect(cornerRadius: 5))
             }
         }
     }
@@ -197,7 +195,7 @@ struct PaleoKeyboardView: View {
                     .frame(height: 42)
             }
             .buttonStyle(.plain)
-            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
+            .background(.regularMaterial, in: .rect(cornerRadius: 5))
 
             // Return
             Button {
@@ -210,7 +208,7 @@ struct PaleoKeyboardView: View {
                     .frame(width: 72, height: 42)
             }
             .buttonStyle(.plain)
-            .glassEffect(.regular.tint(.accentColor).interactive(), in: .rect(cornerRadius: 5))
+            .background(.tint, in: .rect(cornerRadius: 5))
         }
     }
 
@@ -221,7 +219,7 @@ struct PaleoKeyboardView: View {
             .font(.system(size: 17))
             .foregroundStyle(.primary)
             .frame(width: 44, height: 42)
-            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
+            .background(.regularMaterial, in: .rect(cornerRadius: 5))
             .onTapGesture {
                 haptic.impactOccurred()
                 deleteBackward()
@@ -291,7 +289,7 @@ private struct LetterKey: View {
             .frame(height: 44)
         }
         .buttonStyle(.plain)
-        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
+        .background(.regularMaterial, in: .rect(cornerRadius: 5))
     }
 }
 
@@ -317,6 +315,6 @@ private struct FunctionKey: View {
             .frame(width: width, height: 42)
         }
         .buttonStyle(.plain)
-        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
+        .background(.regularMaterial, in: .rect(cornerRadius: 5))
     }
 }
