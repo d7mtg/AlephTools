@@ -190,8 +190,20 @@ class LineNumberRulerView: NSRulerView {
         let visibleCharRange = layoutManager.characterRange(forGlyphRange: visibleGlyphRange, actualGlyphRange: nil)
 
         let text = textView.string as NSString
+        let lineNumFont: NSFont = {
+            let size = font.pointSize - 2
+            let base = NSFont.systemFont(ofSize: size, weight: .regular)
+            let descriptor = base.fontDescriptor.addingAttributes([
+                .featureSettings: [
+                    [NSFontDescriptor.FeatureKey.typeIdentifier: kNumberSpacingType,
+                     NSFontDescriptor.FeatureKey.selectorIdentifier: kMonospacedNumbersSelector],
+                ],
+                .traits: [NSFontDescriptor.TraitKey.width: -1.0],
+            ])
+            return NSFont(descriptor: descriptor, size: size) ?? base
+        }()
         let attrs: [NSAttributedString.Key: Any] = [
-            .font: NSFont.monospacedDigitSystemFont(ofSize: font.pointSize - 2, weight: .regular),
+            .font: lineNumFont,
             .foregroundColor: NSColor.tertiaryLabelColor,
         ]
 
