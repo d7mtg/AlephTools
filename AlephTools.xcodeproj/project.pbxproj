@@ -7,27 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1162E88A320280C7111F621F /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */; };
+		7D1C6342B3EE6E244E76421B /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
 		80E8FB572F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
 		80E8FB582F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
 		80E8FB592F53E1B40055F722 /* aleph.icon in Resources */ = {isa = PBXBuildFile; fileRef = 80E8FB562F53E1B40055F722 /* aleph.icon */; };
 		8C97D6690283A764CE94A201 /* iOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */; };
-		1162E88A320280C7111F621F /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */; };
-		7D1C6342B3EE6E244E76421B /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
-		F1A2B3C4D5E6F7A8B9C0D1E2 /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
 		A1B2C3D400000002 /* LineNumberTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001 /* LineNumberTextEditor.swift */; };
 		B1B2C3D400000002 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000001 /* ServiceProvider.swift */; };
 		B1B2C3D400000004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D400000003 /* SettingsView.swift */; };
-		E81000012B0000010000000A /* AlephToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000B /* AlephToolsApp.swift */; };
-		E81000012B0000010000000C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000D /* ContentView.swift */; };
-		E81000012B0000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
-		E81000012B00000100000020 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
-		F00000010000000A /* AlephToolsiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000000100000009 /* AlephToolsiOSApp.swift */; };
-		F00000010000000C /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000010000000B /* iOSContentView.swift */; };
-		F00000010000000D /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
-		F00000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
-		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
-		K000000100000006 /* PaleoKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000003 /* PaleoKeyboardView.swift */; };
-		K000000100000012 /* AlephKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = K000000100000001 /* AlephKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C1A2B3D400000002 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A2B3D400000001 /* AppIntents.swift */; };
 		C1A2B3D400000004 /* AlephScriptCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A2B3D400000003 /* AlephScriptCommand.swift */; };
 		C1A2B3D400000006 /* AlephTools.sdef in Resources */ = {isa = PBXBuildFile; fileRef = C1A2B3D400000005 /* AlephTools.sdef */; };
@@ -36,13 +24,33 @@
 		D1A2B3D400000004 /* NiqqudGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A2B3D400000001 /* NiqqudGenerator.swift */; };
 		E1A2B3D400000002 /* Nakdimon.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = E1A2B3D400000001 /* Nakdimon.mlpackage */; };
 		E1A2B3D400000004 /* Nakdimon.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = E1A2B3D400000001 /* Nakdimon.mlpackage */; };
+		E81000012B0000010000000A /* AlephToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000B /* AlephToolsApp.swift */; };
+		E81000012B0000010000000C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000D /* ContentView.swift */; };
+		E81000012B0000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
+		E81000012B00000100000020 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
+		F00000010000000A /* AlephToolsiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000000100000009 /* AlephToolsiOSApp.swift */; };
+		F00000010000000C /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000010000000B /* iOSContentView.swift */; };
+		F00000010000000D /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
+		F00000010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E81000012B0000010000000F /* Assets.xcassets */; };
+		F1A2B3C4D5E6F7A8B9C0D1E2 /* LearningCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */; };
+		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
+		K000000100000006 /* PaleoKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000003 /* PaleoKeyboardView.swift */; };
+		K000000100000012 /* AlephKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = K000000100000001 /* AlephKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		S000000100000005 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = S000000100000002 /* ShareViewController.swift */; };
 		S000000100000006 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = S000000100000003 /* ShareView.swift */; };
-		S000000100000017 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
 		S000000100000012 /* AlephShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = S000000100000001 /* AlephShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		S000000100000017 /* HebrewTransformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81000012B00000100000021 /* HebrewTransformations.swift */; };
+		T000000100000001 /* HebrewTransformationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = T000000100000002 /* HebrewTransformationsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		T00000010000000F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E81000012B00000100000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E81000012B00000100000006;
+			remoteInfo = AlephTools;
+		};
 		K00000010000000F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E81000012B00000100000000 /* Project object */;
@@ -75,14 +83,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		80E8FB562F53E1B40055F722 /* aleph.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = aleph.icon; sourceTree = "<group>"; };
 		0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSSettingsView.swift; sourceTree = "<group>"; };
-		3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
 		30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningCenterView.swift; sourceTree = "<group>"; };
+		3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
+		80E8FB562F53E1B40055F722 /* aleph.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = aleph.icon; sourceTree = "<group>"; };
 		A1B2C3D400000001 /* LineNumberTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineNumberTextEditor.swift; sourceTree = "<group>"; };
 		B1B2C3D400000001 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		B1B2C3D400000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B1B2C3D400000005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1A2B3D400000001 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
+		C1A2B3D400000003 /* AlephScriptCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephScriptCommand.swift; sourceTree = "<group>"; };
+		C1A2B3D400000005 /* AlephTools.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AlephTools.sdef; sourceTree = "<group>"; };
+		D1A2B3D400000001 /* NiqqudGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiqqudGenerator.swift; sourceTree = "<group>"; };
+		E1A2B3D400000001 /* Nakdimon.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = Nakdimon.mlpackage; sourceTree = "<group>"; };
 		E81000012B00000100000001 /* Aleph Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aleph Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E81000012B0000010000000B /* AlephToolsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephToolsApp.swift; sourceTree = "<group>"; };
 		E81000012B0000010000000D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -96,15 +109,12 @@
 		K000000100000002 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		K000000100000003 /* PaleoKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaleoKeyboardView.swift; sourceTree = "<group>"; };
 		K000000100000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C1A2B3D400000001 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
-		C1A2B3D400000003 /* AlephScriptCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlephScriptCommand.swift; sourceTree = "<group>"; };
-		C1A2B3D400000005 /* AlephTools.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AlephTools.sdef; sourceTree = "<group>"; };
-		D1A2B3D400000001 /* NiqqudGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiqqudGenerator.swift; sourceTree = "<group>"; };
-		E1A2B3D400000001 /* Nakdimon.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = Nakdimon.mlpackage; sourceTree = "<group>"; };
 		S000000100000001 /* AlephShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AlephShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		S000000100000002 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		S000000100000003 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
 		S000000100000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		T000000100000002 /* HebrewTransformationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HebrewTransformationsTests.swift; sourceTree = "<group>"; };
+		T000000100000003 /* AlephToolsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlephToolsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +146,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		T000000100000009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -147,6 +164,7 @@
 				F00000010000000F /* AlephToolsiOS */,
 				K000000100000007 /* AlephKeyboard */,
 				S000000100000020 /* AlephShare */,
+				T000000100000020 /* AlephToolsTests */,
 				E81000012B00000100000005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -167,7 +185,7 @@
 				D1A2B3D400000001 /* NiqqudGenerator.swift */,
 				E1A2B3D400000001 /* Nakdimon.mlpackage */,
 				E81000012B0000010000000F /* Assets.xcassets */,
-						E81000012B00000100000011 /* AlephTools.entitlements */,
+				E81000012B00000100000011 /* AlephTools.entitlements */,
 			);
 			path = AlephTools;
 			sourceTree = "<group>";
@@ -179,6 +197,7 @@
 				F000000100000001 /* Aleph Tools.app */,
 				K000000100000001 /* AlephKeyboard.appex */,
 				S000000100000001 /* AlephShare.appex */,
+				T000000100000003 /* AlephToolsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,6 +232,14 @@
 				S000000100000004 /* Info.plist */,
 			);
 			path = AlephShare;
+			sourceTree = "<group>";
+		};
+		T000000100000020 /* AlephToolsTests */ = {
+			isa = PBXGroup;
+			children = (
+				T000000100000002 /* HebrewTransformationsTests.swift */,
+			);
+			path = AlephToolsTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,6 +316,24 @@
 			productReference = S000000100000001 /* AlephShare.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		T00000010000000B /* AlephToolsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = T00000010000000E /* Build configuration list for PBXNativeTarget "AlephToolsTests" */;
+			buildPhases = (
+				T000000100000008 /* Sources */,
+				T000000100000009 /* Frameworks */,
+				T00000010000000A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				T000000100000010 /* PBXTargetDependency */,
+			);
+			name = AlephToolsTests;
+			productName = AlephToolsTests;
+			productReference = T000000100000003 /* AlephToolsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -311,6 +356,10 @@
 					S00000010000000B = {
 						CreatedOnToolsVersion = 16.0;
 					};
+					T00000010000000B = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = E81000012B00000100000006;
+					};
 				};
 			};
 			buildConfigurationList = E81000012B0000010000001A /* Build configuration list for PBXProject "AlephTools" */;
@@ -331,6 +380,7 @@
 				F000000100000002 /* AlephToolsiOS */,
 				K00000010000000B /* AlephKeyboard */,
 				S00000010000000B /* AlephShare */,
+				T00000010000000B /* AlephToolsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -342,7 +392,7 @@
 			files = (
 				E81000012B0000010000000E /* Assets.xcassets in Resources */,
 				C1A2B3D400000006 /* AlephTools.sdef in Resources */,
-						80E8FB592F53E1B40055F722 /* aleph.icon in Resources */,
+				80E8FB592F53E1B40055F722 /* aleph.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +401,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F00000010000000E /* Assets.xcassets in Resources */,
-						80E8FB572F53E1B40055F722 /* aleph.icon in Resources */,
+				80E8FB572F53E1B40055F722 /* aleph.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +414,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		S00000010000000A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		T00000010000000A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -426,6 +483,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		T000000100000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				T000000100000001 /* HebrewTransformationsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -438,6 +503,11 @@
 			isa = PBXTargetDependency;
 			target = S00000010000000B /* AlephShare */;
 			targetProxy = S00000010000000F /* PBXContainerItemProxy */;
+		};
+		T000000100000010 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E81000012B00000100000006 /* AlephTools */;
+			targetProxy = T00000010000000F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -708,6 +778,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -733,6 +806,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -791,6 +867,42 @@
 			};
 			name = Release;
 		};
+		T00000010000000C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 444XUVT54V;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alephtools.AlephToolsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aleph Tools.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aleph Tools";
+			};
+			name = Debug;
+		};
+		T00000010000000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 444XUVT54V;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alephtools.AlephToolsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aleph Tools.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aleph Tools";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -839,10 +951,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		T00000010000000E /* Build configuration list for PBXNativeTarget "AlephToolsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				T00000010000000C /* Debug */,
+				T00000010000000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = E81000012B00000100000000 /* Project object */;
 }

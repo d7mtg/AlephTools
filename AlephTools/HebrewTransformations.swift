@@ -343,8 +343,9 @@ enum TransformationEngine {
     // MARK: Gematria
 
     static func toGematria(_ text: String) -> String {
+        let stripped = NiqqudUtils.removeNiqqud(text)
         var sum = 0
-        for char in text {
+        for char in stripped {
             if let value = CharacterMaps.gematriaValues[char] {
                 sum += value
             }
