@@ -32,26 +32,87 @@ struct PaleoKeyboardView: View {
 
     // MARK: - Layout
 
-    private var paleoLayout: KeyboardLayout {
-        let context = KeyboardContext()
-        context.locale = Locale(identifier: "he")
-        var layout = KeyboardLayout.standard(for: context)
+    /// Hebrew keyboard rows mapped to Paleo-Hebrew (standard Israeli layout)
+    private static let paleoRow1: [String] = [
+        "\u{10912}", "\u{10913}", "\u{10900}", "\u{10908}",  // ק ר א ט
+        "\u{10905}", "\u{1090D}", "\u{1090C}", "\u{10910}",  // ו ן ם פ
+    ]
+    private static let paleoRow2: [String] = [
+        "\u{10914}", "\u{10903}", "\u{10902}", "\u{1090A}",  // ש ד ג כ
+        "\u{1090F}", "\u{10909}", "\u{10907}", "\u{1090B}",  // ע י ח ל
+        "\u{1090A}", "\u{10910}",                            // ך ף
+    ]
+    private static let paleoRow3: [String] = [
+        "\u{10906}", "\u{1090E}", "\u{10901}", "\u{10904}",  // ז ס ב ה
+        "\u{1090D}", "\u{1090C}", "\u{10911}", "\u{10915}",  // נ מ צ ת
+        "\u{10911}",                                          // ץ
+    ]
 
-        // Replace input keys with Paleo-Hebrew characters
-        for rowIndex in layout.itemRows.indices {
-            for itemIndex in layout.itemRows[rowIndex].indices {
-                let item = layout.itemRows[rowIndex][itemIndex]
-                if case .character(let char) = item.action {
-                    if let paleo = paleoMap[char] {
-                        layout.itemRows[rowIndex][itemIndex] = item.copy(
-                            withAction: .character(paleo)
-                        )
-                    }
-                }
+    private var paleoLayout: KeyboardLayout {
+        // Get standard layout for system key sizing
+        let context = KeyboardContext()
+        let standardLayout = KeyboardLayout.standard(for: context)
+
+        // Find system key sizes from standard layout
+        let inputSize = standardLayout.itemRows.first?.first(where: {
+            if case .character = $0.action { return true }
+            return false
+        })?.size ?? KeyboardLayout.ItemSize(
+            width: .input,
+            height: 42
+        )
+        let insets = standardLayout.itemRows.first?.first(where: {
+            if case .character = $0.action { return true }
+            return false
+        })?.edgeInsets ?? EdgeInsets()
+
+        // Build character rows with Paleo-Hebrew
+        let rows: [[String]] = [Self.paleoRow1, Self.paleoRow2, Self.paleoRow3]
+        var itemRows: KeyboardLayout.ItemRows = rows.map { row in
+            row.map { char in
+                KeyboardLayout.Item(
+                    action: .character(char),
+                    size: inputSize,
+                    edgeInsets: insets
+                )
             }
         }
 
-        return layout
+        // Add system keys from standard layout (bottom row with space, backspace, etc.)
+        // Find the row with space key
+        for row in standardLayout.itemRows {
+            let hasSpace = row.contains { $0.action == .space }
+            if hasSpace {
+                itemRows.append(row)
+                break
+            }
+        }
+
+        // Add shift + backspace to row 3
+        if let standardRow3 = standardLayout.itemRows.last(where: { row in
+            row.contains { $0.action == .backspace }
+                && !row.contains { $0.action == .space }
+        }) {
+            // Extract shift from start and backspace from end
+            var shift: KeyboardLayout.Item?
+            var backspace: KeyboardLayout.Item?
+            for item in standardRow3 {
+                if case .shift = item.action { shift = item }
+                if item.action == .backspace { backspace = item }
+            }
+            if let shift, let backspace {
+                var row3 = [shift] + itemRows[2]
+                row3.append(backspace)
+                itemRows[2] = row3
+            }
+        }
+
+        return KeyboardLayout(
+            itemRows: itemRows,
+            deviceConfiguration: standardLayout.deviceConfiguration,
+            idealItemHeight: standardLayout.idealItemHeight,
+            idealItemInsets: standardLayout.idealItemInsets
+        )
     }
 
     // MARK: - Button Content
@@ -74,18 +135,6 @@ struct PaleoKeyboardView: View {
     }
 
     // MARK: - Character Maps
-
-    /// Hebrew square → Paleo-Hebrew
-    private let paleoMap: [String: String] = [
-        "ק": "\u{10912}", "ר": "\u{10913}", "א": "\u{10900}", "ט": "\u{10908}",
-        "ו": "\u{10905}", "ן": "\u{1090D}", "ם": "\u{1090C}", "פ": "\u{10910}",
-        "ש": "\u{10914}", "ד": "\u{10903}", "ג": "\u{10902}", "כ": "\u{1090A}",
-        "ע": "\u{1090F}", "י": "\u{10909}", "ח": "\u{10907}", "ל": "\u{1090B}",
-        "ך": "\u{1090A}", "ף": "\u{10910}",
-        "ז": "\u{10906}", "ס": "\u{1090E}", "ב": "\u{10901}", "ה": "\u{10904}",
-        "נ": "\u{1090D}", "מ": "\u{1090C}", "צ": "\u{10911}", "ת": "\u{10915}",
-        "ץ": "\u{10911}",
-    ]
 
     /// Paleo-Hebrew → Hebrew square (for display)
     private let reverseMap: [String: String] = [
