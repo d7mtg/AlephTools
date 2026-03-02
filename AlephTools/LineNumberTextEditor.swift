@@ -197,8 +197,10 @@ class LineNumberRulerView: NSRulerView {
                 .featureSettings: [
                     [NSFontDescriptor.FeatureKey.typeIdentifier: kNumberSpacingType,
                      NSFontDescriptor.FeatureKey.selectorIdentifier: kMonospacedNumbersSelector],
+                    [NSFontDescriptor.FeatureKey.typeIdentifier: kNumberCaseType,
+                     NSFontDescriptor.FeatureKey.selectorIdentifier: kLowerCaseNumbersSelector],
                 ],
-                .traits: [NSFontDescriptor.TraitKey.width: -1.0],
+                .traits: [NSFontDescriptor.TraitKey.width: -0.4],
             ])
             return NSFont(descriptor: descriptor, size: size) ?? base
         }()
