@@ -152,7 +152,8 @@ struct PaleoKeyboardView: View {
                         .frame(height: 44)
                 }
                 .buttonStyle(.plain)
-                .background(.regularMaterial, in: .rect(cornerRadius: 5))
+                .background(Color(.systemBackground), in: .rect(cornerRadius: 5))
+                .shadow(color: .black.opacity(0.15), radius: 0, y: 1)
             }
         }
     }
@@ -195,7 +196,8 @@ struct PaleoKeyboardView: View {
                     .frame(height: 42)
             }
             .buttonStyle(.plain)
-            .background(.regularMaterial, in: .rect(cornerRadius: 5))
+            .background(Color(.systemBackground), in: .rect(cornerRadius: 5))
+                .shadow(color: .black.opacity(0.15), radius: 0, y: 1)
 
             // Return
             Button {
@@ -208,7 +210,8 @@ struct PaleoKeyboardView: View {
                     .frame(width: 72, height: 42)
             }
             .buttonStyle(.plain)
-            .background(.tint, in: .rect(cornerRadius: 5))
+            .background(Color.accentColor, in: .rect(cornerRadius: 5))
+                .shadow(color: .black.opacity(0.15), radius: 0, y: 1)
         }
     }
 
@@ -219,7 +222,8 @@ struct PaleoKeyboardView: View {
             .font(.system(size: 17))
             .foregroundStyle(.primary)
             .frame(width: 44, height: 42)
-            .background(.regularMaterial, in: .rect(cornerRadius: 5))
+            .background(Color(.systemBackground), in: .rect(cornerRadius: 5))
+                .shadow(color: .black.opacity(0.15), radius: 0, y: 1)
             .onTapGesture {
                 haptic.impactOccurred()
                 deleteBackward()
@@ -289,7 +293,8 @@ private struct LetterKey: View {
             .frame(height: 44)
         }
         .buttonStyle(.plain)
-        .background(.regularMaterial, in: .rect(cornerRadius: 5))
+        .background(Color(.systemBackground), in: .rect(cornerRadius: 5))
+                .shadow(color: .black.opacity(0.15), radius: 0, y: 1)
     }
 }
 
@@ -315,6 +320,7 @@ private struct FunctionKey: View {
             .frame(width: width, height: 42)
         }
         .buttonStyle(.plain)
-        .background(.regularMaterial, in: .rect(cornerRadius: 5))
+        .background(Color(.systemBackground), in: .rect(cornerRadius: 5))
+                .shadow(color: .black.opacity(0.15), radius: 0, y: 1)
     }
 }
