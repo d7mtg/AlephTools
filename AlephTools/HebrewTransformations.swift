@@ -1,11 +1,16 @@
 import Foundation
 
+// MARK: - Handoff
+
+let handoffActivityType = "com.alephtools.transform"
+
 // MARK: - Transformation Type
 
 enum TransformationType: String, CaseIterable, Identifiable {
     case hebrewKeyboard = "To Hebrew"
     case englishKeyboard = "To English"
     case removeNiqqud = "Strip Niqqud"
+    case addNiqqud = "Add Niqqud"
     case squareHebrew = "To Modern"
     case paleoHebrew = "To Paleo"
     case gematria = "Gematria"
@@ -14,7 +19,8 @@ enum TransformationType: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 
     var subtitle: String {
-        "\(inputLabel) \u{2192} \(outputLabel)"
+        if self == .addNiqqud { return "Nakdimon \u{00B7} On-device" }
+        return "\(inputLabel) \u{2192} \(outputLabel)"
     }
 
     var inputLabel: String {
@@ -22,6 +28,7 @@ enum TransformationType: String, CaseIterable, Identifiable {
         case .hebrewKeyboard: "QWERTY English"
         case .englishKeyboard: "\u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF} Hebrew"
         case .removeNiqqud: "Hebrew with Niqqud"
+        case .addNiqqud: "Unvocalized Hebrew"
         case .squareHebrew: "\u{10900}\u{10901}\u{10902} Paleo-Hebrew"
         case .paleoHebrew: "\u{05D0}\u{05D1}\u{05D2} Modern Hebrew"
         case .gematria: "Hebrew text"
@@ -34,6 +41,7 @@ enum TransformationType: String, CaseIterable, Identifiable {
         case .hebrewKeyboard: "\u{05E7}\u{05E8}\u{05D0}\u{05D8}\u{05D5}\u{05DF} Hebrew"
         case .englishKeyboard: "QWERTY English"
         case .removeNiqqud: "Clean Hebrew"
+        case .addNiqqud: "Vocalized Hebrew"
         case .squareHebrew: "\u{05D0}\u{05D1}\u{05D2} Modern Hebrew"
         case .paleoHebrew: "\u{10900}\u{10901}\u{10902} Paleo-Hebrew"
         case .gematria: "Numerological value"
@@ -46,6 +54,7 @@ enum TransformationType: String, CaseIterable, Identifiable {
         case .hebrewKeyboard: "keyboard"
         case .englishKeyboard: "globe"
         case .removeNiqqud: "eraser"
+        case .addNiqqud: "wand.and.stars"
         case .squareHebrew: "character.textbox"
         case .paleoHebrew: "scroll"
         case .gematria: "number"
@@ -55,6 +64,15 @@ enum TransformationType: String, CaseIterable, Identifiable {
 
     var supportsPunctuationToggle: Bool {
         self == .hebrewKeyboard || self == .englishKeyboard
+    }
+
+    var supportsSquareOptions: Bool {
+        self == .squareHebrew
+    }
+
+    /// Whether this transformation requires async AI processing
+    var isAITransform: Bool {
+        self == .addNiqqud
     }
 }
 
@@ -181,12 +199,13 @@ enum NiqqudUtils {
 
 enum TransformationEngine {
 
-    static func transform(_ text: String, mode: TransformationType, keepPunctuation: Bool) -> String {
+    static func transform(_ text: String, mode: TransformationType, keepPunctuation: Bool, convertFinalLetters: Bool = false, cleanPunctuation: Bool = false) -> String {
         switch mode {
         case .hebrewKeyboard: toHebrewKeyboard(text, keepPunctuation: keepPunctuation)
         case .englishKeyboard: toEnglishKeyboard(text, keepPunctuation: keepPunctuation)
         case .removeNiqqud: NiqqudUtils.removeNiqqud(text)
-        case .squareHebrew: paleoToSquare(text)
+        case .addNiqqud: text // Async — handled separately by NiqqudGenerator
+        case .squareHebrew: paleoToSquare(text, convertFinals: convertFinalLetters, cleanPunctuation: cleanPunctuation)
         case .paleoHebrew: toPaleoHebrew(text)
         case .gematria: toGematria(text)
         case .reverse: reverseWithNiqqud(text)
@@ -227,21 +246,25 @@ enum TransformationEngine {
 
     // MARK: Square Hebrew (Paleo → Modern)
 
-    static func paleoToSquare(_ text: String) -> String {
-        // Use unicodeScalars for proper SMP character handling
+    static func paleoToSquare(_ text: String, convertFinals: Bool = false, cleanPunctuation: Bool = false) -> String {
+        var input = text
+
+        if cleanPunctuation {
+            input = cleanArchaeologicalPunctuation(input)
+        }
+
+        // Convert Paleo characters to Hebrew
         var result = ""
-        var iterator = text.unicodeScalars.makeIterator()
+        var iterator = input.unicodeScalars.makeIterator()
         var buffer: [Unicode.Scalar] = []
 
         while let scalar = iterator.next() {
             buffer.append(scalar)
-            // Check if we have a complete character
             let str = String(String.UnicodeScalarView(buffer))
             if let char = str.first, str.count == 1 {
                 buffer.removeAll()
                 let paleoStr = String(char)
                 if let hebrewChar = CharacterMaps.paleoToHebrew[paleoStr] {
-                    // Normalize final forms to regular
                     let normalized = CharacterMaps.finalToRegular[hebrewChar] ?? hebrewChar
                     result.append(normalized)
                 } else {
@@ -249,7 +272,72 @@ enum TransformationEngine {
                 }
             }
         }
+
+        if convertFinals {
+            result = applyFinalLetters(result)
+        }
+
         return result
+    }
+
+    /// Apply final letter forms at word boundaries
+    private static func applyFinalLetters(_ text: String) -> String {
+        let regularToFinal: [Character: Character] = [
+            "כ": "ך", "מ": "ם", "נ": "ן", "פ": "ף", "צ": "ץ",
+        ]
+        var chars = Array(text)
+        for i in chars.indices {
+            guard regularToFinal.keys.contains(chars[i]) else { continue }
+            let isLastInWord = (i == chars.count - 1) || !NiqqudUtils.isHebrewLetter(chars[i + 1])
+            if isLastInWord, let final = regularToFinal[chars[i]] {
+                chars[i] = final
+            }
+        }
+        return String(chars)
+    }
+
+    /// Clean archaeological/epigraphic punctuation from Paleo-Hebrew transcriptions
+    private static func cleanArchaeologicalPunctuation(_ text: String) -> String {
+        var result = text
+
+        // Remove line numbers at start of lines (e.g. "2.", "13.")
+        result = result.replacingOccurrences(
+            of: #"(?m)^\d+\.\s*"#,
+            with: "",
+            options: .regularExpression
+        )
+
+        // Remove brackets and dashes (damaged/missing text markers)
+        result = result.replacingOccurrences(of: "[", with: "")
+        result = result.replacingOccurrences(of: "]", with: "")
+        result = result.replacingOccurrences(of: "---", with: "")
+        result = result.replacingOccurrences(of: "--", with: "")
+        result = result.replacingOccurrences(of: "-", with: "")
+
+        // Replace Paleo dot word separator (U+002E between Paleo chars) with space
+        // The dot is used as a word divider in inscriptions
+        result = result.replacingOccurrences(of: ".", with: " ")
+
+        // Collapse multiple spaces
+        result = result.replacingOccurrences(
+            of: #"\s{2,}"#,
+            with: " ",
+            options: .regularExpression
+        )
+
+        // Trim whitespace from each line
+        result = result.split(separator: "\n", omittingEmptySubsequences: false)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .joined(separator: "\n")
+
+        // Remove empty lines
+        result = result.replacingOccurrences(
+            of: #"\n{2,}"#,
+            with: "\n",
+            options: .regularExpression
+        )
+
+        return result.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     // MARK: Gematria
@@ -310,6 +398,12 @@ struct ChangeStats {
             let niqqudCount = input.unicodeScalars.filter { NiqqudUtils.isNiqqud($0) }.count
             let nonSpaceCount = input.filter { $0 != " " }.count
             return ChangeStats(changed: niqqudCount, unchanged: nonSpaceCount - niqqudCount)
+
+        case .addNiqqud:
+            // Count niqqud added in output
+            let addedNiqqud = output.unicodeScalars.filter { NiqqudUtils.isNiqqud($0) }.count
+            let letterCount = input.filter { NiqqudUtils.isHebrewLetter($0) }.count
+            return ChangeStats(changed: addedNiqqud, unchanged: letterCount)
 
         default:
             let inputChars = Array(input.filter { $0 != " " })

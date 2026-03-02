@@ -6,16 +6,22 @@ struct iOSContentView: View {
     @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
     @State private var selectedTransform: TransformationType = .hebrewKeyboard
     @State private var keepPunctuation = false
+    @State private var convertFinalLetters = true
+    @State private var cleanPunctuation = false
     @State private var showSettings = false
     @State private var showCopiedToast = false
     @AppStorage("hasCompletedKeyboardSetup") private var hasCompletedKeyboardSetup = false
     @State private var showKeyboardSetup = false
     @FocusState private var isInputFocused: Bool
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @StateObject private var niqqudGenerator = NiqqudGenerator()
 
     private var outputText: String {
         guard !inputText.isEmpty else { return "" }
-        return TransformationEngine.transform(inputText, mode: selectedTransform, keepPunctuation: keepPunctuation)
+        if selectedTransform == .addNiqqud {
+            return niqqudGenerator.output
+        }
+        return TransformationEngine.transform(inputText, mode: selectedTransform, keepPunctuation: keepPunctuation, convertFinalLetters: convertFinalLetters, cleanPunctuation: cleanPunctuation)
     }
 
     private var stats: ChangeStats {
@@ -47,6 +53,40 @@ struct iOSContentView: View {
             }
             if !hasCompletedKeyboardSetup {
                 showKeyboardSetup = true
+            }
+        }
+        .onChange(of: selectedTransform) { _, newValue in
+            if newValue == .addNiqqud {
+                niqqudGenerator.generate(from: inputText)
+            } else {
+                niqqudGenerator.cancel()
+            }
+        }
+        .onChange(of: inputText) { _, newValue in
+            if selectedTransform == .addNiqqud {
+                niqqudGenerator.generate(from: newValue)
+            }
+        }
+        .userActivity(handoffActivityType) { activity in
+            activity.isEligibleForHandoff = true
+            activity.title = "Aleph Tools — \(selectedTransform.rawValue)"
+            activity.userInfo = [
+                "inputText": inputText,
+                "transformationType": selectedTransform.rawValue,
+                "keepPunctuation": keepPunctuation,
+            ]
+        }
+        .onContinueUserActivity(handoffActivityType) { activity in
+            guard let info = activity.userInfo else { return }
+            if let text = info["inputText"] as? String {
+                inputText = text
+            }
+            if let rawTransform = info["transformationType"] as? String,
+               let transform = TransformationType.allCases.first(where: { $0.rawValue == rawTransform }) {
+                selectedTransform = transform
+            }
+            if let punc = info["keepPunctuation"] as? Bool {
+                keepPunctuation = punc
             }
         }
         .overlay(alignment: .bottom) {
@@ -200,11 +240,33 @@ struct iOSContentView: View {
                 .controlSize(.small)
                 .tint(keepPunctuation ? .accentColor : .secondary)
             }
+
+            if selectedTransform.supportsSquareOptions {
+                Divider()
+                    .frame(height: 20)
+
+                Toggle(isOn: $convertFinalLetters) {
+                    Text("Finals")
+                        .font(.caption)
+                }
+                .toggleStyle(.button)
+                .controlSize(.small)
+                .tint(convertFinalLetters ? .accentColor : .secondary)
+
+                Toggle(isOn: $cleanPunctuation) {
+                    Text("Clean")
+                        .font(.caption)
+                }
+                .toggleStyle(.button)
+                .controlSize(.small)
+                .tint(cleanPunctuation ? .accentColor : .secondary)
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .geometryGroup()
         .animation(.smooth, value: selectedTransform.supportsPunctuationToggle)
+        .animation(.smooth, value: selectedTransform.supportsSquareOptions)
         .glassEffect(.regular, in: .capsule)
     }
 
@@ -246,6 +308,8 @@ struct iOSContentView: View {
             if selectedTransform == .gematria && !outputText.isEmpty {
                 gematriaDisplay
                     .frame(maxHeight: .infinity)
+            } else if selectedTransform == .addNiqqud && !inputText.isEmpty {
+                niqqudOutputContent
             } else {
                 ScrollView {
                     Text(outputText.isEmpty ? " " : outputText)
@@ -263,11 +327,20 @@ struct iOSContentView: View {
 
     // MARK: - Gematria
 
+    private var formattedGematria: String {
+        guard let number = Int(outputText) else { return outputText }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: number)) ?? outputText
+    }
+
     private var gematriaDisplay: some View {
         VStack(spacing: 4) {
-            Text(outputText)
+            Text(formattedGematria)
                 .font(.system(size: 60, weight: .bold, design: .rounded))
                 .contentTransition(.numericText())
+                .animation(.snappy(duration: 0.3), value: outputText)
                 .foregroundStyle(.primary)
             Text("Gematria Value")
                 .font(.footnote)
@@ -276,6 +349,56 @@ struct iOSContentView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 24)
         .padding(.bottom, 8)
+    }
+
+    // MARK: - Niqqud Output
+
+    private var niqqudOutputContent: some View {
+        Group {
+            if niqqudGenerator.isGenerating {
+                VStack(spacing: 12) {
+                    Spacer()
+                    ProgressView()
+                        .controlSize(.large)
+                    Text("Adding niqqud\u{2026}")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                    Text("Nakdimon")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+            } else if let error = niqqudGenerator.error {
+                VStack(spacing: 8) {
+                    Spacer()
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.title)
+                        .foregroundStyle(.secondary)
+                    Text(error.localizedDescription)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                    Button("Retry") {
+                        niqqudGenerator.generate(from: inputText)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+            } else {
+                ScrollView {
+                    Text(niqqudGenerator.output.isEmpty ? " " : niqqudGenerator.output)
+                        .font(.body)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 16)
+                }
+            }
+        }
     }
 
     // MARK: - Stats

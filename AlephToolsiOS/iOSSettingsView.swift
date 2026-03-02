@@ -1,4 +1,5 @@
 import SwiftUI
+import AppIntents
 
 struct iOSSettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -49,26 +50,12 @@ struct iOSSettingsView: View {
                     Text("Set up the Paleo-Hebrew keyboard extension.")
                 }
 
-                // MARK: - Learn
+                // MARK: - About
                 Section {
                     NavigationLink {
                         LearningCenterView()
                     } label: {
                         Label("Learning Center", systemImage: "book")
-                    }
-                } header: {
-                    Text("Learn")
-                } footer: {
-                    Text("History and background on Hebrew scripts, niqqud, gematria, and more.")
-                }
-
-                // MARK: - About
-                Section {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("\(appVersion) (\(buildNumber))")
-                            .foregroundStyle(.secondary)
                     }
 
                     Link(destination: URL(string: "https://github.com/d7mtg/AlephTools")!) {
@@ -100,11 +87,43 @@ struct iOSSettingsView: View {
                                 .foregroundStyle(.tertiary)
                         }
                     }
+
+                    HStack {
+                        Text("Version")
+                        Spacer()
+                        Text("\(appVersion) (\(buildNumber))")
+                            .foregroundStyle(.secondary)
+                    }
                 } header: {
                     Text("About")
                 } footer: {
                     Text("Made by D7mtg with Claude Code")
                 }
+
+                // MARK: - Open-Source Libraries
+                Section {
+                    Link(destination: URL(string: "https://github.com/elazarg/nakdimon")!) {
+                        HStack {
+                            Label("Nakdimon", systemImage: "wand.and.stars")
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                } header: {
+                    Text("Open-Source Libraries")
+                } footer: {
+                    Text("Hebrew diacritization model by Elazar Gershuni \u{00B7} MIT License")
+                }
+
+                // MARK: - Shortcuts
+                Section {
+                    ShortcutsLink()
+                        .shortcutsLinkStyle(.automaticOutline)
+                        .frame(maxWidth: .infinity)
+                }
+                .listRowBackground(Color.clear)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

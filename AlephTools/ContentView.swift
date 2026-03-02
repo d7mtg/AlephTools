@@ -18,6 +18,14 @@ struct FocusedKeepPunctuationValue: FocusedValueKey {
     typealias Value = Binding<Bool>
 }
 
+struct FocusedEditorCommandValue: FocusedValueKey {
+    typealias Value = TextEditorCommand
+}
+
+struct FocusedPrintValue: FocusedValueKey {
+    typealias Value = OutputViewHandle
+}
+
 extension FocusedValues {
     var selectedTransform: Binding<TransformationType>? {
         get { self[FocusedTransformValue.self] }
@@ -38,22 +46,60 @@ extension FocusedValues {
         get { self[FocusedKeepPunctuationValue.self] }
         set { self[FocusedKeepPunctuationValue.self] = newValue }
     }
+
+    var editorCommand: TextEditorCommand? {
+        get { self[FocusedEditorCommandValue.self] }
+        set { self[FocusedEditorCommandValue.self] = newValue }
+    }
+
+    var printHandle: OutputViewHandle? {
+        get { self[FocusedPrintValue.self] }
+        set { self[FocusedPrintValue.self] = newValue }
+    }
+}
+
+struct FocusedFontSizeValue: FocusedValueKey {
+    typealias Value = Binding<Double>
+}
+
+extension FocusedValues {
+    var editorFontSize: Binding<Double>? {
+        get { self[FocusedFontSizeValue.self] }
+        set { self[FocusedFontSizeValue.self] = newValue }
+    }
 }
 
 struct ContentView: View {
-    @State private var inputText = ""
+    @AppStorage("lastInputText") private var inputText = ""
     @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
     @State private var selectedTransform: TransformationType = .hebrewKeyboard
-    @State private var keepPunctuation = false
+    @AppStorage("lastKeepPunctuation") private var keepPunctuation = false
+    @AppStorage("convertFinalLetters") private var convertFinalLetters = true
+    @AppStorage("cleanPunctuation") private var cleanPunctuation = false
+    @AppStorage("editorFontSize") private var editorFontSize = 13.0
     @State private var showCopiedToast = false
+    @State private var toastWorkItem: DispatchWorkItem?
+    @StateObject private var editorCommand = TextEditorCommand()
+    @StateObject private var outputHandle = OutputViewHandle()
+    @StateObject private var niqqudGenerator = NiqqudGenerator()
 
     private var outputText: String {
         guard !inputText.isEmpty else { return "" }
-        return TransformationEngine.transform(inputText, mode: selectedTransform, keepPunctuation: keepPunctuation)
+        if selectedTransform == .addNiqqud {
+            return niqqudGenerator.output
+        }
+        return TransformationEngine.transform(inputText, mode: selectedTransform, keepPunctuation: keepPunctuation, convertFinalLetters: convertFinalLetters, cleanPunctuation: cleanPunctuation)
     }
 
     private var stats: ChangeStats {
         ChangeStats.compute(input: inputText, output: outputText, mode: selectedTransform)
+    }
+
+    private var statsAccessibilityLabel: String {
+        var parts: [String] = []
+        if stats.changed > 0 { parts.append("\(stats.changed) characters changed") }
+        if stats.unchanged > 0 { parts.append("\(stats.unchanged) characters kept") }
+        return parts.isEmpty ? "No statistics" : parts.joined(separator: ", ")
     }
 
     var body: some View {
@@ -76,9 +122,51 @@ struct ContentView: View {
         .focusedSceneValue(\.inputText, $inputText)
         .focusedSceneValue(\.outputText, outputText)
         .focusedSceneValue(\.keepPunctuation, $keepPunctuation)
+        .focusedSceneValue(\.editorCommand, editorCommand)
+        .focusedSceneValue(\.printHandle, outputHandle)
+        .focusedSceneValue(\.editorFontSize, $editorFontSize)
         .onAppear {
-            if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
+            // Restore last used transform, falling back to default
+            if let lastRaw = UserDefaults.standard.string(forKey: "lastUsedTransform"),
+               let last = TransformationType.allCases.first(where: { $0.rawValue == lastRaw }) {
+                selectedTransform = last
+            } else if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
                 selectedTransform = saved
+            }
+        }
+        .onChange(of: selectedTransform) { _, newValue in
+            UserDefaults.standard.set(newValue.rawValue, forKey: "lastUsedTransform")
+            if newValue == .addNiqqud {
+                niqqudGenerator.generate(from: inputText)
+            } else {
+                niqqudGenerator.cancel()
+            }
+        }
+        .onChange(of: inputText) { _, newValue in
+            if selectedTransform == .addNiqqud {
+                niqqudGenerator.generate(from: newValue)
+            }
+        }
+        .userActivity(handoffActivityType) { activity in
+            activity.isEligibleForHandoff = true
+            activity.title = "Aleph Tools — \(selectedTransform.rawValue)"
+            activity.userInfo = [
+                "inputText": inputText,
+                "transformationType": selectedTransform.rawValue,
+                "keepPunctuation": keepPunctuation,
+            ]
+        }
+        .onContinueUserActivity(handoffActivityType) { activity in
+            guard let info = activity.userInfo else { return }
+            if let text = info["inputText"] as? String {
+                inputText = text
+            }
+            if let rawTransform = info["transformationType"] as? String,
+               let transform = TransformationType.allCases.first(where: { $0.rawValue == rawTransform }) {
+                selectedTransform = transform
+            }
+            if let punc = info["keepPunctuation"] as? Bool {
+                keepPunctuation = punc
             }
         }
     }
@@ -114,6 +202,8 @@ struct ContentView: View {
                 }
                 .menuStyle(.borderlessButton)
                 .fixedSize()
+                .accessibilityLabel("Transformation mode")
+                .accessibilityHint("Select the text transformation to apply")
 
                 if selectedTransform.supportsPunctuationToggle {
                     Divider()
@@ -122,6 +212,21 @@ struct ContentView: View {
                     Toggle("Keep Punctuation", isOn: $keepPunctuation)
                         .toggleStyle(.checkbox)
                         .controlSize(.small)
+                }
+
+                if selectedTransform.supportsSquareOptions {
+                    Divider()
+                        .frame(height: 16)
+
+                    Toggle("Final Letters", isOn: $convertFinalLetters)
+                        .toggleStyle(.checkbox)
+                        .controlSize(.small)
+                        .help("Convert כמנפצ to final forms ךםןףץ at word boundaries")
+
+                    Toggle("Clean Punctuation", isOn: $cleanPunctuation)
+                        .toggleStyle(.checkbox)
+                        .controlSize(.small)
+                        .help("Remove brackets, line numbers, and convert dot separators to spaces")
                 }
             }
         }
@@ -145,7 +250,8 @@ struct ContentView: View {
                 Spacer()
 
                 Button {
-                    inputText = NSPasteboard.general.string(forType: .string) ?? ""
+                    let pasteText = NSPasteboard.general.string(forType: .string) ?? ""
+                    editorCommand.setText(pasteText)
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.clipboard")
@@ -155,10 +261,13 @@ struct ContentView: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .disabled(NSPasteboard.general.string(forType: .string) == nil)
                 .help("Paste from clipboard")
+                .accessibilityLabel("Paste from clipboard")
+                .accessibilityHint("Replaces input with clipboard contents")
 
                 Button {
-                    inputText = ""
+                    editorCommand.setText("")
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "xmark")
@@ -170,13 +279,15 @@ struct ContentView: View {
                 .controlSize(.small)
                 .disabled(inputText.isEmpty)
                 .help("Clear input")
+                .accessibilityLabel("Clear input")
+                .accessibilityHint("Clears all input text")
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
 
             Divider()
 
-            LineNumberTextEditor(text: $inputText)
+            LineNumberTextEditor(text: $inputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), command: editorCommand)
                 .clipped()
         }
         .frame(minWidth: 280)
@@ -216,6 +327,8 @@ struct ContentView: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 .disabled(outputText.isEmpty)
+                .accessibilityLabel("Copy output")
+                .accessibilityHint("Copies the transformed text to clipboard")
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -224,8 +337,10 @@ struct ContentView: View {
 
             if selectedTransform == .gematria && !outputText.isEmpty {
                 gematriaOutput
+            } else if selectedTransform == .addNiqqud {
+                niqqudOutputPanel
             } else {
-                LineNumberOutputView(text: outputText)
+                LineNumberOutputView(text: outputText, font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle)
                     .clipped()
             }
         }
@@ -236,13 +351,23 @@ struct ContentView: View {
 
     // MARK: - Gematria Output
 
+    private var formattedGematria: String {
+        guard let number = Int(outputText) else { return outputText }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: number)) ?? outputText
+    }
+
     private var gematriaOutput: some View {
         VStack(spacing: 8) {
             Spacer()
-            Text(outputText)
+            Text(formattedGematria)
                 .font(.system(size: 56, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
                 .contentTransition(.numericText())
+                .animation(.snappy(duration: 0.3), value: outputText)
+                .accessibilityLabel("Gematria value: \(formattedGematria)")
             Text("Gematria Value")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -250,6 +375,53 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(12)
+    }
+
+    // MARK: - Niqqud Output
+
+    private var niqqudOutputPanel: some View {
+        Group {
+            if inputText.isEmpty {
+                LineNumberOutputView(text: "", font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle)
+                    .clipped()
+            } else if niqqudGenerator.isGenerating {
+                VStack(spacing: 12) {
+                    Spacer()
+                    ProgressView()
+                        .controlSize(.large)
+                    Text("Adding niqqud\u{2026}")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                    Text("Nakdimon")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let error = niqqudGenerator.error {
+                VStack(spacing: 8) {
+                    Spacer()
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.title)
+                        .foregroundStyle(.secondary)
+                    Text(error.localizedDescription)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                    Button("Retry") {
+                        niqqudGenerator.generate(from: inputText)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding()
+            } else {
+                LineNumberOutputView(text: niqqudGenerator.output, font: .systemFont(ofSize: CGFloat(editorFontSize)), handle: outputHandle)
+                    .clipped()
+            }
+        }
     }
 
     // MARK: - Stats
@@ -268,6 +440,8 @@ struct ContentView: View {
         .font(.caption)
         .lineLimit(1)
         .fixedSize()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(statsAccessibilityLabel)
     }
 
     // MARK: - Toast
@@ -285,10 +459,11 @@ struct ContentView: View {
     private func copyToClipboard() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(outputText, forType: .string)
+        toastWorkItem?.cancel()
         showCopiedToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            showCopiedToast = false
-        }
+        let item = DispatchWorkItem { showCopiedToast = false }
+        toastWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: item)
     }
 }
 

@@ -4,7 +4,7 @@ import SwiftUI
 
 private let cardFillColor: Color = {
     #if os(iOS)
-    return cardFillColor
+    return Color(.secondarySystemGroupedBackground)
     #else
     return Color(.controlBackgroundColor)
     #endif
@@ -20,14 +20,11 @@ struct LearningCenterView: View {
                     TopicDetailView(topic: topic)
                 } label: {
                     HStack(spacing: 14) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(topic.color.opacity(0.15))
-                                .frame(width: 40, height: 40)
-                            Image(systemName: topic.icon)
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(topic.color)
-                        }
+                        Image(systemName: topic.icon)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 36, height: 36)
+                            .background(topic.color.gradient, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text(topic.title)
@@ -92,8 +89,8 @@ struct TopicDetailView: View {
                         NiqqudChartView()
                     case .gematriaCalculator:
                         GematriaCalculatorView()
-                    case .atbashExplorer:
-                        AtbashExplorerView()
+                    case .paleoAlphabetChart:
+                        PaleoAlphabetChartView()
                     case .reversalDemo:
                         ReversalDemoView()
                     }
@@ -126,7 +123,7 @@ struct TopicDetailView: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: "book")
                                         .font(.caption)
-                                        .foregroundStyle(.accent)
+                                        .foregroundColor(.accentColor)
                                     Text(link.title)
                                         .font(.subheadline)
                                     Spacer()
@@ -183,11 +180,11 @@ private struct AlphabetChartView: View {
                         .frame(height: 62)
                         .background(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(selectedLetter?.id == letter.id ? Color.accent.opacity(0.15) : cardFillColor)
+                                .fill(selectedLetter?.id == letter.id ? Color.accentColor.opacity(0.15) : cardFillColor)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .stroke(selectedLetter?.id == letter.id ? Color.accent : .clear, lineWidth: 1.5)
+                                .stroke(selectedLetter?.id == letter.id ? Color.accentColor : .clear, lineWidth: 1.5)
                         )
                     }
                     .buttonStyle(.plain)
@@ -224,11 +221,11 @@ private struct AlphabetChartView: View {
                             .frame(height: 52)
                             .background(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(selectedLetter?.id == letter.id ? Color.accent.opacity(0.15) : cardFillColor)
+                                    .fill(selectedLetter?.id == letter.id ? Color.accentColor.opacity(0.15) : cardFillColor)
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(selectedLetter?.id == letter.id ? Color.accent : .clear, lineWidth: 1.5)
+                                    .stroke(selectedLetter?.id == letter.id ? Color.accentColor : .clear, lineWidth: 1.5)
                             )
                         }
                         .buttonStyle(.plain)
@@ -378,11 +375,11 @@ private struct KeyboardLayoutView: View {
                     .frame(height: 44)
                     .background(
                         RoundedRectangle(cornerRadius: 7)
-                            .fill(highlightedKey == key ? Color.accent.opacity(0.15) : cardFillColor)
+                            .fill(highlightedKey == key ? Color.accentColor.opacity(0.15) : cardFillColor)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 7)
-                            .stroke(highlightedKey == key ? Color.accent : .clear, lineWidth: 1.5)
+                            .stroke(highlightedKey == key ? Color.accentColor : .clear, lineWidth: 1.5)
                     )
                 }
                 .buttonStyle(.plain)
@@ -426,7 +423,7 @@ private struct NiqqudChartView: View {
                         .font(.caption.weight(.medium))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(Color.accent.opacity(0.12), in: Capsule())
+                        .background(Color.accentColor.opacity(0.12), in: Capsule())
                 }
                 .buttonStyle(.plain)
             }
@@ -554,7 +551,7 @@ private struct GematriaCalculatorView: View {
                 if let match = famous {
                     HStack(spacing: 8) {
                         Image(systemName: "sparkles")
-                            .foregroundStyle(.accent)
+                            .foregroundColor(.accentColor)
                             .font(.caption)
                         Text(match)
                             .font(.caption)
@@ -562,37 +559,13 @@ private struct GematriaCalculatorView: View {
                     }
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+                    .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
                     .transition(.blurReplace)
                 }
             }
 
-            // Value table
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Standard Values")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
-
-                let rows: [(String, String, String)] = [
-                    ("\u{05D0}=1  \u{05D1}=2  \u{05D2}=3", "\u{05D3}=4  \u{05D4}=5  \u{05D5}=6", "\u{05D6}=7  \u{05D7}=8  \u{05D8}=9"),
-                    ("\u{05D9}=10  \u{05DB}=20  \u{05DC}=30", "\u{05DE}=40  \u{05E0}=50  \u{05E1}=60", "\u{05E2}=70  \u{05E4}=80  \u{05E6}=90"),
-                    ("\u{05E7}=100  \u{05E8}=200", "\u{05E9}=300  \u{05EA}=400", ""),
-                ]
-
-                ForEach(rows.indices, id: \.self) { i in
-                    HStack {
-                        Text(rows[i].0)
-                        Spacer()
-                        Text(rows[i].1)
-                        if !rows[i].2.isEmpty {
-                            Spacer()
-                            Text(rows[i].2)
-                        }
-                    }
-                    .font(.system(size: 13))
-                    .foregroundStyle(.secondary)
-                }
-            }
+            // Value grid
+            GematriaGridView()
         }
         .padding(16)
         .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 16))
@@ -665,7 +638,7 @@ private struct ReversalDemoView: View {
                         .padding(.vertical, 10)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.accent)
+                .tint(.accentColor)
             }
 
             Text("Software like After Effects, DaVinci Resolve, and Premiere Pro renders Hebrew left-to-right, flipping the character order. Pre-reversing the text compensates \u{2014} when the app lays it out LTR, it looks correct.")
@@ -677,121 +650,118 @@ private struct ReversalDemoView: View {
     }
 }
 
-// MARK: - Atbash Explorer
+// MARK: - Paleo-Hebrew Alphabet Chart
 
-private struct AtbashExplorerView: View {
-    @State private var input = ""
+private struct PaleoAlphabetChartView: View {
+    @State private var selectedIndex: Int?
 
-    private static let atbashMap: [Character: Character] = {
-        let aleph: [Character] = [
-            "\u{05D0}", "\u{05D1}", "\u{05D2}", "\u{05D3}", "\u{05D4}",
-            "\u{05D5}", "\u{05D6}", "\u{05D7}", "\u{05D8}", "\u{05D9}",
-            "\u{05DB}", "\u{05DC}", "\u{05DE}", "\u{05E0}", "\u{05E1}",
-            "\u{05E2}", "\u{05E4}", "\u{05E6}", "\u{05E7}", "\u{05E8}",
-            "\u{05E9}", "\u{05EA}",
-        ]
-        var map: [Character: Character] = [:]
-        for i in 0..<aleph.count {
-            map[aleph[i]] = aleph[aleph.count - 1 - i]
-        }
-        let finals: [Character: Character] = [
-            "\u{05DA}": "\u{05DB}", "\u{05DD}": "\u{05DE}",
-            "\u{05DF}": "\u{05E0}", "\u{05E3}": "\u{05E4}",
-            "\u{05E5}": "\u{05E6}",
-        ]
-        for (final, regular) in finals {
-            if let mapped = map[regular] {
-                map[final] = mapped
-            }
-        }
-        return map
-    }()
-
-    private var output: String {
-        String(input.map { Self.atbashMap[$0] ?? $0 })
-    }
+    private let letters = HebrewLetter.all
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Try the Atbash cipher")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Text("Type \u{05D1}\u{05D1}\u{05DC} to see the biblical example")
-                    .font(.caption)
-                    .foregroundStyle(.quaternary)
+            Text("Tap a letter to see its Paleo-Hebrew form")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(letters.indices, id: \.self) { i in
+                    let letter = letters[i]
+                    Button {
+                        withAnimation(.smooth(duration: 0.25)) {
+                            selectedIndex = selectedIndex == i ? nil : i
+                        }
+                    } label: {
+                        VStack(spacing: 4) {
+                            Text(String(letter.hebrew))
+                                .font(.system(size: 22))
+                            Text(letter.name)
+                                .font(.system(size: 8, weight: .medium))
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(selectedIndex == i ? Color.accentColor.opacity(0.15) : cardFillColor)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .stroke(selectedIndex == i ? Color.accentColor : .clear, lineWidth: 1.5)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
             }
 
-            // Input
-            TextField("Type Hebrew text\u{2026}", text: $input)
-                .font(.title3)
-                .multilineTextAlignment(.trailing)
-                .padding(14)
-                .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
-
-            if !input.isEmpty {
-                // Output
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Atbash")
-                            .font(.caption)
+            if let idx = selectedIndex {
+                let letter = letters[idx]
+                HStack(spacing: 20) {
+                    VStack(spacing: 4) {
+                        Text(String(letter.hebrew))
+                            .font(.system(size: 44))
+                        Text("Modern")
+                            .font(.caption2)
                             .foregroundStyle(.tertiary)
-                        Text(output)
-                            .font(.title2)
-                            .textSelection(.enabled)
                     }
-                    Spacer()
-                    Image(systemName: "lock.rotation")
-                        .foregroundStyle(.accent)
+
+                    Image(systemName: "arrow.left.arrow.right")
+                        .font(.title3)
+                        .foregroundStyle(.tertiary)
+
+                    VStack(spacing: 4) {
+                        Text("Paleo \(letter.name)")
+                            .font(.title2.weight(.medium))
+                        Text("Position \(letter.position) \u{2022} Value \(letter.gematriaValue)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
-                .padding(14)
+                .frame(maxWidth: .infinity)
+                .padding(16)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 .transition(.blurReplace)
             }
 
-            // Mapping table
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Full Mapping")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
-
-                let topRow: [Character] = [
-                    "\u{05D0}", "\u{05D1}", "\u{05D2}", "\u{05D3}", "\u{05D4}",
-                    "\u{05D5}", "\u{05D6}", "\u{05D7}", "\u{05D8}", "\u{05D9}",
-                    "\u{05DB}",
-                ]
-                let bottomRow: [Character] = [
-                    "\u{05EA}", "\u{05E9}", "\u{05E8}", "\u{05E7}", "\u{05E6}",
-                    "\u{05E4}", "\u{05E2}", "\u{05E1}", "\u{05E0}", "\u{05DE}",
-                    "\u{05DC}",
-                ]
-
-                HStack(spacing: 0) {
-                    ForEach(topRow.indices, id: \.self) { i in
-                        VStack(spacing: 4) {
-                            Text(String(topRow[i]))
-                                .font(.system(size: 18))
-                            Image(systemName: "arrow.down")
-                                .font(.system(size: 8))
-                                .foregroundStyle(.tertiary)
-                            Text(String(bottomRow[i]))
-                                .font(.system(size: 18))
-                                .foregroundStyle(.accent)
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                }
-                .padding(.vertical, 8)
-                .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
-            }
-
-            Text("\u{05D0}\u{05EA}\u{05D1}\u{05E9} = \u{05D0}-\u{05EA}, \u{05D1}-\u{05E9} \u{2014} the first letter swaps with the last, the second with the second-to-last, and so on.")
+            Text("Paleo-Hebrew characters are encoded in the Phoenician Unicode block (U+10900\u{2013}U+1091F). Not all devices render these characters; the grid above uses the modern equivalents for reliable display.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
         .padding(16)
         .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 16))
-        .animation(.smooth, value: output)
+    }
+}
+
+// MARK: - Gematria Grid View
+
+private struct GematriaGridView: View {
+    private let letters = HebrewLetter.all
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 5)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Standard Values")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(columns: columns, spacing: 6) {
+                ForEach(letters) { letter in
+                    VStack(spacing: 2) {
+                        Text(String(letter.hebrew))
+                            .font(.system(size: 24))
+                        Text("\(letter.gematriaValue)")
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(cardFillColor)
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -850,7 +820,7 @@ enum LearningWidget {
     case keyboardLayout
     case niqqudChart
     case gematriaCalculator
-    case atbashExplorer
+    case paleoAlphabetChart
     case reversalDemo
 }
 
@@ -887,9 +857,7 @@ extension LearningTopic {
         niqqud,
         gematria,
         keyboardLayouts,
-        squareScript,
         textReversal,
-        atbash,
     ]
 
     static let hebrewAlphabet = LearningTopic(
@@ -902,10 +870,14 @@ extension LearningTopic {
             Section(heading: nil, body: "The Hebrew alphabet (aleph-bet) consists of 22 consonant letters. It is an abjad \u{2014} a writing system where vowels are typically omitted or indicated with optional diacritical marks called niqqud."),
             Section(heading: "Direction", body: "Hebrew is written and read from right to left. The alphabet has been in continuous use for over 3,000 years, making it one of the oldest writing systems still in active use today."),
             Section(heading: "Final Forms", body: "Five Hebrew letters have special forms when they appear at the end of a word: Kaf (\u{05DB}\u{2192}\u{05DA}), Mem (\u{05DE}\u{2192}\u{05DD}), Nun (\u{05E0}\u{2192}\u{05DF}), Pe (\u{05E4}\u{2192}\u{05E3}), and Tsadi (\u{05E6}\u{2192}\u{05E5}). These are called sofit (final) letters."),
+            Section(heading: "Square Script (Ktav Ashuri)", body: "The modern Hebrew letterforms are formally known as Ktav Ashuri (\u{201C}Assyrian script\u{201D}). After the Babylonian exile in the 6th century BCE, Jewish scribes gradually adopted the Aramaic square letterforms in place of the older Paleo-Hebrew script. By the Second Temple period, square script had become the standard for everyday writing."),
+            Section(heading: "Why \u{201C}Square\u{201D}?", body: "The name comes from the blocky, rectangular shape of the letters. Unlike Paleo-Hebrew\u{2019}s angular, pictographic forms, square script has consistent vertical and horizontal strokes that sit neatly on a baseline. This regularity made it well-suited for scribal copying."),
+            Section(heading: "Sacred Use", body: "Ktav Ashuri is the script required for Torah scrolls, mezuzot, and tefillin. Jewish law (halakha) specifies that these sacred texts must be written in this script by a trained scribe (sofer). The Talmud (Sanhedrin 21b\u{2013}22a) records a debate about whether the Torah was originally given in Ktav Ashuri or Paleo-Hebrew, reflecting the historical transition between the two scripts."),
         ],
         links: [
             WikiLink(title: "Hebrew alphabet \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Hebrew_alphabet"),
             WikiLink(title: "Abjad writing system", url: "https://en.wikipedia.org/wiki/Abjad"),
+            WikiLink(title: "Aramaic alphabet", url: "https://en.wikipedia.org/wiki/Aramaic_alphabet"),
         ],
         widget: .alphabetChart
     )
@@ -915,18 +887,22 @@ extension LearningTopic {
         subtitle: "The ancient letterforms of Israel",
         icon: "scroll",
         color: .orange,
-        example: "\u{10900}\u{10901}\u{10902}\u{10903}\u{10904} \u{2014} \u{05D0}\u{05D1}\u{05D2}\u{05D3}\u{05D4}",
+        example: nil,
         sections: [
-            Section(heading: nil, body: "Paleo-Hebrew (also called Old Hebrew or Phoenician script) is the original script used to write Hebrew from approximately the 10th century BCE. It is closely related to the Phoenician alphabet and is the ancestor of many modern scripts including Greek, Latin, and Arabic."),
-            Section(heading: "Historical Use", body: "This script was used during the First Temple period and appears on ancient inscriptions, coins, and seals. The famous Siloam Inscription (circa 701 BCE) and the Gezer Calendar (circa 10th century BCE) are written in Paleo-Hebrew."),
-            Section(heading: "In Unicode", body: "Paleo-Hebrew is encoded in the Phoenician block of Unicode (U+10900\u{2013}U+1091F). While it looks very different from modern Hebrew, each letter maps directly to its modern equivalent \u{2014} Aleph (\u{10900}) is \u{05D0}, Bet (\u{10901}) is \u{05D1}, and so on."),
+            Section(heading: nil, body: "Paleo-Hebrew (also called Old Hebrew script) is the original script used to write Hebrew from approximately the 10th century BCE. It is closely related to the Phoenician alphabet and is the ancestor of many modern scripts including Greek, Latin, and Arabic. Each of the 22 Paleo-Hebrew letters maps directly to its modern square Hebrew equivalent."),
+            Section(heading: "The Siloam Inscription", body: "Discovered in 1880 in Hezekiah\u{2019}s Tunnel in Jerusalem, the Siloam Inscription (circa 701 BCE) describes the moment two teams of tunnelers met underground. It is one of the oldest known Hebrew inscriptions and is written entirely in Paleo-Hebrew. The original is in the Istanbul Archaeology Museum."),
+            Section(heading: "The Tel Dan Stele", body: "Found in 1993 in northern Israel, the Tel Dan Stele is a 9th-century BCE Aramaic inscription that contains the earliest known reference to the \u{201C}House of David\u{201D} outside the Bible. While written in Aramaic, it uses a script closely related to Paleo-Hebrew and is a landmark find for biblical archaeology."),
+            Section(heading: "Coins", body: "Paleo-Hebrew experienced a deliberate revival on Jewish coinage as a national symbol:\n\n\u{2022} Hasmonean coins (2nd\u{2013}1st century BCE) \u{2014} The Maccabees minted coins with Paleo-Hebrew legends like \u{201C}Yehonatan the King\u{201D} and \u{201C}Yehudah the High Priest,\u{201D} asserting continuity with ancient Israelite sovereignty.\n\n\u{2022} Bar Kokhba revolt coins (132\u{2013}136 CE) \u{2014} Simon bar Kokhba\u{2019}s rebels overstruck Roman coins with Paleo-Hebrew inscriptions reading \u{201C}For the Freedom of Jerusalem\u{201D} and \u{201C}Year One of the Redemption of Israel.\u{201D} These are among the last widespread uses of the script."),
+            Section(heading: "In Unicode", body: "Paleo-Hebrew is encoded in the Phoenician block of Unicode (U+10900\u{2013}U+1091F). These are Supplementary Multilingual Plane characters, so font and rendering support varies across devices. AlephTools handles the mapping internally for reliable conversion."),
         ],
         links: [
             WikiLink(title: "Paleo-Hebrew alphabet \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Paleo-Hebrew_alphabet"),
-            WikiLink(title: "Phoenician alphabet", url: "https://en.wikipedia.org/wiki/Phoenician_alphabet"),
-            WikiLink(title: "Siloam inscription", url: "https://en.wikipedia.org/wiki/Siloam_inscription"),
+            WikiLink(title: "Siloam inscription \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Siloam_inscription"),
+            WikiLink(title: "Tel Dan stele \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Tel_Dan_stele"),
+            WikiLink(title: "Bar Kokhba coinage \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Bar_Kokhba_revolt_coinage"),
+            WikiLink(title: "Hasmonean coinage \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Hasmonean_coinage"),
         ],
-        widget: nil
+        widget: .paleoAlphabetChart
     )
 
     static let niqqud = LearningTopic(
@@ -951,7 +927,7 @@ extension LearningTopic {
         title: "Gematria",
         subtitle: "The numerical value of Hebrew words",
         icon: "number",
-        color: .accent,
+        color: .indigo,
         example: "\u{05D0}=1  \u{05D1}=2  \u{05D2}=3 \u{2026} \u{05E7}=100  \u{05E8}=200",
         sections: [
             Section(heading: nil, body: "Gematria is the practice of assigning numerical values to Hebrew letters and calculating the sum of a word or phrase. Each of the 22 Hebrew letters has a fixed value: Aleph=1, Bet=2, Gimel=3, and so on up to Tav=400."),
@@ -965,40 +941,30 @@ extension LearningTopic {
         widget: .gematriaCalculator
     )
 
-    static let keyboardLayouts = LearningTopic(
-        title: "Hebrew Keyboard Layout",
-        subtitle: "How QWERTY maps to Hebrew",
-        icon: "keyboard",
-        color: .teal,
-        example: nil,
-        sections: [
+    static let keyboardLayouts: LearningTopic = {
+        var sections = [
             Section(heading: nil, body: "The standard Hebrew keyboard layout maps each key on a QWERTY keyboard to a Hebrew letter. When someone types in English while their keyboard is set to Hebrew (or vice versa), the result is gibberish that maps letter-for-letter to the other layout."),
             Section(heading: "A Common Problem", body: "This happens frequently to bilingual typists. You start typing a URL or password and realize your keyboard was set to the wrong language. The \u{201C}To Hebrew\u{201D} and \u{201C}To English\u{201D} tools reverse this mapping, recovering the intended text without retyping."),
-        ],
-        links: [
-            WikiLink(title: "Hebrew keyboard layout \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Hebrew_keyboard"),
-            WikiLink(title: "SI 1452 standard", url: "https://en.wikipedia.org/wiki/Hebrew_keyboard#702_layout_(SI_1452)"),
-        ],
-        widget: .keyboardLayout
-    )
-
-    static let squareScript = LearningTopic(
-        title: "Square Script (Ktav Ashuri)",
-        subtitle: "The modern Hebrew letterforms",
-        icon: "square.text.square",
-        color: .indigo,
-        example: "\u{10900}\u{10901}\u{10902} \u{2192} \u{05D0}\u{05D1}\u{05D2}",
-        sections: [
-            Section(heading: nil, body: "The \u{201C}square\u{201D} Hebrew script used today is formally known as Ktav Ashuri (\u{201C}Assyrian script\u{201D}). It replaced the older Paleo-Hebrew script after the Babylonian exile in the 6th century BCE, when Jewish scribes adopted the Aramaic square letterforms."),
-            Section(heading: "Why \u{201C}Square\u{201D}?", body: "The name comes from the blocky, rectangular shape of the letters. Unlike Paleo-Hebrew\u{2019}s angular, pictographic forms, square script has consistent vertical and horizontal strokes that sit neatly on a baseline."),
-            Section(heading: "Sacred Use", body: "Ktav Ashuri is the script used for Torah scrolls, mezuzot, and tefillin. Jewish law (halakha) requires these sacred texts to be written specifically in this script by a trained scribe (sofer)."),
-        ],
-        links: [
-            WikiLink(title: "Hebrew alphabet \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Hebrew_alphabet"),
-            WikiLink(title: "Aramaic alphabet", url: "https://en.wikipedia.org/wiki/Aramaic_alphabet"),
-        ],
-        widget: nil
-    )
+        ]
+        #if os(iOS)
+        sections.append(Section(heading: "Adding a Hebrew Keyboard", body: "To install a Hebrew keyboard on iOS:\n\n1. Open Settings\n2. Go to General \u{203A} Keyboard \u{203A} Keyboards\n3. Tap Add New Keyboard\u{2026}\n4. Select Hebrew\n\nOnce added, tap the globe icon on your keyboard to switch between English and Hebrew."))
+        #else
+        sections.append(Section(heading: "Adding a Hebrew Keyboard", body: "To add a Hebrew keyboard on macOS:\n\n1. Open System Settings\n2. Go to Keyboard \u{203A} Input Sources\n3. Click the + button\n4. Search for and add Hebrew\n\nUse the input menu in the menu bar (or press Control+Space) to switch layouts. With the Hebrew layout active, each key press shows the Hebrew mapping \u{2014} try the interactive widget above to preview it."))
+        #endif
+        return LearningTopic(
+            title: "Hebrew Keyboard Layout",
+            subtitle: "How QWERTY maps to Hebrew",
+            icon: "keyboard",
+            color: .teal,
+            example: nil,
+            sections: sections,
+            links: [
+                WikiLink(title: "Hebrew keyboard layout \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Hebrew_keyboard"),
+                WikiLink(title: "SI 1452 standard", url: "https://en.wikipedia.org/wiki/Hebrew_keyboard#702_layout_(SI_1452)"),
+            ],
+            widget: .keyboardLayout
+        )
+    }()
 
     static let textReversal = LearningTopic(
         title: "Text Reversal (RTL Fix)",
@@ -1008,7 +974,7 @@ extension LearningTopic {
         example: "\u{05E9}\u{05DC}\u{05D5}\u{05DD} \u{2192} \u{05DD}\u{05D5}\u{05DC}\u{05E9}",
         sections: [
             Section(heading: nil, body: "Hebrew is a right-to-left language, but many programs don\u{2019}t support RTL text. When you paste Hebrew into these apps, the characters appear in reverse order \u{2014} rendered left-to-right instead of right-to-left. The Reverse tool flips the character order so the text displays correctly in LTR-only software."),
-            Section(heading: "Adobe Creative Suite", body: "This is one of the most common use cases. Adobe apps historically lacked RTL support:\n\n\u{2022} After Effects \u{2014} No RTL until CC 2019, and many templates and plugins still ignore it. Motion designers working with Hebrew titles frequently need text reversal.\n\n\u{2022} Premiere Pro \u{2014} The title tool had no RTL support for years. Basic support arrived in CC 2019 but still has issues with mixed-direction text.\n\n\u{2022} Photoshop & Illustrator \u{2014} RTL requires manually enabling the \u{201C}Middle Eastern\u{201D} text engine in Preferences \u{203A} Type. Many users don\u{2019}t know about this setting.\n\nEven in recent versions, the ME text engine is opt-in, not the default."),
+            Section(heading: "Fixing Adobe Apps (Tomech Ivrit)", body: "Adobe apps can support Hebrew natively, but the Middle Eastern text engine isn\u{2019}t installed by default. To enable it:\n\n1. Open the Creative Cloud desktop app\n2. Go to Preferences \u{203A} Apps\n3. Under the \u{201C}Installing\u{201D} section, change the language/text engine to \u{201C}Tomech Ivrit\u{201D} (Hebrew support)\n4. Uninstall the Adobe apps you use (After Effects, Premiere Pro, Photoshop, Illustrator, etc.)\n5. Reinstall them from Creative Cloud\n\nThe reinstalled apps will include the Middle Eastern text engine by default, giving you proper RTL text, correct character joining, and bidirectional support without needing to pre-reverse text."),
             Section(heading: "Video Editors", body: "DaVinci Resolve is a major offender \u{2014} its text tools have limited or no RTL support even in the latest versions. Hebrew-speaking filmmakers routinely pre-reverse text before pasting it into Resolve titles and subtitles. Vegas Pro and many open-source editors (Shotcut, OpenShot) have the same problem."),
             Section(heading: "Other Software", body: "The RTL problem appears across many categories:\n\n\u{2022} Game engines \u{2014} Unity (legacy UI), older Godot, RPG Maker, GameMaker\n\u{2022} 3D software \u{2014} Cinema 4D text objects, Blender (pre-3.1), 3ds Max\n\u{2022} Subtitles \u{2014} SRT files have no directionality metadata; some players render Hebrew reversed\n\u{2022} LED signage \u{2014} Many sign controllers are LTR-only\n\u{2022} Laser/CNC engraving \u{2014} Label printers and engravers often lack BiDi"),
             Section(heading: "Niqqud-Aware Reversal", body: "A simple character-level reversal would detach niqqud (vowel marks) from their letters, since niqqud are combining Unicode characters that attach to the preceding letter. Aleph Tools reverses text in groups \u{2014} each letter with its attached diacritics stays together \u{2014} so vocalized text reverses correctly."),
@@ -1020,22 +986,4 @@ extension LearningTopic {
         widget: .reversalDemo
     )
 
-    static let atbash = LearningTopic(
-        title: "Atbash Cipher",
-        subtitle: "Ancient Hebrew letter substitution",
-        icon: "lock.rotation",
-        color: .mint,
-        example: "\u{05D0}\u{2192}\u{05EA}  \u{05D1}\u{2192}\u{05E9}  \u{05D2}\u{2192}\u{05E8}",
-        sections: [
-            Section(heading: nil, body: "Atbash is one of the oldest known ciphers, originating in Hebrew. It substitutes each letter with its reverse-alphabet counterpart: the first letter (Aleph, \u{05D0}) becomes the last (Tav, \u{05EA}), the second (Bet, \u{05D1}) becomes the second-to-last (Shin, \u{05E9}), and so on."),
-            Section(heading: "The Name", body: "The word \u{201C}Atbash\u{201D} (\u{05D0}\u{05EA}\u{05D1}\u{05E9}) itself encodes the pattern: \u{05D0}-\u{05EA} (Aleph-Tav, first swaps with last) and \u{05D1}-\u{05E9} (Bet-Shin, second swaps with second-to-last)."),
-            Section(heading: "In the Bible", body: "Atbash appears in the Book of Jeremiah. The word \u{201C}Sheshakh\u{201D} (\u{05E9}\u{05E9}\u{05DA}) is an Atbash cipher for \u{201C}Babel\u{201D} (\u{05D1}\u{05D1}\u{05DC}) \u{2014} \u{05D1} (Bet) becomes \u{05E9} (Shin), and \u{05DC} (Lamed) becomes \u{05DA} (Kaf). This is one of the earliest documented uses of encryption in history."),
-            Section(heading: "In Gematria", body: "Atbash is also used as a gematria method. Instead of using a letter\u{2019}s standard numerical value, you substitute it via Atbash first, then calculate the value of the resulting text. This is one of dozens of gematria methods used in traditional biblical interpretation."),
-        ],
-        links: [
-            WikiLink(title: "Atbash \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Atbash"),
-            WikiLink(title: "Hebrew cipher methods", url: "https://en.wikipedia.org/wiki/Gematria#Methods"),
-        ],
-        widget: .atbashExplorer
-    )
 }

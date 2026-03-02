@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Key Model
 
@@ -6,6 +7,13 @@ struct PaleoKey: Identifiable {
     let id: String
     let paleo: String
     let hebrew: String
+}
+
+// MARK: - Number/Symbol Key
+
+struct SymbolKey: Identifiable {
+    let id: String
+    let label: String
 }
 
 // MARK: - Keyboard View
@@ -17,9 +25,13 @@ struct PaleoKeyboardView: View {
     let showGlobe: Bool
 
     @State private var deleteTimer: Timer?
+    @State private var showPaleo = true
+    @State private var showNumbers = false
+    @State private var lastSpaceTime: Date?
+
+    private let haptic = UIImpactFeedbackGenerator(style: .light)
 
     // Hebrew keyboard layout positions → Paleo-Hebrew output
-    // Row 1: e(ק) r(ר) t(א) y(ט) u(ו) i(ן) o(ם) p(פ)
     private let row1: [PaleoKey] = [
         .init(id: "ק", paleo: "\u{10912}", hebrew: "ק"),
         .init(id: "ר", paleo: "\u{10913}", hebrew: "ר"),
@@ -31,7 +43,6 @@ struct PaleoKeyboardView: View {
         .init(id: "פ", paleo: "\u{10910}", hebrew: "פ"),
     ]
 
-    // Row 2: a(ש) s(ד) d(ג) f(כ) g(ע) h(י) j(ח) k(ל) l(ך) ;(ף)
     private let row2: [PaleoKey] = [
         .init(id: "ש", paleo: "\u{10914}", hebrew: "ש"),
         .init(id: "ד", paleo: "\u{10903}", hebrew: "ד"),
@@ -45,7 +56,6 @@ struct PaleoKeyboardView: View {
         .init(id: "ף", paleo: "\u{10910}", hebrew: "ף"),
     ]
 
-    // Row 3: z(ז) x(ס) c(ב) v(ה) b(נ) n(מ) m(צ) ,(ת) .(ץ)
     private let row3: [PaleoKey] = [
         .init(id: "ז", paleo: "\u{10906}", hebrew: "ז"),
         .init(id: "ס", paleo: "\u{1090E}", hebrew: "ס"),
@@ -58,12 +68,54 @@ struct PaleoKeyboardView: View {
         .init(id: "ץ", paleo: "\u{10911}", hebrew: "ץ"),
     ]
 
+    // Numbers & symbols layout
+    private let numRow1: [SymbolKey] = [
+        .init(id: "1", label: "1"), .init(id: "2", label: "2"),
+        .init(id: "3", label: "3"), .init(id: "4", label: "4"),
+        .init(id: "5", label: "5"), .init(id: "6", label: "6"),
+        .init(id: "7", label: "7"), .init(id: "8", label: "8"),
+        .init(id: "9", label: "9"), .init(id: "0", label: "0"),
+    ]
+
+    private let numRow2: [SymbolKey] = [
+        .init(id: "-", label: "-"), .init(id: "/", label: "/"),
+        .init(id: ":", label: ":"), .init(id: ";", label: ";"),
+        .init(id: "(", label: "("), .init(id: ")", label: ")"),
+        .init(id: "\"", label: "\""), .init(id: "'", label: "'"),
+    ]
+
+    private let numRow3: [SymbolKey] = [
+        .init(id: ".", label: "."), .init(id: ",", label: ","),
+        .init(id: "?", label: "?"), .init(id: "!", label: "!"),
+        .init(id: "׳", label: "׳"), .init(id: "״", label: "״"),
+        .init(id: "־", label: "־"),
+    ]
+
     var body: some View {
-        VStack(spacing: 6) {
-            letterRow(row1)
-            letterRow(row2)
-            letterRow(row3)
-            bottomRow
+        GlassEffectContainer {
+            VStack(spacing: 6) {
+                if showNumbers {
+                    symbolRow(numRow1)
+                    symbolRow(numRow2)
+                    HStack(spacing: 4) {
+                        FunctionKey(label: "אב", width: 44) {
+                            haptic.impactOccurred()
+                            showNumbers = false
+                        }
+                        symbolRow(numRow3, extraPadding: false)
+                        deleteKey
+                    }
+                } else {
+                    letterRow(row1)
+                    letterRow(row2)
+                    HStack(spacing: 4) {
+                        scriptToggle
+                        letterRow(row3, extraPadding: false)
+                        deleteKey
+                    }
+                }
+                bottomRow
+            }
         }
         .padding(.horizontal, 3)
         .padding(.top, 8)
@@ -72,13 +124,48 @@ struct PaleoKeyboardView: View {
 
     // MARK: - Letter Row
 
-    private func letterRow(_ keys: [PaleoKey]) -> some View {
+    private func letterRow(_ keys: [PaleoKey], extraPadding: Bool = true) -> some View {
         HStack(spacing: 4) {
             ForEach(keys) { key in
-                LetterKey(paleo: key.paleo, hebrew: key.hebrew) {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                LetterKey(
+                    paleo: key.paleo,
+                    hebrew: key.hebrew,
+                    showPaleo: showPaleo
+                ) {
+                    haptic.impactOccurred()
                     insertText(key.paleo)
                 }
+            }
+        }
+    }
+
+    // MARK: - Symbol Row
+
+    private func symbolRow(_ keys: [SymbolKey], extraPadding: Bool = true) -> some View {
+        HStack(spacing: 4) {
+            ForEach(keys) { key in
+                Button {
+                    haptic.impactOccurred()
+                    insertText(key.label)
+                } label: {
+                    Text(key.label)
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 44)
+                }
+                .buttonStyle(.plain)
+                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
+            }
+        }
+    }
+
+    // MARK: - Script Toggle
+
+    private var scriptToggle: some View {
+        FunctionKey(label: showPaleo ? "אב" : "𐤀𐤁", width: 44) {
+            haptic.impactOccurred()
+            withAnimation(.easeInOut(duration: 0.15)) {
+                showPaleo.toggle()
             }
         }
     }
@@ -87,30 +174,34 @@ struct PaleoKeyboardView: View {
 
     private var bottomRow: some View {
         HStack(spacing: 4) {
-            // Globe
             if showGlobe {
-                FunctionKey(systemImage: "globe", width: 48) {
+                FunctionKey(systemImage: "globe", width: 44) {
                     nextKeyboard()
+                }
+            }
+
+            if !showNumbers {
+                FunctionKey(label: "123", width: 44) {
+                    haptic.impactOccurred()
+                    showNumbers = true
                 }
             }
 
             // Space
             Button {
-                insertText(" ")
+                handleSpace()
             } label: {
                 Text("space")
                     .font(.system(size: 15))
                     .frame(maxWidth: .infinity)
                     .frame(height: 42)
             }
-            .buttonStyle(KeyPressStyle())
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(.regularMaterial)
-            )
+            .buttonStyle(.plain)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
 
             // Return
             Button {
+                haptic.impactOccurred()
                 insertText("\n")
             } label: {
                 Text("return")
@@ -118,14 +209,8 @@ struct PaleoKeyboardView: View {
                     .foregroundStyle(.white)
                     .frame(width: 72, height: 42)
             }
-            .buttonStyle(KeyPressStyle())
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.accentColor)
-            )
-
-            // Delete (with long-press repeat)
-            deleteKey
+            .buttonStyle(.plain)
+            .glassEffect(.regular.tint(.accentColor).interactive(), in: .rect(cornerRadius: 5))
         }
     }
 
@@ -134,17 +219,14 @@ struct PaleoKeyboardView: View {
     private var deleteKey: some View {
         Image(systemName: "delete.left.fill")
             .font(.system(size: 17))
-            .frame(width: 48, height: 42)
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(.thickMaterial)
-            )
+            .foregroundStyle(.primary)
+            .frame(width: 44, height: 42)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
             .onTapGesture {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                haptic.impactOccurred()
                 deleteBackward()
             }
             .onLongPressGesture(minimumDuration: 0.3) {
-                // Long press completed — no-op, timer handles it
             } onPressingChanged: { pressing in
                 if pressing {
                     startRepeatingDelete()
@@ -154,9 +236,25 @@ struct PaleoKeyboardView: View {
             }
     }
 
+    // MARK: - Actions
+
+    private func handleSpace() {
+        haptic.impactOccurred()
+        let now = Date()
+        if let last = lastSpaceTime, now.timeIntervalSince(last) < 0.4 {
+            // Double-tap space → period + space
+            deleteBackward() // remove the first space
+            insertText(". ")
+            lastSpaceTime = nil
+        } else {
+            insertText(" ")
+            lastSpaceTime = now
+        }
+    }
+
     private func startRepeatingDelete() {
         deleteBackward()
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        haptic.impactOccurred()
         deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.08, repeats: true) { _ in
             deleteBackward()
         }
@@ -173,57 +271,52 @@ struct PaleoKeyboardView: View {
 private struct LetterKey: View {
     let paleo: String
     let hebrew: String
+    let showPaleo: Bool
     let action: () -> Void
+
+    private var primaryText: String { showPaleo ? paleo : hebrew }
+    private var secondaryText: String { showPaleo ? hebrew : paleo }
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: 1) {
-                Text(paleo)
-                    .font(.system(size: 22))
-                Text(hebrew)
-                    .font(.system(size: 9))
+                Text(primaryText)
+                    .font(.system(size: 24))
+                    .minimumScaleFactor(0.7)
+                Text(secondaryText)
+                    .font(.system(size: 8))
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 44)
         }
-        .buttonStyle(KeyPressStyle())
-        .background(
-            RoundedRectangle(cornerRadius: 6)
-                .fill(.regularMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 0.5, y: 0.5)
-        )
+        .buttonStyle(.plain)
+        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
     }
 }
 
 // MARK: - Function Key
 
 private struct FunctionKey: View {
-    let systemImage: String
+    var systemImage: String?
+    var label: String?
     var width: CGFloat = 44
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: systemImage)
-                .font(.system(size: 17))
-                .frame(width: width, height: 42)
+            Group {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                        .font(.system(size: 17))
+                } else if let label {
+                    Text(label)
+                        .font(.system(size: 14, weight: .medium))
+                }
+            }
+            .frame(width: width, height: 42)
         }
-        .buttonStyle(KeyPressStyle())
-        .background(
-            RoundedRectangle(cornerRadius: 6)
-                .fill(.thickMaterial)
-        )
-    }
-}
-
-// MARK: - Key Press Button Style
-
-private struct KeyPressStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .opacity(configuration.isPressed ? 0.5 : 1)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1)
-            .animation(.easeOut(duration: 0.08), value: configuration.isPressed)
+        .buttonStyle(.plain)
+        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 5))
     }
 }

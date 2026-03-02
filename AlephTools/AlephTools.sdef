@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Aleph Tools Scripting">
+    <suite name="Aleph Tools Suite" code="AlTl" description="Aleph Tools scripting support">
+
+        <enumeration name="transformation mode" code="TrMd">
+            <enumerator name="to hebrew" code="hebr" description="QWERTY English to Hebrew keyboard"/>
+            <enumerator name="to english" code="engl" description="Hebrew to QWERTY English keyboard"/>
+            <enumerator name="strip niqqud" code="strp" description="Remove vowel points and diacritics"/>
+            <enumerator name="to modern" code="modn" description="Paleo-Hebrew to modern square script"/>
+            <enumerator name="to paleo" code="pleo" description="Modern square to Paleo-Hebrew"/>
+            <enumerator name="gematria" code="gema" description="Calculate gematria value"/>
+            <enumerator name="add niqqud" code="aniq" description="Add vowel diacritics using Nakdimon model"/>
+            <enumerator name="reverse" code="rvrs" description="Reverse text preserving niqqud"/>
+        </enumeration>
+
+        <command name="transform" code="AlTlTrfm" description="Transform text using a specified mode">
+            <cocoa class="AlephTools.AlephTransformCommand"/>
+            <direct-parameter type="text" description="The text to transform"/>
+            <parameter name="using" code="TrUs" type="transformation mode" description="The transformation to apply">
+                <cocoa key="Mode"/>
+            </parameter>
+            <parameter name="keeping punctuation" code="TrKp" type="boolean" optional="yes" description="Whether to preserve punctuation">
+                <cocoa key="KeepPunctuation"/>
+            </parameter>
+            <result type="text" description="The transformed text"/>
+        </command>
+
+    </suite>
+</dictionary>

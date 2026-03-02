@@ -22,7 +22,7 @@ struct SettingsView: View {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(width: 520, height: 440)
+        .frame(width: 520, height: 520)
     }
 }
 
@@ -32,6 +32,7 @@ private struct GeneralSettingsTab: View {
     @AppStorage("launchAtLogin") private var launchAtLogin = false
     @AppStorage("defaultTransform") private var defaultTransform = TransformationType.hebrewKeyboard.rawValue
     @AppStorage("showInMenuBar") private var showInMenuBar = false
+    @AppStorage("appearanceOverride") private var appearanceOverride = "system"
 
     var body: some View {
         Form {
@@ -56,10 +57,12 @@ private struct GeneralSettingsTab: View {
             Section {
                 Toggle("Show in menu bar", isOn: $showInMenuBar)
             } footer: {
-                Text("Quick access to transformations from the menu bar. (Coming soon)")
+                Text("Quick access to transformations from the menu bar.")
             }
-            .disabled(true)
-            .opacity(0.5)
+
+            Section("Appearance") {
+                AppearancePicker(selection: $appearanceOverride)
+            }
         }
         .formStyle(.grouped)
     }
@@ -78,6 +81,182 @@ enum LaunchAtLoginManager {
             }
         } catch {
             print("Launch at login error: \(error)")
+        }
+    }
+}
+
+// MARK: - Appearance Picker
+
+private struct AppearancePicker: View {
+    @Binding var selection: String
+
+    private let options: [(id: String, label: String)] = [
+        ("system", "Auto"),
+        ("light", "Light"),
+        ("dark", "Dark"),
+    ]
+
+    var body: some View {
+        HStack(spacing: 20) {
+            ForEach(options, id: \.id) { option in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        selection = option.id
+                    }
+                } label: {
+                    VStack(spacing: 7) {
+                        AppearanceThumbnail(mode: option.id, isSelected: selection == option.id)
+                            .frame(width: 80, height: 56)
+
+                        Text(option.label)
+                            .font(.system(size: 11, weight: selection == option.id ? .semibold : .regular))
+                            .foregroundStyle(selection == option.id ? .primary : .secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 6)
+    }
+}
+
+private struct AppearanceThumbnail: View {
+    let mode: String
+    let isSelected: Bool
+
+    // Concentric radii: outer - inset = inner
+    private let outerRadius: CGFloat = 10
+    private let inset: CGFloat = 8
+    private var innerRadius: CGFloat { outerRadius - inset + 2 } // 4pt
+
+    var body: some View {
+        ZStack {
+            // Desktop background
+            if mode == "system" {
+                HStack(spacing: 0) {
+                    Color(white: 0.96)
+                    Color(white: 0.15)
+                }
+            } else if mode == "light" {
+                Color(white: 0.96)
+            } else {
+                Color(white: 0.15)
+            }
+
+            // Mini window(s)
+            if mode == "system" {
+                splitWindow
+            } else {
+                miniWindow(light: mode == "light")
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: outerRadius, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: outerRadius, style: .continuous)
+                .strokeBorder(
+                    isSelected ? Color.accentColor : Color.primary.opacity(0.12),
+                    lineWidth: isSelected ? 2.5 : 0.5
+                )
+        )
+    }
+
+    // Auto mode: single window split light/dark with one set of traffic lights
+    private var splitWindow: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                // Shared title bar
+                HStack(spacing: 2) {
+                    Circle().fill(Color(red: 1, green: 0.38, blue: 0.35)).frame(width: 4, height: 4)
+                    Circle().fill(Color(red: 1, green: 0.78, blue: 0.23)).frame(width: 4, height: 4)
+                    Circle().fill(Color(red: 0.15, green: 0.8, blue: 0.26)).frame(width: 4, height: 4)
+                    Spacer()
+                }
+                .padding(.horizontal, 4)
+                .padding(.vertical, 3.5)
+                .background(
+                    HStack(spacing: 0) {
+                        Color(white: 0.94)
+                        Color(white: 0.26)
+                    }
+                )
+
+                // Split content area
+                HStack(spacing: 0) {
+                    // Light half
+                    VStack(spacing: 3) {
+                        RoundedRectangle(cornerRadius: 1).fill(Color.accentColor.opacity(0.4)).frame(height: 2.5)
+                        RoundedRectangle(cornerRadius: 1).fill(Color(white: 0.84)).frame(height: 2.5)
+                        RoundedRectangle(cornerRadius: 1).fill(Color(white: 0.84)).frame(height: 2.5)
+                            .frame(maxWidth: geo.size.width * 0.25, alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(white: 0.98))
+
+                    // Dark half
+                    VStack(spacing: 3) {
+                        RoundedRectangle(cornerRadius: 1).fill(Color.accentColor.opacity(0.5)).frame(height: 2.5)
+                        RoundedRectangle(cornerRadius: 1).fill(Color(white: 0.34)).frame(height: 2.5)
+                        RoundedRectangle(cornerRadius: 1).fill(Color(white: 0.34)).frame(height: 2.5)
+                            .frame(maxWidth: geo.size.width * 0.25, alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(white: 0.2))
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: innerRadius, style: .continuous))
+            .shadow(color: .black.opacity(0.15), radius: 1.5, y: 0.5)
+            .padding(inset)
+        }
+    }
+
+    private func miniWindow(light: Bool) -> some View {
+        let windowBg = light ? Color(white: 0.98) : Color(white: 0.2)
+        let titleBar = light ? Color(white: 0.94) : Color(white: 0.26)
+        let line1 = light ? Color.accentColor.opacity(0.4) : Color.accentColor.opacity(0.5)
+        let line2 = light ? Color(white: 0.84) : Color(white: 0.34)
+
+        return GeometryReader { geo in
+            VStack(spacing: 0) {
+                // Title bar with traffic lights
+                HStack(spacing: 2) {
+                    Circle().fill(Color(red: 1, green: 0.38, blue: 0.35)).frame(width: 4, height: 4)
+                    Circle().fill(Color(red: 1, green: 0.78, blue: 0.23)).frame(width: 4, height: 4)
+                    Circle().fill(Color(red: 0.15, green: 0.8, blue: 0.26)).frame(width: 4, height: 4)
+                    Spacer()
+                }
+                .padding(.horizontal, 4)
+                .padding(.vertical, 3.5)
+                .background(titleBar)
+
+                // Content lines
+                VStack(spacing: 3) {
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(line1)
+                        .frame(height: 2.5)
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(line2)
+                        .frame(height: 2.5)
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(line2)
+                        .frame(maxWidth: geo.size.width * 0.5)
+                        .frame(height: 2.5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 4)
+                .padding(.vertical, 4)
+                .frame(maxHeight: .infinity)
+                .background(windowBg)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: innerRadius, style: .continuous))
+            .shadow(color: .black.opacity(light ? 0.1 : 0.25), radius: 1.5, y: 0.5)
+            .padding(inset)
         }
     }
 }
@@ -157,6 +336,7 @@ private struct ShortcutRow: View {
     @ObservedObject var manager: GlobalShortcutManager
     @State private var isRecording = false
     @State private var localMonitor: Any?
+    @State private var showRecorded = false
 
     private var shortcut: StoredShortcut? {
         manager.shortcuts[transform]
@@ -196,11 +376,19 @@ private struct ShortcutRow: View {
                 .foregroundStyle(.secondary)
             } else if let shortcut {
                 HStack(spacing: 4) {
-                    Text(shortcut.displayString)
-                        .font(.system(.caption, design: .rounded).weight(.medium))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
+                    if showRecorded {
+                        Label("Recorded", systemImage: "checkmark.circle.fill")
+                            .font(.system(.caption, design: .rounded).weight(.medium))
+                            .foregroundStyle(.green)
+                            .transition(.opacity)
+                    } else {
+                        Text(shortcut.displayString)
+                            .font(.system(.caption, design: .rounded).weight(.medium))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
+                            .transition(.opacity)
+                    }
 
                     Button {
                         manager.removeShortcut(for: transform)
@@ -211,6 +399,7 @@ private struct ShortcutRow: View {
                     }
                     .buttonStyle(.plain)
                 }
+                .animation(.easeInOut(duration: 0.2), value: showRecorded)
                 .onTapGesture {
                     isRecording = true
                 }
@@ -251,6 +440,10 @@ private struct ShortcutRow: View {
             )
             manager.setShortcut(recorded, for: transform)
             stopRecording()
+            showRecorded = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                showRecorded = false
+            }
             return nil // consume the event
         }
     }
@@ -317,10 +510,11 @@ private struct ServicesSettingsTab: View {
 
                         Spacer()
 
-                        Toggle("", isOn: Binding(
+                        Toggle(t.rawValue, isOn: Binding(
                             get: { enabledServices.contains(t.rawValue) },
                             set: { setEnabled(t, enabled: $0) }
                         ))
+                        .labelsHidden()
                         .toggleStyle(.switch)
                         .controlSize(.small)
                     }
@@ -421,6 +615,49 @@ private struct AboutSettingsTab: View {
                     .stroke(.separator, lineWidth: 0.5)
             )
             .padding(.horizontal, 20)
+
+            // Open-source credits
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Open-Source Libraries")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 10)
+                    .padding(.bottom, 6)
+
+                Divider().padding(.leading, 12)
+
+                Link(destination: URL(string: "https://github.com/elazarg/nakdimon")!) {
+                    HStack(spacing: 10) {
+                        Image(systemName: "wand.and.stars")
+                            .frame(width: 20)
+                            .foregroundStyle(.secondary)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("Nakdimon")
+                                .foregroundStyle(.primary)
+                            Text("Hebrew diacritization model by Elazar Gershuni \u{00B7} MIT License")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.quaternary)
+                    }
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.vertical, 4)
+            .background(.background, in: RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.separator, lineWidth: 0.5)
+            )
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
 
             Spacer()
 
