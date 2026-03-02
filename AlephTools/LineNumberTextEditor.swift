@@ -198,6 +198,7 @@ struct LineNumberTextEditor: NSViewRepresentable {
             if parent.text != textView.string {
                 parent.text = textView.string
             }
+            scrollSync?.refreshRulers()
             textView.enclosingScrollView?.verticalRulerView?.needsDisplay = true
         }
 
@@ -267,10 +268,11 @@ class LineNumberRulerView: NSRulerView {
         // Find which line the cursor is on
         var activeLine = 0
         if textView.isEditable {
-            let cursorLocation = textView.selectedRange().location
+            let cursorLocation = min(textView.selectedRange().location, text.length)
+            let substring = text.substring(to: cursorLocation)
             activeLine = 1
-            text.enumerateSubstrings(in: NSRange(location: 0, length: min(cursorLocation, text.length)), options: [.byLines, .substringNotRequired]) { _, _, _, _ in
-                activeLine += 1
+            for char in substring.unicodeScalars {
+                if char == "\n" { activeLine += 1 }
             }
             scrollSync?.activeLine = activeLine
         } else {
