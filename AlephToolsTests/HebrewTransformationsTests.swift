@@ -368,6 +368,50 @@ final class HebrewTransformationsTests: XCTestCase {
         )
     }
 
+    // MARK: - Gematria Per Word
+
+    func testGematriaPerWordSingleWord() {
+        let result = TransformationEngine.gematriaPerWord("חי")
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result[0].word, "חי")
+        XCTAssertEqual(result[0].value, 18)
+    }
+
+    func testGematriaPerWordMultipleWords() {
+        // א(1) + ב(2) = 3; ג(3) + ד(4) = 7
+        let result = TransformationEngine.gematriaPerWord("אב גד")
+        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result[0].value, 3)
+        XCTAssertEqual(result[1].value, 7)
+    }
+
+    func testGematriaPerWordFiltersNonHebrew() {
+        let result = TransformationEngine.gematriaPerWord("abc אב def")
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result[0].word, "אב")
+        XCTAssertEqual(result[0].value, 3)
+    }
+
+    func testGematriaPerWordEmptyString() {
+        let result = TransformationEngine.gematriaPerWord("")
+        XCTAssertTrue(result.isEmpty)
+    }
+
+    func testGematriaPerWordStripsNiqqud() {
+        let result = TransformationEngine.gematriaPerWord("חַי")
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result[0].word, "חי")
+        XCTAssertEqual(result[0].value, 18)
+    }
+
+    func testGematriaPerWordSumMatchesTotal() {
+        let text = "שלום עולם"
+        let perWord = TransformationEngine.gematriaPerWord(text)
+        let perWordSum = perWord.reduce(0) { $0 + $1.value }
+        let total = Int(TransformationEngine.toGematria(text))!
+        XCTAssertEqual(perWordSum, total)
+    }
+
     // MARK: - Reverse
 
     func testReverseSimple() {

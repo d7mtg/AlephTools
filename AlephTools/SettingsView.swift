@@ -673,7 +673,7 @@ private struct AboutSettingsTab: View {
                 .foregroundStyle(.tertiary)
                 .tint(.secondary)
 
-                Text("\u{00A9} 2025 D7mtg")
+                Text("\u{00A9} \(Calendar.current.component(.year, from: Date())) D7mtg")
                     .font(.caption2)
                     .foregroundStyle(.quaternary)
             }

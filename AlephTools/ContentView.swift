@@ -360,6 +360,17 @@ struct ContentView: View {
         return formatter.string(from: NSNumber(value: number)) ?? outputText
     }
 
+    private var gematriaWords: [(word: String, value: Int)] {
+        TransformationEngine.gematriaPerWord(inputText)
+    }
+
+    private func formatNumber(_ value: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
+
     private var gematriaOutput: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -372,6 +383,29 @@ struct ContentView: View {
             Text("Gematria Value")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            if gematriaWords.count >= 2 {
+                Divider()
+                    .padding(.horizontal, 20)
+
+                ScrollView {
+                    VStack(spacing: 4) {
+                        ForEach(Array(gematriaWords.enumerated()), id: \.offset) { _, entry in
+                            HStack {
+                                Text(entry.word)
+                                    .font(.body)
+                                Spacer()
+                                Text(formatNumber(entry.value))
+                                    .font(.body.monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

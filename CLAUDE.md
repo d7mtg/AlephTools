@@ -19,6 +19,8 @@ AlephTools/
 │   ├── Info.plist                 # Services configuration
 │   ├── AlephTools.entitlements    # App entitlements
 │   └── Assets.xcassets/           # Icons and colors
+├── AlephToolsTests/               # Unit tests
+│   └── HebrewTransformationsTests.swift
 ├── AlephToolsiOS/                 # iOS/iPadOS app target
 │   ├── AlephToolsiOSApp.swift     # iOS app entry point
 │   └── iOSContentView.swift       # Adaptive layout (iPhone/iPad)
@@ -39,7 +41,7 @@ AlephTools/
 
 Build with Xcode (`xcodebuild`) or open `AlephTools.xcodeproj` directly. There are no external dependencies — the project uses only Apple system frameworks.
 
-**No test suite exists.** There are no XCTest targets, no linting tools (SwiftLint, SwiftFormat), and no CI/CD pipeline configured.
+**Tests:** An XCTest target (`AlephToolsTests`) exists with unit tests for `HebrewTransformations.swift` covering all transformation types, character maps, niqqud utilities, gematria, reverse, and `ChangeStats`. No linting tools (SwiftLint, SwiftFormat) or CI/CD pipeline are configured. Run tests via `xcodebuild test -scheme AlephTools -destination 'platform=macOS'`.
 
 ## Language & Frameworks
 

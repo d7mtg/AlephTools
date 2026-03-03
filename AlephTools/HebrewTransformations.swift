@@ -353,6 +353,22 @@ enum TransformationEngine {
         return String(sum)
     }
 
+    /// Returns per-word gematria breakdown. Words with no Hebrew letters (value 0) are excluded.
+    static func gematriaPerWord(_ text: String) -> [(word: String, value: Int)] {
+        let stripped = NiqqudUtils.removeNiqqud(text)
+        let words = stripped.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
+        return words.compactMap { word in
+            var sum = 0
+            for char in word {
+                if let value = CharacterMaps.gematriaValues[char] {
+                    sum += value
+                }
+            }
+            guard sum > 0 else { return nil }
+            return (word: String(word), value: sum)
+        }
+    }
+
     // MARK: Reverse (Niqqud-aware)
 
     static func reverseWithNiqqud(_ text: String) -> String {
