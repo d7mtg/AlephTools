@@ -561,6 +561,11 @@ private struct AboutSettingsTab: View {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
     }
 
+    private var copyrightYears: String {
+        let current = Calendar.current.component(.year, from: Date())
+        return current > 2026 ? "2026\u{2013}\(current)" : "2026"
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // App identity
@@ -673,7 +678,7 @@ private struct AboutSettingsTab: View {
                 .foregroundStyle(.tertiary)
                 .tint(.secondary)
 
-                Text("\u{00A9} \(Calendar.current.component(.year, from: Date())) D7mtg")
+                Text("\u{00A9} \(copyrightYears) D7mtg")
                     .font(.caption2)
                     .foregroundStyle(.quaternary)
             }
