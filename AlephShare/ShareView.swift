@@ -24,9 +24,9 @@ struct ShareView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 // Transform picker
-                Picker("Transformation", selection: $selectedTransform) {
+                Picker(String(localized: "Transformation"), selection: $selectedTransform) {
                     ForEach(availableTransforms) { t in
-                        Label(t.rawValue, systemImage: t.icon)
+                        Label(t.localizedName, systemImage: t.icon)
                             .tag(t)
                     }
                 }
@@ -35,16 +35,16 @@ struct ShareView: View {
                 .padding(.vertical, 12)
 
                 if selectedTransform.supportsPunctuationToggle {
-                    Toggle("Keep Punctuation", isOn: $keepPunctuation)
+                    Toggle(String(localized: "Keep Punctuation"), isOn: $keepPunctuation)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 12)
                 }
 
                 if selectedTransform.supportsSquareOptions {
-                    Toggle("Convert Final Letters (ם ן ך ף ץ)", isOn: $convertFinalLetters)
+                    Toggle(String(localized: "Convert Final Letters (ם ן ך ף ץ)"), isOn: $convertFinalLetters)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 4)
-                    Toggle("Clean Punctuation", isOn: $cleanPunctuation)
+                    Toggle(String(localized: "Clean Punctuation"), isOn: $cleanPunctuation)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 12)
                 }
@@ -53,7 +53,7 @@ struct ShareView: View {
 
                 // Input preview
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Input")
+                    Text(String(localized: "Input"))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
                     Text(inputText)
@@ -69,7 +69,7 @@ struct ShareView: View {
                 // Output
                 ScrollView {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Output")
+                        Text(String(localized: "Output"))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
 
@@ -101,7 +101,7 @@ struct ShareView: View {
                 } label: {
                     HStack {
                         Image(systemName: showCopied ? "checkmark" : "doc.on.doc")
-                        Text(showCopied ? "Copied" : "Copy Result")
+                        Text(showCopied ? String(localized: "Copied") : String(localized: "Copy Result"))
                     }
                     .font(.body.weight(.medium))
                     .frame(maxWidth: .infinity)
@@ -111,11 +111,11 @@ struct ShareView: View {
                 .padding(16)
                 .disabled(outputText.isEmpty)
             }
-            .navigationTitle("Aleph Tools")
+            .navigationTitle(String(localized: "Aleph Tools"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { onDone() }
+                    Button(String(localized: "Done")) { onDone() }
                 }
             }
         }

@@ -190,7 +190,7 @@ struct PaleoKeyboardView: View {
             Button {
                 handleSpace()
             } label: {
-                Text("space")
+                Text("space", comment: "Keyboard space bar label")
                     .font(.system(size: 15))
                     .frame(maxWidth: .infinity)
                     .frame(height: 42)
@@ -204,7 +204,7 @@ struct PaleoKeyboardView: View {
                 haptic.impactOccurred()
                 insertText("\n")
             } label: {
-                Text("return")
+                Text("return", comment: "Keyboard return key label")
                     .font(.system(size: 15))
                     .foregroundStyle(.white)
                     .frame(width: 72, height: 42)

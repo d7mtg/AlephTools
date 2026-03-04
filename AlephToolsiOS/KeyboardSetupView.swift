@@ -26,11 +26,11 @@ struct KeyboardSetupView: View {
                     .scaleEffect(appeared ? 1 : 0.85)
 
                 VStack(spacing: 10) {
-                    Text("Paleo-Hebrew\nKeyboard")
+                    Text("Paleo-Hebrew\nKeyboard", comment: "Keyboard setup hero title")
                         .font(.largeTitle.weight(.bold))
                         .multilineTextAlignment(.center)
 
-                    Text("Type in ancient Hebrew script\nanywhere on your device.")
+                    Text("Type in ancient Hebrew script\nanywhere on your device.", comment: "Keyboard setup hero subtitle")
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -61,7 +61,7 @@ struct KeyboardSetupView: View {
                         hasCompletedSetup = true
                         dismiss()
                     } label: {
-                        Text("Get Started")
+                        Text("Get Started", comment: "Keyboard setup success button")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -72,7 +72,7 @@ struct KeyboardSetupView: View {
                     Button {
                         openKeyboardSettings()
                     } label: {
-                        Label("Open Settings", systemImage: "arrow.up.forward.app")
+                        Label(String(localized: "Open Settings"), systemImage: "arrow.up.forward.app")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -80,7 +80,7 @@ struct KeyboardSetupView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(.accent)
 
-                    Button("Skip for now") {
+                    Button(String(localized: "Skip for now")) {
                         hasCompletedSetup = true
                         dismiss()
                     }
@@ -119,10 +119,10 @@ struct KeyboardSetupView: View {
                 .foregroundStyle(.green)
                 .symbolEffect(.bounce, value: isKeyboardInstalled)
 
-            Text("Ready to go")
+            Text("Ready to go", comment: "Keyboard setup success title")
                 .font(.title3.weight(.semibold))
 
-            Text("Switch keyboards with the\nglobe key while typing.")
+            Text("Switch keyboards with the\nglobe key while typing.", comment: "Keyboard setup success subtitle")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -135,20 +135,20 @@ struct KeyboardSetupView: View {
         VStack(alignment: .leading, spacing: 0) {
             stepRow(
                 number: 1,
-                title: "Open Keyboard Settings",
-                detail: "Go to Settings \u{203A} General \u{203A} Keyboard"
+                title: String(localized: "Open Keyboard Settings"),
+                detail: String(localized: "Go to Settings \u{203A} General \u{203A} Keyboard")
             )
             stepConnector()
             stepRow(
                 number: 2,
-                title: "Add New Keyboard",
-                detail: "Tap Keyboards, then Add New Keyboard..."
+                title: String(localized: "Add New Keyboard"),
+                detail: String(localized: "Tap Keyboards, then Add New Keyboard...")
             )
             stepConnector()
             stepRow(
                 number: 3,
-                title: "Choose Paleo-Hebrew",
-                detail: "Find Aleph Tools in the list and tap it"
+                title: String(localized: "Choose Paleo-Hebrew"),
+                detail: String(localized: "Find Aleph Tools in the list and tap it")
             )
         }
         .padding(.horizontal, 32)

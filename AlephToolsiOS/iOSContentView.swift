@@ -37,7 +37,7 @@ struct iOSContentView: View {
                     iPhoneBody
                 }
             }
-            .navigationTitle("Aleph Tools")
+            .navigationTitle(String(localized: "Aleph Tools"))
             .toolbarTitleDisplayMode(.inline)
             .toolbar { toolbarItems }
             .sheet(isPresented: $showSettings) {
@@ -69,7 +69,7 @@ struct iOSContentView: View {
         }
         .userActivity(handoffActivityType) { activity in
             activity.isEligibleForHandoff = true
-            activity.title = "Aleph Tools — \(selectedTransform.rawValue)"
+            activity.title = "Aleph Tools — \(selectedTransform.localizedName)"
             activity.userInfo = [
                 "inputText": inputText,
                 "transformationType": selectedTransform.rawValue,
@@ -138,7 +138,7 @@ struct iOSContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Input")
+                    Text(String(localized: "Input"))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
                     Text(selectedTransform.inputLabel)
@@ -154,7 +154,7 @@ struct iOSContentView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.clipboard")
-                        Text("Paste")
+                        Text(String(localized: "Paste"))
                     }
                     .font(.caption.weight(.medium))
                 }
@@ -166,7 +166,7 @@ struct iOSContentView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "xmark")
-                        Text("Clear")
+                        Text(String(localized: "Clear"))
                     }
                     .font(.caption.weight(.medium))
                 }
@@ -180,7 +180,7 @@ struct iOSContentView: View {
 
             ZStack(alignment: .topLeading) {
                 if inputText.isEmpty {
-                    Text("Type or paste text\u{2026}")
+                    Text(String(localized: "Type or paste text…"))
                         .foregroundStyle(.tertiary)
                         .font(.body)
                         .padding(.top, 8)
@@ -207,9 +207,9 @@ struct iOSContentView: View {
                         withAnimation(.smooth) { selectedTransform = t }
                     } label: {
                         if t == selectedTransform {
-                            Label(t.rawValue, systemImage: "checkmark")
+                            Label(t.localizedName, systemImage: "checkmark")
                         } else {
-                            Text(t.rawValue)
+                            Text(t.localizedName)
                         }
                     }
                 }
@@ -217,7 +217,7 @@ struct iOSContentView: View {
                 HStack(spacing: 6) {
                     Image(systemName: selectedTransform.icon)
                         .foregroundStyle(.tint)
-                    Text(selectedTransform.rawValue)
+                    Text(selectedTransform.localizedName)
                         .fontWeight(.medium)
                     Image(systemName: "chevron.up.chevron.down")
                         .font(.caption2.weight(.semibold))
@@ -233,7 +233,7 @@ struct iOSContentView: View {
                     .frame(height: 20)
 
                 Toggle(isOn: $keepPunctuation) {
-                    Text("Keep Punc.")
+                    Text(String(localized: "Keep Punc."))
                         .font(.caption)
                 }
                 .toggleStyle(.button)
@@ -246,7 +246,7 @@ struct iOSContentView: View {
                     .frame(height: 20)
 
                 Toggle(isOn: $convertFinalLetters) {
-                    Text("Finals")
+                    Text(String(localized: "Finals"))
                         .font(.caption)
                 }
                 .toggleStyle(.button)
@@ -254,7 +254,7 @@ struct iOSContentView: View {
                 .tint(convertFinalLetters ? .accentColor : .secondary)
 
                 Toggle(isOn: $cleanPunctuation) {
-                    Text("Clean")
+                    Text(String(localized: "Clean"))
                         .font(.caption)
                 }
                 .toggleStyle(.button)
@@ -276,7 +276,7 @@ struct iOSContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Output")
+                    Text(String(localized: "Output"))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
                     Text(selectedTransform.outputLabel)
@@ -293,7 +293,7 @@ struct iOSContentView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.doc")
-                        Text("Copy")
+                        Text(String(localized: "Copy"))
                     }
                     .font(.caption.weight(.medium))
                 }
@@ -342,7 +342,7 @@ struct iOSContentView: View {
                 .contentTransition(.numericText())
                 .animation(.snappy(duration: 0.3), value: outputText)
                 .foregroundStyle(.primary)
-            Text("Gematria Value")
+            Text(String(localized: "Gematria Value"))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -360,10 +360,10 @@ struct iOSContentView: View {
                     Spacer()
                     ProgressView()
                         .controlSize(.large)
-                    Text("Adding niqqud\u{2026}")
+                    Text(String(localized: "Adding niqqud…"))
                         .font(.callout)
                         .foregroundStyle(.secondary)
-                    Text("Nakdimon")
+                    Text(String(localized: "Nakdimon"))
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                     Spacer()
@@ -379,7 +379,7 @@ struct iOSContentView: View {
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                    Button("Retry") {
+                    Button(String(localized: "Retry")) {
                         niqqudGenerator.generate(from: inputText)
                     }
                     .buttonStyle(.bordered)
@@ -406,11 +406,11 @@ struct iOSContentView: View {
     private var statsLabel: some View {
         HStack(spacing: 6) {
             if stats.changed > 0 {
-                Text("\(stats.changed) changed")
+                Text("\(stats.changed) \(String(localized: "changed"))")
                     .foregroundColor(.accentColor)
             }
             if stats.unchanged > 0 {
-                Text("\(stats.unchanged) kept")
+                Text("\(stats.unchanged) \(String(localized: "kept"))")
                     .foregroundStyle(.secondary)
             }
         }
@@ -420,7 +420,7 @@ struct iOSContentView: View {
     // MARK: - Toast
 
     private var toast: some View {
-        Label("Copied", systemImage: "checkmark")
+        Label(String(localized: "Copied"), systemImage: "checkmark")
             .font(.subheadline.weight(.medium))
             .padding(.horizontal, 20)
             .padding(.vertical, 10)

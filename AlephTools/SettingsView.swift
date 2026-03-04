@@ -7,19 +7,19 @@ struct SettingsView: View {
         TabView {
             GeneralSettingsTab()
                 .tabItem {
-                    Label("General", systemImage: "gearshape")
+                    Label(String(localized: "General"), systemImage: "gearshape")
                 }
             ShortcutsSettingsTab()
                 .tabItem {
-                    Label("Shortcuts", systemImage: "command")
+                    Label(String(localized: "Shortcuts"), systemImage: "command")
                 }
             ServicesSettingsTab()
                 .tabItem {
-                    Label("Services", systemImage: "square.and.arrow.up.on.square")
+                    Label(String(localized: "Services"), systemImage: "square.and.arrow.up.on.square")
                 }
             AboutSettingsTab()
                 .tabItem {
-                    Label("About", systemImage: "info.circle")
+                    Label(String(localized: "About"), systemImage: "info.circle")
                 }
         }
         .frame(width: 520, height: 520)
@@ -33,34 +33,56 @@ private struct GeneralSettingsTab: View {
     @AppStorage("defaultTransform") private var defaultTransform = TransformationType.hebrewKeyboard.rawValue
     @AppStorage("showInMenuBar") private var showInMenuBar = false
     @AppStorage("appearanceOverride") private var appearanceOverride = "system"
+    @AppStorage("languageOverride") private var languageOverride = "system"
 
     var body: some View {
         Form {
             Section {
-                Toggle("Launch Aleph Tools at login", isOn: $launchAtLogin)
+                Toggle(String(localized: "Launch Aleph Tools at login"), isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _, newValue in
                         LaunchAtLoginManager.setEnabled(newValue)
                     }
             }
 
             Section {
-                Picker("Default transformation:", selection: $defaultTransform) {
+                Picker(String(localized: "Default transformation:"), selection: $defaultTransform) {
                     ForEach(TransformationType.allCases) { t in
-                        Text(t.rawValue).tag(t.rawValue)
+                        Text(t.localizedName).tag(t.rawValue)
                     }
                 }
                 .fixedSize()
             } footer: {
-                Text("Used when opening the app and for new windows.")
+                Text(String(localized: "Used when opening the app and for new windows."))
             }
 
             Section {
-                Toggle("Show in menu bar", isOn: $showInMenuBar)
+                Toggle(String(localized: "Show in menu bar"), isOn: $showInMenuBar)
             } footer: {
-                Text("Quick access to transformations from the menu bar.")
+                Text(String(localized: "Quick access to transformations from the menu bar."))
             }
 
-            Section("Appearance") {
+            Section {
+                Picker(String(localized: "Language"), selection: $languageOverride) {
+                    Text(String(localized: "System")).tag("system")
+                    Text("English").tag("en")
+                    Text("עברית").tag("he")
+                    Text("אידיש").tag("yi")
+                }
+                .fixedSize()
+                .onChange(of: languageOverride) { _, newValue in
+                    if newValue == "system" {
+                        UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+                    } else {
+                        UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
+                    }
+                }
+            } header: {
+                Text(String(localized: "Language"))
+            } footer: {
+                Text(String(localized: "Restart the app to fully apply."))
+            }
+
+            Section(String(localized: "Appearance")) {
                 AppearancePicker(selection: $appearanceOverride)
             }
         }
@@ -90,11 +112,13 @@ enum LaunchAtLoginManager {
 private struct AppearancePicker: View {
     @Binding var selection: String
 
-    private let options: [(id: String, label: String)] = [
-        ("system", "Auto"),
-        ("light", "Light"),
-        ("dark", "Dark"),
-    ]
+    private var options: [(id: String, label: String)] {
+        [
+            ("system", String(localized: "Auto")),
+            ("light", String(localized: "Light")),
+            ("dark", String(localized: "Dark")),
+        ]
+    }
 
     var body: some View {
         HStack(spacing: 20) {
@@ -268,10 +292,10 @@ private struct ShortcutsSettingsTab: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Global Shortcuts")
+            Text(String(localized: "Global Shortcuts"))
                 .font(.headline)
 
-            Text("Assign keyboard shortcuts to transform selected text anywhere on your Mac. The app must be running.")
+            Text(String(localized: "Assign keyboard shortcuts to transform selected text anywhere on your Mac. The app must be running."))
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -299,14 +323,14 @@ private struct ShortcutsSettingsTab: View {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.accentColor)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Accessibility Access Required")
+                        Text(String(localized: "Accessibility Access Required"))
                             .font(.callout.weight(.medium))
-                        Text("Global shortcuts need Accessibility permission to simulate copy/paste in other apps.")
+                        Text(String(localized: "Global shortcuts need Accessibility permission to simulate copy/paste in other apps."))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Button("Open Settings") {
+                    Button(String(localized: "Open Settings")) {
                         let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
                         AXIsProcessTrustedWithOptions(options)
                     }
@@ -319,7 +343,7 @@ private struct ShortcutsSettingsTab: View {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
-                    Text("Accessibility access granted. Shortcuts work system-wide.")
+                    Text(String(localized: "Accessibility access granted. Shortcuts work system-wide."))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -349,7 +373,7 @@ private struct ShortcutRow: View {
                 .foregroundStyle(.secondary)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text(transform.rawValue)
+                Text(transform.localizedName)
                     .font(.body.weight(.medium))
                 Text(transform.subtitle)
                     .font(.caption)
@@ -359,7 +383,7 @@ private struct ShortcutRow: View {
             Spacer()
 
             if isRecording {
-                Text("Type shortcut\u{2026}")
+                Text(String(localized: "Type shortcut…"))
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
@@ -368,7 +392,7 @@ private struct ShortcutRow: View {
                     .onAppear { startLocalMonitor() }
                     .onDisappear { stopLocalMonitor() }
 
-                Button("Cancel") {
+                Button(String(localized: "Cancel")) {
                     stopRecording()
                 }
                 .buttonStyle(.borderless)
@@ -377,7 +401,7 @@ private struct ShortcutRow: View {
             } else if let shortcut {
                 HStack(spacing: 4) {
                     if showRecorded {
-                        Label("Recorded", systemImage: "checkmark.circle.fill")
+                        Label(String(localized: "Recorded"), systemImage: "checkmark.circle.fill")
                             .font(.system(.caption, design: .rounded).weight(.medium))
                             .foregroundStyle(.green)
                             .transition(.opacity)
@@ -404,7 +428,7 @@ private struct ShortcutRow: View {
                     isRecording = true
                 }
             } else {
-                Button("Record Shortcut") {
+                Button(String(localized: "Record Shortcut")) {
                     isRecording = true
                 }
                 .buttonStyle(.bordered)
@@ -485,10 +509,10 @@ private struct ServicesSettingsTab: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Services Menu")
+            Text(String(localized: "Services Menu"))
                 .font(.headline)
 
-            Text("Aleph Tools registers transformations in the system Services menu. Select text in any app, then use the app menu \u{2192} Services \u{2192} Aleph Tools.")
+            Text(String(localized: "Aleph Tools registers transformations in the system Services menu. Select text in any app, then use the app menu → Services → Aleph Tools."))
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -501,7 +525,7 @@ private struct ServicesSettingsTab: View {
                             .foregroundStyle(.secondary)
 
                         VStack(alignment: .leading, spacing: 1) {
-                            Text(t.rawValue)
+                            Text(t.localizedName)
                                 .font(.body.weight(.medium))
                             Text(t.subtitle)
                                 .font(.caption)
@@ -510,7 +534,7 @@ private struct ServicesSettingsTab: View {
 
                         Spacer()
 
-                        Toggle(t.rawValue, isOn: Binding(
+                        Toggle(t.localizedName, isOn: Binding(
                             get: { enabledServices.contains(t.rawValue) },
                             set: { setEnabled(t, enabled: $0) }
                         ))
@@ -537,7 +561,7 @@ private struct ServicesSettingsTab: View {
             HStack(spacing: 6) {
                 Image(systemName: "info.circle")
                     .foregroundStyle(.secondary)
-                Text("Services are registered when the app launches. Restart may be needed after changes.")
+                Text(String(localized: "Services are registered when the app launches. Restart may be needed after changes."))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -570,10 +594,10 @@ private struct AboutSettingsTab: View {
                     .frame(width: 80, height: 80)
 
                 VStack(spacing: 2) {
-                    Text("Aleph Tools")
+                    Text(String(localized: "Aleph Tools"))
                         .font(.title2.weight(.semibold))
 
-                    Text("Version \(appVersion) (\(buildNumber))")
+                    Text(String(localized: "Version \(appVersion) (\(buildNumber))"))
                         .font(.callout)
                         .foregroundStyle(.secondary)
                 }
@@ -582,7 +606,7 @@ private struct AboutSettingsTab: View {
             .padding(.bottom, 20)
 
             // Description
-            Text("Hebrew text transformation utility for macOS. Convert keyboard layouts, strip niqqud, transliterate between modern and paleo-Hebrew scripts, and more.")
+            Text(String(localized: "Hebrew text transformation utility for macOS. Convert keyboard layouts, strip niqqud, transliterate between modern and paleo-Hebrew scripts, and more."))
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -592,21 +616,21 @@ private struct AboutSettingsTab: View {
 
             // Links
             VStack(spacing: 0) {
-                aboutRow(icon: "book", label: "Learning Center") {
+                aboutRow(icon: "book", label: String(localized: "Learning Center")) {
                     openWindow(id: "learning-center")
                 }
 
                 Divider().padding(.leading, 36)
 
-                aboutLinkRow(icon: "chevron.left.forwardslash.chevron.right", label: "Source Code", url: "https://github.com/d7mtg/AlephTools")
+                aboutLinkRow(icon: "chevron.left.forwardslash.chevron.right", label: String(localized: "Source Code"), url: "https://github.com/d7mtg/AlephTools")
 
                 Divider().padding(.leading, 36)
 
-                aboutLinkRow(icon: "ladybug", label: "Report an Issue", url: "https://github.com/d7mtg/AlephTools/issues")
+                aboutLinkRow(icon: "ladybug", label: String(localized: "Report an Issue"), url: "https://github.com/d7mtg/AlephTools/issues")
 
                 Divider().padding(.leading, 36)
 
-                aboutLinkRow(icon: "globe", label: "Website", url: "https://d7mtg.com")
+                aboutLinkRow(icon: "globe", label: String(localized: "Website"), url: "https://d7mtg.com")
             }
             .padding(.vertical, 4)
             .background(.background, in: RoundedRectangle(cornerRadius: 8))
@@ -618,7 +642,7 @@ private struct AboutSettingsTab: View {
 
             // Open-source credits
             VStack(alignment: .leading, spacing: 0) {
-                Text("Open-Source Libraries")
+                Text(String(localized: "Open-Source Libraries"))
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 12)
@@ -635,7 +659,7 @@ private struct AboutSettingsTab: View {
                         VStack(alignment: .leading, spacing: 1) {
                             Text("Nakdimon")
                                 .foregroundStyle(.primary)
-                            Text("Hebrew diacritization model by Elazar Gershuni \u{00B7} MIT License")
+                            Text(String(localized: "Hebrew diacritization model by Elazar Gershuni · MIT License"))
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
                         }
@@ -664,16 +688,16 @@ private struct AboutSettingsTab: View {
             // Footer
             VStack(spacing: 4) {
                 HStack(spacing: 4) {
-                    Text("Made by")
+                    Text(String(localized: "Made by"))
                     Link("D7mtg", destination: URL(string: "https://d7mtg.com")!)
-                    Text("with")
+                    Text(String(localized: "with"))
                     Link("Claude Code", destination: URL(string: "https://claude.ai/claude-code")!)
                 }
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .tint(.secondary)
 
-                Text("\u{00A9} 2025 D7mtg")
+                Text("© 2025 D7mtg")
                     .font(.caption2)
                     .foregroundStyle(.quaternary)
             }

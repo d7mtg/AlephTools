@@ -39,7 +39,7 @@ struct LearningCenterView: View {
                 }
             }
         }
-        .navigationTitle("Learning Center")
+        .navigationTitle(String(localized: "Learning Center"))
         #if os(iOS)
         .navigationBarTitleDisplayMode(.large)
         #endif
@@ -114,7 +114,7 @@ struct TopicDetailView: View {
                 // Links
                 if !topic.links.isEmpty {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Learn more")
+                        Text(String(localized: "Learn more"))
                             .font(.headline)
                             .padding(.bottom, 2)
 
@@ -158,7 +158,7 @@ private struct AlphabetChartView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Tap a letter to explore")
+            Text(String(localized: "Tap a letter to explore"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -199,7 +199,7 @@ private struct AlphabetChartView: View {
 
             // Final forms section
             VStack(alignment: .leading, spacing: 10) {
-                Text("Final Forms (Sofit)")
+                Text(String(localized: "Final Forms (Sofit)"))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
 
@@ -254,15 +254,15 @@ private struct AlphabetChartView: View {
 
                 // Info
                 VStack(alignment: .leading, spacing: 8) {
-                    infoRow("Name", letter.name)
-                    infoRow("Sound", letter.pronunciation)
-                    infoRow("Position", "#\(letter.position)")
-                    infoRow("Gematria", "\(letter.gematriaValue)")
+                    infoRow(String(localized: "Name"), letter.name)
+                    infoRow(String(localized: "Sound"), letter.pronunciation)
+                    infoRow(String(localized: "Position"), "#\(letter.position)")
+                    infoRow(String(localized: "Gematria"), "\(letter.gematriaValue)")
                     if let finalForm = letter.finalForm {
-                        infoRow("Final form", String(finalForm))
+                        infoRow(String(localized: "Final form"), String(finalForm))
                     }
                     if letter.isFinal {
-                        infoRow("Regular form", String(letter.regularForm!))
+                        infoRow(String(localized: "Regular form"), String(letter.regularForm!))
                     }
                 }
             }
@@ -307,7 +307,7 @@ private struct KeyboardLayoutView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Tap any key to see its mapping")
+            Text(String(localized: "Tap any key to see its mapping"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -320,7 +320,7 @@ private struct KeyboardLayoutView: View {
             if let key = highlightedKey, let hebrew = keyMap[key] {
                 HStack(spacing: 16) {
                     VStack(spacing: 2) {
-                        Text("English")
+                        Text(String(localized: "English"))
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                         Text(key)
@@ -332,7 +332,7 @@ private struct KeyboardLayoutView: View {
                         .foregroundStyle(.tertiary)
 
                     VStack(spacing: 2) {
-                        Text("Hebrew")
+                        Text(String(localized: "Hebrew"))
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                         Text(hebrew)
@@ -345,7 +345,7 @@ private struct KeyboardLayoutView: View {
                 .transition(.blurReplace)
             }
 
-            Text("The SI 1452 Hebrew keyboard layout is the standard used in Israel. Each QWERTY key maps to a specific Hebrew letter.")
+            Text(String(localized: "The SI 1452 Hebrew keyboard layout is the standard used in Israel. Each QWERTY key maps to a specific Hebrew letter."))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -396,30 +396,32 @@ private struct KeyboardLayoutView: View {
 private struct NiqqudChartView: View {
     @State private var showWithNiqqud = true
 
-    private let niqqudMarks: [(name: String, mark: String, sound: String, example: String, examplePlain: String)] = [
-        ("Patach", "\u{05B7}", "a (as in father)", "\u{05D1}\u{05B7}", "\u{05D1}"),
-        ("Kamatz", "\u{05B8}", "a / o", "\u{05D1}\u{05B8}", "\u{05D1}"),
-        ("Tsere", "\u{05B5}", "e (as in they)", "\u{05D1}\u{05B5}", "\u{05D1}"),
-        ("Segol", "\u{05B6}", "e (as in bed)", "\u{05D1}\u{05B6}", "\u{05D1}"),
-        ("Hiriq", "\u{05B4}", "i (as in ski)", "\u{05D1}\u{05B4}", "\u{05D1}"),
-        ("Holam", "\u{05B9}", "o (as in go)", "\u{05D1}\u{05B9}", "\u{05D1}"),
-        ("Kubutz", "\u{05BB}", "u (as in blue)", "\u{05D1}\u{05BB}", "\u{05D1}"),
-        ("Shuruk", "\u{05D5}\u{05BC}", "u (as in blue)", "\u{05D5}\u{05BC}", "\u{05D5}"),
-        ("Shva", "\u{05B0}", "brief e / silent", "\u{05D1}\u{05B0}", "\u{05D1}"),
-        ("Dagesh", "\u{05BC}", "hardens letter", "\u{05D1}\u{05BC}", "\u{05D1}"),
-    ]
+    private var niqqudMarks: [(name: String, mark: String, sound: String, example: String, examplePlain: String)] {
+        [
+            (String(localized: "Patach"), "\u{05B7}", String(localized: "a (as in father)"), "\u{05D1}\u{05B7}", "\u{05D1}"),
+            (String(localized: "Kamatz"), "\u{05B8}", String(localized: "a / o"), "\u{05D1}\u{05B8}", "\u{05D1}"),
+            (String(localized: "Tsere"), "\u{05B5}", String(localized: "e (as in they)"), "\u{05D1}\u{05B5}", "\u{05D1}"),
+            (String(localized: "Segol"), "\u{05B6}", String(localized: "e (as in bed)"), "\u{05D1}\u{05B6}", "\u{05D1}"),
+            (String(localized: "Hiriq"), "\u{05B4}", String(localized: "i (as in ski)"), "\u{05D1}\u{05B4}", "\u{05D1}"),
+            (String(localized: "Holam"), "\u{05B9}", String(localized: "o (as in go)"), "\u{05D1}\u{05B9}", "\u{05D1}"),
+            (String(localized: "Kubutz"), "\u{05BB}", String(localized: "u (as in blue)"), "\u{05D1}\u{05BB}", "\u{05D1}"),
+            (String(localized: "Shuruk"), "\u{05D5}\u{05BC}", String(localized: "u (as in blue)"), "\u{05D5}\u{05BC}", "\u{05D5}"),
+            (String(localized: "Shva"), "\u{05B0}", String(localized: "brief e / silent"), "\u{05D1}\u{05B0}", "\u{05D1}"),
+            (String(localized: "Dagesh"), "\u{05BC}", String(localized: "hardens letter"), "\u{05D1}\u{05BC}", "\u{05D1}"),
+        ]
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Niqqud Marks")
+                Text(String(localized: "Niqqud Marks"))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
                 Button {
                     withAnimation(.smooth) { showWithNiqqud.toggle() }
                 } label: {
-                    Text(showWithNiqqud ? "With Niqqud" : "Without")
+                    Text(showWithNiqqud ? String(localized: "With Niqqud") : String(localized: "Without"))
                         .font(.caption.weight(.medium))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
@@ -433,7 +435,7 @@ private struct NiqqudChartView: View {
                 Text(showWithNiqqud ? "\u{05E9}\u{05C1}\u{05B8}\u{05DC}\u{05D5}\u{05B9}\u{05DD}" : "\u{05E9}\u{05DC}\u{05D5}\u{05DD}")
                     .font(.system(size: 44))
                     .contentTransition(.interpolate)
-                Text("shalom \u{2014} peace / hello")
+                Text(String(localized: "shalom — peace / hello"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -492,16 +494,16 @@ private struct GematriaCalculatorView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Try it yourself")
+                Text(String(localized: "Try it yourself"))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
-                Text("Type \u{05D7}\u{05D9} for a famous one")
+                Text(String(localized: "Type חי for a famous one"))
                     .font(.caption)
                     .foregroundStyle(.quaternary)
             }
 
             // Input field
-            TextField("Type Hebrew text\u{2026}", text: $input)
+            TextField(String(localized: "Type Hebrew text\u{2026}"), text: $input)
                 .font(.title2)
                 .multilineTextAlignment(.trailing)
                 .padding(14)
@@ -513,7 +515,7 @@ private struct GematriaCalculatorView: View {
                     Text("\(value)")
                         .font(.system(size: 52, weight: .bold, design: .rounded))
                         .contentTransition(.numericText())
-                    Text("Gematria value")
+                    Text(String(localized: "Gematria value"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -574,21 +576,21 @@ private struct GematriaCalculatorView: View {
 
     private func famousGematriaMatch(_ val: Int) -> String? {
         switch val {
-        case 18: return "18 = \u{05D7}\u{05D9} (Chai, \"life\") \u{2014} considered a lucky number"
-        case 26: return "26 = \u{05D9}\u{05D4}\u{05D5}\u{05D4} (YHVH, the Tetragrammaton)"
-        case 36: return "36 = double Chai \u{2014} the 36 righteous (Lamed-Vavniks)"
-        case 72: return "72 = \u{05D7}\u{05E1}\u{05D3} (Chesed, \"kindness\")"
-        case 86: return "86 = \u{05D0}\u{05DC}\u{05D4}\u{05D9}\u{05DD} (Elohim)"
-        case 91: return "91 = \u{05D0}\u{05DE}\u{05DF} (Amen)"
-        case 112: return "112 = \u{05D9}\u{05D4}\u{05D5}\u{05D4} + \u{05D0}\u{05DC}\u{05D4}\u{05D9}\u{05DD} (26 + 86)"
-        case 137: return "137 = \u{05E7}\u{05D1}\u{05DC}\u{05D4} (Kabbalah)"
-        case 248: return "248 = the number of positive commandments"
-        case 314: return "314 = \u{05E9}\u{05D3}\u{05D9} (Shaddai, \"Almighty\")"
-        case 345: return "345 = \u{05DE}\u{05E9}\u{05D4} (Moshe / Moses)"
-        case 358: return "358 = \u{05DE}\u{05E9}\u{05D9}\u{05D7} (Mashiach / Messiah) and also \u{05E0}\u{05D7}\u{05E9} (Nachash, serpent)"
-        case 365: return "365 = the number of negative commandments"
-        case 541: return "541 = \u{05D9}\u{05E9}\u{05E8}\u{05D0}\u{05DC} (Yisrael / Israel)"
-        case 613: return "613 = total number of commandments (mitzvot)"
+        case 18: return String(localized: "18 = חי (Chai, \"life\") — considered a lucky number")
+        case 26: return String(localized: "26 = יהוה (YHVH, the Tetragrammaton)")
+        case 36: return String(localized: "36 = double Chai — the 36 righteous (Lamed-Vavniks)")
+        case 72: return String(localized: "72 = חסד (Chesed, \"kindness\")")
+        case 86: return String(localized: "86 = אלהים (Elohim)")
+        case 91: return String(localized: "91 = אמן (Amen)")
+        case 112: return String(localized: "112 = יהוה + אלהים (26 + 86)")
+        case 137: return String(localized: "137 = קבלה (Kabbalah)")
+        case 248: return String(localized: "248 = the number of positive commandments")
+        case 314: return String(localized: "314 = שדי (Shaddai, \"Almighty\")")
+        case 345: return String(localized: "345 = משה (Moshe / Moses)")
+        case 358: return String(localized: "358 = משיח (Mashiach / Messiah) and also נחש (Nachash, serpent)")
+        case 365: return String(localized: "365 = the number of negative commandments")
+        case 541: return String(localized: "541 = ישראל (Yisrael / Israel)")
+        case 613: return String(localized: "613 = total number of commandments (mitzvot)")
         default: return nil
         }
     }
@@ -601,7 +603,7 @@ private struct ReversalDemoView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("The problem, visualized")
+            Text(String(localized: "The problem, visualized"))
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
 
@@ -614,7 +616,7 @@ private struct ReversalDemoView: View {
                         Circle().fill(.orange).frame(width: 8, height: 8)
                         Circle().fill(.green).frame(width: 8, height: 8)
                         Spacer()
-                        Text(showFixed ? "After reversal" : "Without RTL support")
+                        Text(showFixed ? String(localized: "After reversal") : String(localized: "Without RTL support"))
                             .font(.system(size: 9, weight: .medium))
                             .foregroundStyle(.tertiary)
                     }
@@ -632,7 +634,7 @@ private struct ReversalDemoView: View {
                 Button {
                     withAnimation(.smooth) { showFixed.toggle() }
                 } label: {
-                    Label(showFixed ? "Show broken" : "Fix with reversal", systemImage: showFixed ? "arrow.uturn.backward" : "arrow.uturn.left")
+                    Label(showFixed ? String(localized: "Show broken") : String(localized: "Fix with reversal"), systemImage: showFixed ? "arrow.uturn.backward" : "arrow.uturn.left")
                         .font(.subheadline.weight(.medium))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
@@ -641,7 +643,7 @@ private struct ReversalDemoView: View {
                 .tint(.accentColor)
             }
 
-            Text("Software like After Effects, DaVinci Resolve, and Premiere Pro renders Hebrew left-to-right, flipping the character order. Pre-reversing the text compensates \u{2014} when the app lays it out LTR, it looks correct.")
+            Text(String(localized: "Software like After Effects, DaVinci Resolve, and Premiere Pro renders Hebrew left-to-right, flipping the character order. Pre-reversing the text compensates — when the app lays it out LTR, it looks correct."))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -660,7 +662,7 @@ private struct PaleoAlphabetChartView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Tap a letter to see its Paleo-Hebrew form")
+            Text(String(localized: "Tap a letter to see its Paleo-Hebrew form"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -700,7 +702,7 @@ private struct PaleoAlphabetChartView: View {
                     VStack(spacing: 4) {
                         Text(String(letter.hebrew))
                             .font(.system(size: 44))
-                        Text("Modern")
+                        Text(String(localized: "Modern"))
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }
@@ -710,9 +712,9 @@ private struct PaleoAlphabetChartView: View {
                         .foregroundStyle(.tertiary)
 
                     VStack(spacing: 4) {
-                        Text("Paleo \(letter.name)")
+                        Text(String(localized: "Paleo \(letter.name)"))
                             .font(.title2.weight(.medium))
-                        Text("Position \(letter.position) \u{2022} Value \(letter.gematriaValue)")
+                        Text(String(localized: "Position \(letter.position) • Value \(letter.gematriaValue)"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -723,7 +725,7 @@ private struct PaleoAlphabetChartView: View {
                 .transition(.blurReplace)
             }
 
-            Text("Paleo-Hebrew characters are encoded in the Phoenician Unicode block (U+10900\u{2013}U+1091F). Not all devices render these characters; the grid above uses the modern equivalents for reliable display.")
+            Text(String(localized: "Paleo-Hebrew characters are encoded in the Phoenician Unicode block (U+10900–U+1091F). Not all devices render these characters; the grid above uses the modern equivalents for reliable display."))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -740,7 +742,7 @@ private struct GematriaGridView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Standard Values")
+            Text(String(localized: "Standard Values"))
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
 
@@ -861,18 +863,18 @@ extension LearningTopic {
     ]
 
     static let hebrewAlphabet = LearningTopic(
-        title: "The Hebrew Alphabet",
-        subtitle: "22 letters, 3000+ years of history",
+        title: String(localized: "The Hebrew Alphabet"),
+        subtitle: String(localized: "22 letters, 3000+ years of history"),
         icon: "character.textbox",
         color: .blue,
         example: "\u{05D0}\u{05D1}\u{05D2}\u{05D3}\u{05D4}\u{05D5}\u{05D6}\u{05D7}\u{05D8}\u{05D9}\u{05DB}\u{05DC}\u{05DE}\u{05E0}\u{05E1}\u{05E2}\u{05E4}\u{05E6}\u{05E7}\u{05E8}\u{05E9}\u{05EA}",
         sections: [
-            Section(heading: nil, body: "The Hebrew alphabet (aleph-bet) consists of 22 consonant letters. It is an abjad \u{2014} a writing system where vowels are typically omitted or indicated with optional diacritical marks called niqqud."),
-            Section(heading: "Direction", body: "Hebrew is written and read from right to left. The alphabet has been in continuous use for over 3,000 years, making it one of the oldest writing systems still in active use today."),
-            Section(heading: "Final Forms", body: "Five Hebrew letters have special forms when they appear at the end of a word: Kaf (\u{05DB}\u{2192}\u{05DA}), Mem (\u{05DE}\u{2192}\u{05DD}), Nun (\u{05E0}\u{2192}\u{05DF}), Pe (\u{05E4}\u{2192}\u{05E3}), and Tsadi (\u{05E6}\u{2192}\u{05E5}). These are called sofit (final) letters."),
-            Section(heading: "Square Script (Ktav Ashuri)", body: "The modern Hebrew letterforms are formally known as Ktav Ashuri (\u{201C}Assyrian script\u{201D}). After the Babylonian exile in the 6th century BCE, Jewish scribes gradually adopted the Aramaic square letterforms in place of the older Paleo-Hebrew script. By the Second Temple period, square script had become the standard for everyday writing."),
-            Section(heading: "Why \u{201C}Square\u{201D}?", body: "The name comes from the blocky, rectangular shape of the letters. Unlike Paleo-Hebrew\u{2019}s angular, pictographic forms, square script has consistent vertical and horizontal strokes that sit neatly on a baseline. This regularity made it well-suited for scribal copying."),
-            Section(heading: "Sacred Use", body: "Ktav Ashuri is the script required for Torah scrolls, mezuzot, and tefillin. Jewish law (halakha) specifies that these sacred texts must be written in this script by a trained scribe (sofer). The Talmud (Sanhedrin 21b\u{2013}22a) records a debate about whether the Torah was originally given in Ktav Ashuri or Paleo-Hebrew, reflecting the historical transition between the two scripts."),
+            Section(heading: nil, body: String(localized: "The Hebrew alphabet (aleph-bet) consists of 22 consonant letters. It is an abjad — a writing system where vowels are typically omitted or indicated with optional diacritical marks called niqqud.")),
+            Section(heading: String(localized: "Direction"), body: String(localized: "Hebrew is written and read from right to left. The alphabet has been in continuous use for over 3,000 years, making it one of the oldest writing systems still in active use today.")),
+            Section(heading: String(localized: "Final Forms"), body: String(localized: "Five Hebrew letters have special forms when they appear at the end of a word: Kaf (כ→ך), Mem (מ→ם), Nun (נ→ן), Pe (פ→ף), and Tsadi (צ→ץ). These are called sofit (final) letters.")),
+            Section(heading: String(localized: "Square Script (Ktav Ashuri)"), body: String(localized: "The modern Hebrew letterforms are formally known as Ktav Ashuri (\u{201C}Assyrian script\u{201D}). After the Babylonian exile in the 6th century BCE, Jewish scribes gradually adopted the Aramaic square letterforms in place of the older Paleo-Hebrew script. By the Second Temple period, square script had become the standard for everyday writing.")),
+            Section(heading: String(localized: "Why \u{201C}Square\u{201D}?"), body: String(localized: "The name comes from the blocky, rectangular shape of the letters. Unlike Paleo-Hebrew\u{2019}s angular, pictographic forms, square script has consistent vertical and horizontal strokes that sit neatly on a baseline. This regularity made it well-suited for scribal copying.")),
+            Section(heading: String(localized: "Sacred Use"), body: String(localized: "Ktav Ashuri is the script required for Torah scrolls, mezuzot, and tefillin. Jewish law (halakha) specifies that these sacred texts must be written in this script by a trained scribe (sofer). The Talmud (Sanhedrin 21b–22a) records a debate about whether the Torah was originally given in Ktav Ashuri or Paleo-Hebrew, reflecting the historical transition between the two scripts.")),
         ],
         links: [
             WikiLink(title: "Hebrew alphabet \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Hebrew_alphabet"),
@@ -883,17 +885,17 @@ extension LearningTopic {
     )
 
     static let paleoHebrew = LearningTopic(
-        title: "Paleo-Hebrew Script",
-        subtitle: "The ancient letterforms of Israel",
+        title: String(localized: "Paleo-Hebrew Script"),
+        subtitle: String(localized: "The ancient letterforms of Israel"),
         icon: "scroll",
         color: .orange,
         example: nil,
         sections: [
-            Section(heading: nil, body: "Paleo-Hebrew (also called Old Hebrew script) is the original script used to write Hebrew from approximately the 10th century BCE. It is closely related to the Phoenician alphabet and is the ancestor of many modern scripts including Greek, Latin, and Arabic. Each of the 22 Paleo-Hebrew letters maps directly to its modern square Hebrew equivalent."),
-            Section(heading: "The Siloam Inscription", body: "Discovered in 1880 in Hezekiah\u{2019}s Tunnel in Jerusalem, the Siloam Inscription (circa 701 BCE) describes the moment two teams of tunnelers met underground. It is one of the oldest known Hebrew inscriptions and is written entirely in Paleo-Hebrew. The original is in the Istanbul Archaeology Museum."),
-            Section(heading: "The Tel Dan Stele", body: "Found in 1993 in northern Israel, the Tel Dan Stele is a 9th-century BCE Aramaic inscription that contains the earliest known reference to the \u{201C}House of David\u{201D} outside the Bible. While written in Aramaic, it uses a script closely related to Paleo-Hebrew and is a landmark find for biblical archaeology."),
-            Section(heading: "Coins", body: "Paleo-Hebrew experienced a deliberate revival on Jewish coinage as a national symbol:\n\n\u{2022} Hasmonean coins (2nd\u{2013}1st century BCE) \u{2014} The Maccabees minted coins with Paleo-Hebrew legends like \u{201C}Yehonatan the King\u{201D} and \u{201C}Yehudah the High Priest,\u{201D} asserting continuity with ancient Israelite sovereignty.\n\n\u{2022} Bar Kokhba revolt coins (132\u{2013}136 CE) \u{2014} Simon bar Kokhba\u{2019}s rebels overstruck Roman coins with Paleo-Hebrew inscriptions reading \u{201C}For the Freedom of Jerusalem\u{201D} and \u{201C}Year One of the Redemption of Israel.\u{201D} These are among the last widespread uses of the script."),
-            Section(heading: "In Unicode", body: "Paleo-Hebrew is encoded in the Phoenician block of Unicode (U+10900\u{2013}U+1091F). These are Supplementary Multilingual Plane characters, so font and rendering support varies across devices. AlephTools handles the mapping internally for reliable conversion."),
+            Section(heading: nil, body: String(localized: "Paleo-Hebrew (also called Old Hebrew script) is the original script used to write Hebrew from approximately the 10th century BCE. It is closely related to the Phoenician alphabet and is the ancestor of many modern scripts including Greek, Latin, and Arabic. Each of the 22 Paleo-Hebrew letters maps directly to its modern square Hebrew equivalent.")),
+            Section(heading: String(localized: "The Siloam Inscription"), body: String(localized: "Discovered in 1880 in Hezekiah\u{2019}s Tunnel in Jerusalem, the Siloam Inscription (circa 701 BCE) describes the moment two teams of tunnelers met underground. It is one of the oldest known Hebrew inscriptions and is written entirely in Paleo-Hebrew. The original is in the Istanbul Archaeology Museum.")),
+            Section(heading: String(localized: "The Tel Dan Stele"), body: String(localized: "Found in 1993 in northern Israel, the Tel Dan Stele is a 9th-century BCE Aramaic inscription that contains the earliest known reference to the \u{201C}House of David\u{201D} outside the Bible. While written in Aramaic, it uses a script closely related to Paleo-Hebrew and is a landmark find for biblical archaeology.")),
+            Section(heading: String(localized: "Coins"), body: String(localized: "Paleo-Hebrew experienced a deliberate revival on Jewish coinage as a national symbol:\n\n• Hasmonean coins (2nd–1st century BCE) — The Maccabees minted coins with Paleo-Hebrew legends like \u{201C}Yehonatan the King\u{201D} and \u{201C}Yehudah the High Priest,\u{201D} asserting continuity with ancient Israelite sovereignty.\n\n• Bar Kokhba revolt coins (132–136 CE) — Simon bar Kokhba\u{2019}s rebels overstruck Roman coins with Paleo-Hebrew inscriptions reading \u{201C}For the Freedom of Jerusalem\u{201D} and \u{201C}Year One of the Redemption of Israel.\u{201D} These are among the last widespread uses of the script.")),
+            Section(heading: String(localized: "In Unicode"), body: String(localized: "Paleo-Hebrew is encoded in the Phoenician block of Unicode (U+10900–U+1091F). These are Supplementary Multilingual Plane characters, so font and rendering support varies across devices. AlephTools handles the mapping internally for reliable conversion.")),
         ],
         links: [
             WikiLink(title: "Paleo-Hebrew alphabet \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Paleo-Hebrew_alphabet"),
@@ -906,15 +908,15 @@ extension LearningTopic {
     )
 
     static let niqqud = LearningTopic(
-        title: "Niqqud (Vowel Points)",
-        subtitle: "How Hebrew marks vowels",
+        title: String(localized: "Niqqud (Vowel Points)"),
+        subtitle: String(localized: "How Hebrew marks vowels"),
         icon: "eraser",
         color: .purple,
         example: "\u{05E9}\u{05C1}\u{05B8}\u{05DC}\u{05D5}\u{05B9}\u{05DD} \u{2192} \u{05E9}\u{05DC}\u{05D5}\u{05DD}",
         sections: [
-            Section(heading: nil, body: "Niqqud is a system of diacritical marks (dots and dashes) placed above or below Hebrew letters to indicate vowel sounds. Since the Hebrew alphabet only represents consonants, niqqud fills in the vowels that readers must otherwise infer from context."),
-            Section(heading: "When It\u{2019}s Used", body: "Modern Hebrew text is almost always written without niqqud. Fluent readers infer vowels from context. Niqqud appears mainly in children\u{2019}s books, poetry, liturgical texts, language textbooks, and to disambiguate words that could be read multiple ways."),
-            Section(heading: "Stripping Niqqud", body: "The \u{201C}Strip Niqqud\u{201D} tool removes all these diacritical marks, converting fully vocalized text into the standard unpointed form used in everyday writing."),
+            Section(heading: nil, body: String(localized: "Niqqud is a system of diacritical marks (dots and dashes) placed above or below Hebrew letters to indicate vowel sounds. Since the Hebrew alphabet only represents consonants, niqqud fills in the vowels that readers must otherwise infer from context.")),
+            Section(heading: String(localized: "When It\u{2019}s Used"), body: String(localized: "Modern Hebrew text is almost always written without niqqud. Fluent readers infer vowels from context. Niqqud appears mainly in children\u{2019}s books, poetry, liturgical texts, language textbooks, and to disambiguate words that could be read multiple ways.")),
+            Section(heading: String(localized: "Stripping Niqqud"), body: String(localized: "The \u{201C}Strip Niqqud\u{201D} tool removes all these diacritical marks, converting fully vocalized text into the standard unpointed form used in everyday writing.")),
         ],
         links: [
             WikiLink(title: "Niqqud \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Niqqud"),
@@ -924,15 +926,15 @@ extension LearningTopic {
     )
 
     static let gematria = LearningTopic(
-        title: "Gematria",
-        subtitle: "The numerical value of Hebrew words",
+        title: String(localized: "Gematria"),
+        subtitle: String(localized: "The numerical value of Hebrew words"),
         icon: "number",
         color: .indigo,
         example: "\u{05D0}=1  \u{05D1}=2  \u{05D2}=3 \u{2026} \u{05E7}=100  \u{05E8}=200",
         sections: [
-            Section(heading: nil, body: "Gematria is the practice of assigning numerical values to Hebrew letters and calculating the sum of a word or phrase. Each of the 22 Hebrew letters has a fixed value: Aleph=1, Bet=2, Gimel=3, and so on up to Tav=400."),
-            Section(heading: "The Number System", body: "The first 9 letters represent 1\u{2013}9, the next 9 represent 10\u{2013}90, and the final 4 represent 100\u{2013}400. Final letter forms (sofit) typically carry the same value as their non-final counterparts."),
-            Section(heading: "Historical Significance", body: "Gematria has been used for thousands of years in Jewish biblical interpretation (hermeneutics). Words or phrases with equal numerical values are considered to have a hidden connection. For example, the Hebrew word for \u{201C}life\u{201D} (\u{05D7}\u{05D9}) equals 18, which is why 18 is considered a lucky number in Jewish tradition."),
+            Section(heading: nil, body: String(localized: "Gematria is the practice of assigning numerical values to Hebrew letters and calculating the sum of a word or phrase. Each of the 22 Hebrew letters has a fixed value: Aleph=1, Bet=2, Gimel=3, and so on up to Tav=400.")),
+            Section(heading: String(localized: "The Number System"), body: String(localized: "The first 9 letters represent 1–9, the next 9 represent 10–90, and the final 4 represent 100–400. Final letter forms (sofit) typically carry the same value as their non-final counterparts.")),
+            Section(heading: String(localized: "Historical Significance"), body: String(localized: "Gematria has been used for thousands of years in Jewish biblical interpretation (hermeneutics). Words or phrases with equal numerical values are considered to have a hidden connection. For example, the Hebrew word for \u{201C}life\u{201D} (חי) equals 18, which is why 18 is considered a lucky number in Jewish tradition.")),
         ],
         links: [
             WikiLink(title: "Gematria \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Gematria"),
@@ -943,17 +945,17 @@ extension LearningTopic {
 
     static let keyboardLayouts: LearningTopic = {
         var sections = [
-            Section(heading: nil, body: "The standard Hebrew keyboard layout maps each key on a QWERTY keyboard to a Hebrew letter. When someone types in English while their keyboard is set to Hebrew (or vice versa), the result is gibberish that maps letter-for-letter to the other layout."),
-            Section(heading: "A Common Problem", body: "This happens frequently to bilingual typists. You start typing a URL or password and realize your keyboard was set to the wrong language. The \u{201C}To Hebrew\u{201D} and \u{201C}To English\u{201D} tools reverse this mapping, recovering the intended text without retyping."),
+            Section(heading: nil, body: String(localized: "The standard Hebrew keyboard layout maps each key on a QWERTY keyboard to a Hebrew letter. When someone types in English while their keyboard is set to Hebrew (or vice versa), the result is gibberish that maps letter-for-letter to the other layout.")),
+            Section(heading: String(localized: "A Common Problem"), body: String(localized: "This happens frequently to bilingual typists. You start typing a URL or password and realize your keyboard was set to the wrong language. The \u{201C}To Hebrew\u{201D} and \u{201C}To English\u{201D} tools reverse this mapping, recovering the intended text without retyping.")),
         ]
         #if os(iOS)
-        sections.append(Section(heading: "Adding a Hebrew Keyboard", body: "To install a Hebrew keyboard on iOS:\n\n1. Open Settings\n2. Go to General \u{203A} Keyboard \u{203A} Keyboards\n3. Tap Add New Keyboard\u{2026}\n4. Select Hebrew\n\nOnce added, tap the globe icon on your keyboard to switch between English and Hebrew."))
+        sections.append(Section(heading: String(localized: "Adding a Hebrew Keyboard"), body: String(localized: "To install a Hebrew keyboard on iOS:\n\n1. Open Settings\n2. Go to General › Keyboard › Keyboards\n3. Tap Add New Keyboard…\n4. Select Hebrew\n\nOnce added, tap the globe icon on your keyboard to switch between English and Hebrew.")))
         #else
-        sections.append(Section(heading: "Adding a Hebrew Keyboard", body: "To add a Hebrew keyboard on macOS:\n\n1. Open System Settings\n2. Go to Keyboard \u{203A} Input Sources\n3. Click the + button\n4. Search for and add Hebrew\n\nUse the input menu in the menu bar (or press Control+Space) to switch layouts. With the Hebrew layout active, each key press shows the Hebrew mapping \u{2014} try the interactive widget above to preview it."))
+        sections.append(Section(heading: String(localized: "Adding a Hebrew Keyboard"), body: String(localized: "To add a Hebrew keyboard on macOS:\n\n1. Open System Settings\n2. Go to Keyboard › Input Sources\n3. Click the + button\n4. Search for and add Hebrew\n\nUse the input menu in the menu bar (or press Control+Space) to switch layouts. With the Hebrew layout active, each key press shows the Hebrew mapping — try the interactive widget above to preview it.")))
         #endif
         return LearningTopic(
-            title: "Hebrew Keyboard Layout",
-            subtitle: "How QWERTY maps to Hebrew",
+            title: String(localized: "Hebrew Keyboard Layout"),
+            subtitle: String(localized: "How QWERTY maps to Hebrew"),
             icon: "keyboard",
             color: .teal,
             example: nil,
@@ -967,17 +969,17 @@ extension LearningTopic {
     }()
 
     static let textReversal = LearningTopic(
-        title: "Text Reversal (RTL Fix)",
-        subtitle: "Fix Hebrew in non-RTL software",
+        title: String(localized: "Text Reversal (RTL Fix)"),
+        subtitle: String(localized: "Fix Hebrew in non-RTL software"),
         icon: "arrow.uturn.left",
         color: .cyan,
         example: "\u{05E9}\u{05DC}\u{05D5}\u{05DD} \u{2192} \u{05DD}\u{05D5}\u{05DC}\u{05E9}",
         sections: [
-            Section(heading: nil, body: "Hebrew is a right-to-left language, but many programs don\u{2019}t support RTL text. When you paste Hebrew into these apps, the characters appear in reverse order \u{2014} rendered left-to-right instead of right-to-left. The Reverse tool flips the character order so the text displays correctly in LTR-only software."),
-            Section(heading: "Fixing Adobe Apps (Tomech Ivrit)", body: "Adobe apps can support Hebrew natively, but the Middle Eastern text engine isn\u{2019}t installed by default. To enable it:\n\n1. Open the Creative Cloud desktop app\n2. Go to Preferences \u{203A} Apps\n3. Under the \u{201C}Installing\u{201D} section, change the language/text engine to \u{201C}Tomech Ivrit\u{201D} (Hebrew support)\n4. Uninstall the Adobe apps you use (After Effects, Premiere Pro, Photoshop, Illustrator, etc.)\n5. Reinstall them from Creative Cloud\n\nThe reinstalled apps will include the Middle Eastern text engine by default, giving you proper RTL text, correct character joining, and bidirectional support without needing to pre-reverse text."),
-            Section(heading: "Video Editors", body: "DaVinci Resolve is a major offender \u{2014} its text tools have limited or no RTL support even in the latest versions. Hebrew-speaking filmmakers routinely pre-reverse text before pasting it into Resolve titles and subtitles. Vegas Pro and many open-source editors (Shotcut, OpenShot) have the same problem."),
-            Section(heading: "Other Software", body: "The RTL problem appears across many categories:\n\n\u{2022} Game engines \u{2014} Unity (legacy UI), older Godot, RPG Maker, GameMaker\n\u{2022} 3D software \u{2014} Cinema 4D text objects, Blender (pre-3.1), 3ds Max\n\u{2022} Subtitles \u{2014} SRT files have no directionality metadata; some players render Hebrew reversed\n\u{2022} LED signage \u{2014} Many sign controllers are LTR-only\n\u{2022} Laser/CNC engraving \u{2014} Label printers and engravers often lack BiDi"),
-            Section(heading: "Niqqud-Aware Reversal", body: "A simple character-level reversal would detach niqqud (vowel marks) from their letters, since niqqud are combining Unicode characters that attach to the preceding letter. Aleph Tools reverses text in groups \u{2014} each letter with its attached diacritics stays together \u{2014} so vocalized text reverses correctly."),
+            Section(heading: nil, body: String(localized: "Hebrew is a right-to-left language, but many programs don\u{2019}t support RTL text. When you paste Hebrew into these apps, the characters appear in reverse order — rendered left-to-right instead of right-to-left. The Reverse tool flips the character order so the text displays correctly in LTR-only software.")),
+            Section(heading: String(localized: "Fixing Adobe Apps (Tomech Ivrit)"), body: String(localized: "Adobe apps can support Hebrew natively, but the Middle Eastern text engine isn\u{2019}t installed by default. To enable it:\n\n1. Open the Creative Cloud desktop app\n2. Go to Preferences › Apps\n3. Under the \u{201C}Installing\u{201D} section, change the language/text engine to \u{201C}Tomech Ivrit\u{201D} (Hebrew support)\n4. Uninstall the Adobe apps you use (After Effects, Premiere Pro, Photoshop, Illustrator, etc.)\n5. Reinstall them from Creative Cloud\n\nThe reinstalled apps will include the Middle Eastern text engine by default, giving you proper RTL text, correct character joining, and bidirectional support without needing to pre-reverse text.")),
+            Section(heading: String(localized: "Video Editors"), body: String(localized: "DaVinci Resolve is a major offender — its text tools have limited or no RTL support even in the latest versions. Hebrew-speaking filmmakers routinely pre-reverse text before pasting it into Resolve titles and subtitles. Vegas Pro and many open-source editors (Shotcut, OpenShot) have the same problem.")),
+            Section(heading: String(localized: "Other Software"), body: String(localized: "The RTL problem appears across many categories:\n\n• Game engines — Unity (legacy UI), older Godot, RPG Maker, GameMaker\n• 3D software — Cinema 4D text objects, Blender (pre-3.1), 3ds Max\n• Subtitles — SRT files have no directionality metadata; some players render Hebrew reversed\n• LED signage — Many sign controllers are LTR-only\n• Laser/CNC engraving — Label printers and engravers often lack BiDi")),
+            Section(heading: String(localized: "Niqqud-Aware Reversal"), body: String(localized: "A simple character-level reversal would detach niqqud (vowel marks) from their letters, since niqqud are combining Unicode characters that attach to the preceding letter. Aleph Tools reverses text in groups — each letter with its attached diacritics stays together — so vocalized text reverses correctly.")),
         ],
         links: [
             WikiLink(title: "Bidirectional text \u{2014} Wikipedia", url: "https://en.wikipedia.org/wiki/Bidirectional_text"),

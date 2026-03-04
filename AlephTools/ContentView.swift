@@ -98,9 +98,9 @@ struct ContentView: View {
 
     private var statsAccessibilityLabel: String {
         var parts: [String] = []
-        if stats.changed > 0 { parts.append("\(stats.changed) characters changed") }
-        if stats.unchanged > 0 { parts.append("\(stats.unchanged) characters kept") }
-        return parts.isEmpty ? "No statistics" : parts.joined(separator: ", ")
+        if stats.changed > 0 { parts.append("\(stats.changed) \(String(localized: "characters changed"))") }
+        if stats.unchanged > 0 { parts.append("\(stats.unchanged) \(String(localized: "characters kept"))") }
+        return parts.isEmpty ? String(localized: "No statistics") : parts.joined(separator: ", ")
     }
 
     var body: some View {
@@ -109,7 +109,7 @@ struct ContentView: View {
             outputPanel
         }
         .frame(minWidth: 640, minHeight: 400)
-        .navigationTitle("Aleph Tools")
+        .navigationTitle(String(localized: "Aleph Tools"))
         .toolbar { toolbarContent }
         .overlay(alignment: .bottom) {
             if showCopiedToast {
@@ -150,7 +150,7 @@ struct ContentView: View {
         }
         .userActivity(handoffActivityType) { activity in
             activity.isEligibleForHandoff = true
-            activity.title = "Aleph Tools — \(selectedTransform.rawValue)"
+            activity.title = "Aleph Tools — \(selectedTransform.localizedName)"
             activity.userInfo = [
                 "inputText": inputText,
                 "transformationType": selectedTransform.rawValue,
@@ -184,9 +184,9 @@ struct ContentView: View {
                             selectedTransform = t
                         } label: {
                             if t == selectedTransform {
-                                Label(t.rawValue, systemImage: "checkmark")
+                                Label(t.localizedName, systemImage: "checkmark")
                             } else {
-                                Text(t.rawValue)
+                                Text(t.localizedName)
                             }
                         }
                     }
@@ -194,7 +194,7 @@ struct ContentView: View {
                     HStack(spacing: 6) {
                         Image(systemName: selectedTransform.icon)
                             .foregroundStyle(.secondary)
-                        Text(selectedTransform.rawValue)
+                        Text(selectedTransform.localizedName)
                         Image(systemName: "chevron.down")
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(.tertiary)
@@ -203,14 +203,14 @@ struct ContentView: View {
                 }
                 .menuStyle(.borderlessButton)
                 .fixedSize()
-                .accessibilityLabel("Transformation mode")
-                .accessibilityHint("Select the text transformation to apply")
+                .accessibilityLabel(String(localized: "Transformation mode"))
+                .accessibilityHint(String(localized: "Select the text transformation to apply"))
 
                 if selectedTransform.supportsPunctuationToggle {
                     Divider()
                         .frame(height: 16)
 
-                    Toggle("Keep Punctuation", isOn: $keepPunctuation)
+                    Toggle(String(localized: "Keep Punctuation"), isOn: $keepPunctuation)
                         .toggleStyle(.checkbox)
                         .controlSize(.small)
                 }
@@ -219,15 +219,15 @@ struct ContentView: View {
                     Divider()
                         .frame(height: 16)
 
-                    Toggle("Final Letters", isOn: $convertFinalLetters)
+                    Toggle(String(localized: "Final Letters"), isOn: $convertFinalLetters)
                         .toggleStyle(.checkbox)
                         .controlSize(.small)
-                        .help("Convert כמנפצ to final forms ךםןףץ at word boundaries")
+                        .help(String(localized: "Convert כמנפצ to final forms ךםןףץ at word boundaries"))
 
-                    Toggle("Clean Punctuation", isOn: $cleanPunctuation)
+                    Toggle(String(localized: "Clean Punctuation"), isOn: $cleanPunctuation)
                         .toggleStyle(.checkbox)
                         .controlSize(.small)
-                        .help("Remove brackets, line numbers, and convert dot separators to spaces")
+                        .help(String(localized: "Remove brackets, line numbers, and convert dot separators to spaces"))
                 }
             }
         }
@@ -239,7 +239,7 @@ struct ContentView: View {
     private var inputPanel: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Input")
+                Text(String(localized: "Input"))
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
 
@@ -256,32 +256,32 @@ struct ContentView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.clipboard")
-                        Text("Paste")
+                        Text(String(localized: "Paste"))
                     }
                     .font(.caption.weight(.medium))
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 .disabled(NSPasteboard.general.string(forType: .string) == nil)
-                .help("Paste from clipboard")
-                .accessibilityLabel("Paste from clipboard")
-                .accessibilityHint("Replaces input with clipboard contents")
+                .help(String(localized: "Paste from clipboard"))
+                .accessibilityLabel(String(localized: "Paste from clipboard"))
+                .accessibilityHint(String(localized: "Replaces input with clipboard contents"))
 
                 Button {
                     editorCommand.setText("")
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "xmark")
-                        Text("Clear")
+                        Text(String(localized: "Clear"))
                     }
                     .font(.caption.weight(.medium))
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 .disabled(inputText.isEmpty)
-                .help("Clear input")
-                .accessibilityLabel("Clear input")
-                .accessibilityHint("Clears all input text")
+                .help(String(localized: "Clear input"))
+                .accessibilityLabel(String(localized: "Clear input"))
+                .accessibilityHint(String(localized: "Clears all input text"))
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -301,7 +301,7 @@ struct ContentView: View {
     private var outputPanel: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Output")
+                Text(String(localized: "Output"))
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
 
@@ -321,15 +321,15 @@ struct ContentView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.doc")
-                        Text("Copy")
+                        Text(String(localized: "Copy"))
                     }
                     .font(.caption.weight(.medium))
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 .disabled(outputText.isEmpty)
-                .accessibilityLabel("Copy output")
-                .accessibilityHint("Copies the transformed text to clipboard")
+                .accessibilityLabel(String(localized: "Copy output"))
+                .accessibilityHint(String(localized: "Copies the transformed text to clipboard"))
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -368,8 +368,8 @@ struct ContentView: View {
                 .foregroundStyle(.primary)
                 .contentTransition(.numericText())
                 .animation(.snappy(duration: 0.3), value: outputText)
-                .accessibilityLabel("Gematria value: \(formattedGematria)")
-            Text("Gematria Value")
+                .accessibilityLabel(String(localized: "Gematria value: \(formattedGematria)"))
+            Text(String(localized: "Gematria Value"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Spacer()
@@ -390,10 +390,10 @@ struct ContentView: View {
                     Spacer()
                     ProgressView()
                         .controlSize(.large)
-                    Text("Adding niqqud\u{2026}")
+                    Text(String(localized: "Adding niqqud…"))
                         .font(.callout)
                         .foregroundStyle(.secondary)
-                    Text("Nakdimon")
+                    Text(String(localized: "Nakdimon"))
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                     Spacer()
@@ -409,7 +409,7 @@ struct ContentView: View {
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                    Button("Retry") {
+                    Button(String(localized: "Retry")) {
                         niqqudGenerator.generate(from: inputText)
                     }
                     .buttonStyle(.bordered)
@@ -430,11 +430,11 @@ struct ContentView: View {
     private var statsView: some View {
         HStack(spacing: 6) {
             if stats.changed > 0 {
-                Text("\(stats.changed) changed")
+                Text("\(stats.changed) \(String(localized: "changed"))")
                     .foregroundColor(.accentColor)
             }
             if stats.unchanged > 0 {
-                Text("\(stats.unchanged) kept")
+                Text("\(stats.unchanged) \(String(localized: "kept"))")
                     .foregroundStyle(.secondary)
             }
         }
@@ -448,7 +448,7 @@ struct ContentView: View {
     // MARK: - Toast
 
     private var copiedToast: some View {
-        Label("Copied", systemImage: "checkmark")
+        Label(String(localized: "Copied"), systemImage: "checkmark")
             .font(.caption.weight(.medium))
             .padding(.horizontal, 16)
             .padding(.vertical, 8)

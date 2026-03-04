@@ -1,0 +1,181 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Add Niqqud" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הוספת ניקוד"
+          }
+        }
+      }
+    },
+    "Aleph Tools" : {
+
+    },
+    "Clean Punctuation" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניקוי פיסוק"
+          }
+        }
+      }
+    },
+    "Convert Final Letters (ם ן ך ף ץ)" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "המרת אותיות סופיות (ם ן ך ף ץ)"
+          }
+        }
+      }
+    },
+    "Copied" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הועתק!"
+          }
+        }
+      }
+    },
+    "Copy Result" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "העתקת תוצאה"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "סיום"
+          }
+        }
+      }
+    },
+    "Gematria" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גימטריה"
+          }
+        }
+      }
+    },
+    "Input" : {
+      "comment" : "Input panel header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קלט"
+          }
+        }
+      }
+    },
+    "Keep Punctuation" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שמור פיסוק"
+          }
+        }
+      }
+    },
+    "Output" : {
+      "comment" : "Output panel header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פלט"
+          }
+        }
+      }
+    },
+    "Remove Niqqud" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הסרת ניקוד"
+          }
+        }
+      }
+    },
+    "Reverse" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "היפוך"
+          }
+        }
+      }
+    },
+    "To English" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לאנגלית"
+          }
+        }
+      }
+    },
+    "To Hebrew" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לעברית"
+          }
+        }
+      }
+    },
+    "To Paleo-Hebrew" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לכתב עברי קדום"
+          }
+        }
+      }
+    },
+    "To Square Hebrew" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לעברית מרובעת"
+          }
+        }
+      }
+    },
+    "Transformation" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "המרה"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

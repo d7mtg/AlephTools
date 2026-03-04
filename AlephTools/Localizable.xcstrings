@@ -1,0 +1,1249 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld" : {
+
+    },
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "© 2025 D7mtg" : {
+
+    },
+    "+" : {
+
+    },
+    "22 letters, 3000+ years of history" : {
+
+    },
+    "A Common Problem" : {
+
+    },
+    "A simple character-level reversal would detach niqqud (vowel marks) from their letters, since niqqud are combining Unicode characters that attach to the preceding letter. Aleph Tools reverses text in groups — each letter with its attached diacritics stays together — so vocalized text reverses correctly." : {
+
+    },
+    "About" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אודות"
+          }
+        }
+      }
+    },
+    "Accessibility access granted. Shortcuts work system-wide." : {
+      "comment" : "Accessibility permission success",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הרשאת נגישות ניתנה. הקיצורים פועלים בכל המערכת."
+          }
+        }
+      }
+    },
+    "Accessibility Access Required" : {
+      "comment" : "Accessibility permission warning title",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נדרשת הרשאת נגישות"
+          }
+        }
+      }
+    },
+    "Actual Size" : {
+
+    },
+    "Add Niqqud" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הוספת ניקוד"
+          }
+        }
+      }
+    },
+    "Add vowel diacritics (niqqud) to Hebrew text using the Nakdimon model" : {
+
+    },
+    "Adding a Hebrew Keyboard" : {
+
+    },
+    "Adding niqqud…" : {
+      "comment" : "Progress label for niqqud generation",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מוסיף ניקוד…"
+          }
+        }
+      }
+    },
+    "Adobe apps can support Hebrew natively, but the Middle Eastern text engine isn’t installed by default. To enable it:\n\n1. Open the Creative Cloud desktop app\n2. Go to Preferences › Apps\n3. Under the “Installing” section, change the language/text engine to “Tomech Ivrit” (Hebrew support)\n4. Uninstall the Adobe apps you use (After Effects, Premiere Pro, Photoshop, Illustrator, etc.)\n5. Reinstall them from Creative Cloud\n\nThe reinstalled apps will include the Middle Eastern text engine by default, giving you proper RTL text, correct character joining, and bidirectional support without needing to pre-reverse text." : {
+
+    },
+    "After reversal" : {
+
+    },
+    "Aleph Tools" : {
+
+    },
+    "Aleph Tools registers transformations in the system Services menu. Select text in any app, then use the app menu → Services → Aleph Tools." : {
+      "comment" : "Services settings description",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aleph Tools רושם המרות בתפריט השירותים של המערכת. בחר טקסט בכל אפליקציה, ואז השתמש בתפריט האפליקציה → שירותים → Aleph Tools."
+          }
+        }
+      }
+    },
+    "Appearance" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מראה"
+          }
+        }
+      }
+    },
+    "Assign keyboard shortcuts to transform selected text anywhere on your Mac. The app must be running." : {
+      "comment" : "Shortcuts settings description",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקצה קיצורי מקלדת להמרת טקסט נבחר בכל מקום ב-Mac שלך. האפליקציה חייבת לפעול."
+          }
+        }
+      }
+    },
+    "Auto" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אוטומטי"
+          }
+        }
+      }
+    },
+    "Bigger" : {
+
+    },
+    "Calculate the gematria numerical value of Hebrew text" : {
+
+    },
+    "Cancel" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ביטול"
+          }
+        }
+      }
+    },
+    "changed" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שונו"
+          }
+        }
+      }
+    },
+    "characters changed" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תווים שונו"
+          }
+        }
+      }
+    },
+    "characters kept" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תווים נשמרו"
+          }
+        }
+      }
+    },
+    "Claude Code" : {
+
+    },
+    "Clean Punctuation" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניקוי פיסוק"
+          }
+        }
+      }
+    },
+    "Clear" : {
+      "comment" : "Clear button label",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניקוי"
+          }
+        }
+      }
+    },
+    "Clear input" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניקוי קלט"
+          }
+        }
+      }
+    },
+    "Clear Input" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניקוי קלט"
+          }
+        }
+      }
+    },
+    "Clears all input text" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מנקה את כל טקסט הקלט"
+          }
+        }
+      }
+    },
+    "Coins" : {
+
+    },
+    "Convert Hebrew text to QWERTY English keyboard layout" : {
+
+    },
+    "Convert modern square Hebrew to Paleo-Hebrew script" : {
+
+    },
+    "Convert Paleo-Hebrew to modern square Hebrew script" : {
+
+    },
+    "Convert QWERTY English text to Hebrew keyboard layout" : {
+
+    },
+    "Convert כמנפצ to final forms ךםןףץ at word boundaries" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "המרת כמנפצ לצורות סופיות ךםןףץ בסוף מילים"
+          }
+        }
+      }
+    },
+    "Copied" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הועתק!"
+          }
+        }
+      }
+    },
+    "Copies the transformed text to clipboard" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מעתיק את הטקסט המומר ללוח"
+          }
+        }
+      }
+    },
+    "Copy" : {
+      "comment" : "Copy button label",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "העתקה"
+          }
+        }
+      }
+    },
+    "Copy output" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "העתקת פלט"
+          }
+        }
+      }
+    },
+    "Copy Output" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "העתקת פלט"
+          }
+        }
+      }
+    },
+    "Cut" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גזירה"
+          }
+        }
+      }
+    },
+    "D7mtg" : {
+
+    },
+    "Dark" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "כהה"
+          }
+        }
+      }
+    },
+    "DaVinci Resolve is a major offender — its text tools have limited or no RTL support even in the latest versions. Hebrew-speaking filmmakers routinely pre-reverse text before pasting it into Resolve titles and subtitles. Vegas Pro and many open-source editors (Shotcut, OpenShot) have the same problem." : {
+
+    },
+    "Default transformation:" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "המרת ברירת מחדל:"
+          }
+        }
+      }
+    },
+    "Direction" : {
+
+    },
+    "Discovered in 1880 in Hezekiah’s Tunnel in Jerusalem, the Siloam Inscription (circa 701 BCE) describes the moment two teams of tunnelers met underground. It is one of the oldest known Hebrew inscriptions and is written entirely in Paleo-Hebrew. The original is in the Istanbul Archaeology Museum." : {
+
+    },
+    "English" : {
+      "comment" : "Keyboard mapping label"
+    },
+    "Final Forms" : {
+
+    },
+    "Final Forms (Sofit)" : {
+      "comment" : "Hebrew final letter forms section header"
+    },
+    "Final Letters" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אותיות סופיות"
+          }
+        }
+      }
+    },
+    "Find and Replace…" : {
+
+    },
+    "Find Next" : {
+
+    },
+    "Find Previous" : {
+
+    },
+    "Find…" : {
+
+    },
+    "Five Hebrew letters have special forms when they appear at the end of a word: Kaf (כ→ך), Mem (מ→ם), Nun (נ→ן), Pe (פ→ף), and Tsadi (צ→ץ). These are called sofit (final) letters." : {
+
+    },
+    "Fix Hebrew in non-RTL software" : {
+
+    },
+    "Fix with reversal" : {
+
+    },
+    "Fixing Adobe Apps (Tomech Ivrit)" : {
+
+    },
+    "Found in 1993 in northern Israel, the Tel Dan Stele is a 9th-century BCE Aramaic inscription that contains the earliest known reference to the “House of David” outside the Bible. While written in Aramaic, it uses a script closely related to Paleo-Hebrew and is a landmark find for biblical archaeology." : {
+
+    },
+    "Gematria" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גימטריה"
+          }
+        }
+      }
+    },
+    "Gematria has been used for thousands of years in Jewish biblical interpretation (hermeneutics). Words or phrases with equal numerical values are considered to have a hidden connection. For example, the Hebrew word for “life” (חי) equals 18, which is why 18 is considered a lucky number in Jewish tradition." : {
+
+    },
+    "Gematria is the practice of assigning numerical values to Hebrew letters and calculating the sum of a word or phrase. Each of the 22 Hebrew letters has a fixed value: Aleph=1, Bet=2, Gimel=3, and so on up to Tav=400." : {
+
+    },
+    "Gematria value" : {
+      "comment" : "Gematria calculator result label"
+    },
+    "Gematria Value" : {
+      "comment" : "Label under gematria number",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ערך גימטריה"
+          }
+        }
+      }
+    },
+    "Gematria value: %@" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ערך גימטריה: %@"
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "כללי"
+          }
+        }
+      }
+    },
+    "Global Shortcuts" : {
+      "comment" : "Shortcuts settings header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קיצורי מקלדת גלובליים"
+          }
+        }
+      }
+    },
+    "Global shortcuts need Accessibility permission to simulate copy/paste in other apps." : {
+      "comment" : "Accessibility permission warning description",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קיצורים גלובליים דורשים הרשאת נגישות כדי לדמות העתקה/הדבקה באפליקציות אחרות."
+          }
+        }
+      }
+    },
+    "Hebrew" : {
+      "comment" : "Keyboard mapping label"
+    },
+    "Hebrew diacritization model by Elazar Gershuni · MIT License" : {
+      "comment" : "Nakdimon library description",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מודל ניקוד עברי מאת אלעזר גרשוני · רישיון MIT"
+          }
+        }
+      }
+    },
+    "Hebrew is a right-to-left language, but many programs don’t support RTL text. When you paste Hebrew into these apps, the characters appear in reverse order — rendered left-to-right instead of right-to-left. The Reverse tool flips the character order so the text displays correctly in LTR-only software." : {
+
+    },
+    "Hebrew is written and read from right to left. The alphabet has been in continuous use for over 3,000 years, making it one of the oldest writing systems still in active use today." : {
+
+    },
+    "Hebrew Keyboard Layout" : {
+
+    },
+    "Hebrew text transformation utility for macOS. Convert keyboard layouts, strip niqqud, transliterate between modern and paleo-Hebrew scripts, and more." : {
+      "comment" : "App description in About",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "כלי עזר להמרת טקסט עברי עבור macOS. המרת פריסות מקלדת, הסרת ניקוד, תעתוק בין כתב עברי מודרני וקדום, ועוד."
+          }
+        }
+      }
+    },
+    "Historical Significance" : {
+
+    },
+    "How Hebrew marks vowels" : {
+
+    },
+    "How QWERTY maps to Hebrew" : {
+
+    },
+    "In Unicode" : {
+
+    },
+    "Input" : {
+      "comment" : "Input panel header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קלט"
+          }
+        }
+      }
+    },
+    "Input text…" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "טקסט קלט…"
+          }
+        }
+      }
+    },
+    "Keep Punctuation" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שמור פיסוק"
+          }
+        }
+      }
+    },
+    "kept" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נשמרו"
+          }
+        }
+      }
+    },
+    "Ktav Ashuri is the script required for Torah scrolls, mezuzot, and tefillin. Jewish law (halakha) specifies that these sacred texts must be written in this script by a trained scribe (sofer). The Talmud (Sanhedrin 21b–22a) records a debate about whether the Torah was originally given in Ktav Ashuri or Paleo-Hebrew, reflecting the historical transition between the two scripts." : {
+
+    },
+    "Language" : {
+      "comment" : "Settings section header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שפה"
+          }
+        }
+      }
+    },
+    "Launch Aleph Tools at login" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הפעל את Aleph Tools בהתחברות"
+          }
+        }
+      }
+    },
+    "Learn more" : {
+      "comment" : "Learning center section header"
+    },
+    "Learning Center" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מרכז למידה"
+          }
+        }
+      }
+    },
+    "Light" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בהיר"
+          }
+        }
+      }
+    },
+    "Made by" : {
+      "comment" : "About footer attribution",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נוצר על ידי"
+          }
+        }
+      }
+    },
+    "Modern" : {
+      "comment" : "Modern Hebrew script label"
+    },
+    "Modern Hebrew text is almost always written without niqqud. Fluent readers infer vowels from context. Niqqud appears mainly in children’s books, poetry, liturgical texts, language textbooks, and to disambiguate words that could be read multiple ways." : {
+
+    },
+    "Nakdimon" : {
+
+    },
+    "Niqqud (Vowel Points)" : {
+
+    },
+    "Niqqud is a system of diacritical marks (dots and dashes) placed above or below Hebrew letters to indicate vowel sounds. Since the Hebrew alphabet only represents consonants, niqqud fills in the vowels that readers must otherwise infer from context." : {
+
+    },
+    "Niqqud Marks" : {
+      "comment" : "Niqqud chart section header"
+    },
+    "Niqqud-Aware Reversal" : {
+
+    },
+    "No statistics" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אין סטטיסטיקה"
+          }
+        }
+      }
+    },
+    "Open Settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתח הגדרות"
+          }
+        }
+      }
+    },
+    "Open-Source Libraries" : {
+      "comment" : "Section header in About",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ספריות קוד פתוח"
+          }
+        }
+      }
+    },
+    "Other Software" : {
+
+    },
+    "Output" : {
+      "comment" : "Output panel header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פלט"
+          }
+        }
+      }
+    },
+    "Paleo %@" : {
+      "comment" : "Paleo-Hebrew letter name"
+    },
+    "Paleo-Hebrew (also called Old Hebrew script) is the original script used to write Hebrew from approximately the 10th century BCE. It is closely related to the Phoenician alphabet and is the ancestor of many modern scripts including Greek, Latin, and Arabic. Each of the 22 Paleo-Hebrew letters maps directly to its modern square Hebrew equivalent." : {
+
+    },
+    "Paleo-Hebrew characters are encoded in the Phoenician Unicode block (U+10900–U+1091F). Not all devices render these characters; the grid above uses the modern equivalents for reliable display." : {
+      "comment" : "Paleo-Hebrew Unicode explanation"
+    },
+    "Paleo-Hebrew experienced a deliberate revival on Jewish coinage as a national symbol:\n\n• Hasmonean coins (2nd–1st century BCE) — The Maccabees minted coins with Paleo-Hebrew legends like “Yehonatan the King” and “Yehudah the High Priest,” asserting continuity with ancient Israelite sovereignty.\n\n• Bar Kokhba revolt coins (132–136 CE) — Simon bar Kokhba’s rebels overstruck Roman coins with Paleo-Hebrew inscriptions reading “For the Freedom of Jerusalem” and “Year One of the Redemption of Israel.” These are among the last widespread uses of the script." : {
+
+    },
+    "Paleo-Hebrew is encoded in the Phoenician block of Unicode (U+10900–U+1091F). These are Supplementary Multilingual Plane characters, so font and rendering support varies across devices. AlephTools handles the mapping internally for reliable conversion." : {
+
+    },
+    "Paleo-Hebrew Script" : {
+
+    },
+    "Paste" : {
+      "comment" : "Paste button label",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הדבקה"
+          }
+        }
+      }
+    },
+    "Paste from clipboard" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הדבקה מהלוח"
+          }
+        }
+      }
+    },
+    "Position %lld • Value %lld" : {
+      "comment" : "Letter position and gematria value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Position %1$lld • Value %2$lld"
+          }
+        }
+      }
+    },
+    "Print Output…" : {
+
+    },
+    "Quick access to transformations from the menu bar." : {
+      "comment" : "Menu bar toggle footer",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גישה מהירה להמרות משורת התפריטים."
+          }
+        }
+      }
+    },
+    "Record Shortcut" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקלט קיצור"
+          }
+        }
+      }
+    },
+    "Recorded" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הוקלט"
+          }
+        }
+      }
+    },
+    "Redo" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חזרה"
+          }
+        }
+      }
+    },
+    "Remove brackets, line numbers, and convert dot separators to spaces" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הסרת סוגריים, מספרי שורות, והמרת מפרידי נקודות לרווחים"
+          }
+        }
+      }
+    },
+    "Remove Niqqud" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הסרת ניקוד"
+          }
+        }
+      }
+    },
+    "Remove vowel points and diacritics from Hebrew text" : {
+
+    },
+    "Replaces input with clipboard contents" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מחליף את הקלט בתוכן הלוח"
+          }
+        }
+      }
+    },
+    "Report an Issue" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "דיווח על בעיה"
+          }
+        }
+      }
+    },
+    "Restart the app to fully apply." : {
+      "comment" : "Language picker footer"
+    },
+    "Retry" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נסה שנית"
+          }
+        }
+      }
+    },
+    "Reverse" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "היפוך"
+          }
+        }
+      }
+    },
+    "Reverse Hebrew Text" : {
+
+    },
+    "Reverse Text" : {
+
+    },
+    "Reverse text while preserving niqqud attachment to letters" : {
+
+    },
+    "Sacred Use" : {
+
+    },
+    "Select a topic" : {
+      "comment" : "Learning center placeholder",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בחר נושא"
+          }
+        }
+      }
+    },
+    "Select All" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בחר הכל"
+          }
+        }
+      }
+    },
+    "Select the text transformation to apply" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בחר את המרת הטקסט להפעלה"
+          }
+        }
+      }
+    },
+    "Services" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שירותים"
+          }
+        }
+      }
+    },
+    "Services are registered when the app launches. Restart may be needed after changes." : {
+      "comment" : "Services settings footer",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "השירותים נרשמים בעת הפעלת האפליקציה. ייתכן שיידרש אתחול מחדש לאחר שינויים."
+          }
+        }
+      }
+    },
+    "Services Menu" : {
+      "comment" : "Services settings header",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תפריט שירותים"
+          }
+        }
+      }
+    },
+    "shalom — peace / hello" : {
+      "comment" : "Example word translation"
+    },
+    "Shortcuts" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קיצורי מקלדת"
+          }
+        }
+      }
+    },
+    "Show broken" : {
+
+    },
+    "Show in menu bar" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצג בשורת התפריטים"
+          }
+        }
+      }
+    },
+    "Smaller" : {
+
+    },
+    "Software like After Effects, DaVinci Resolve, and Premiere Pro renders Hebrew left-to-right, flipping the character order. Pre-reversing the text compensates — when the app lays it out LTR, it looks correct." : {
+      "comment" : "Reversal explanation"
+    },
+    "Source Code" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קוד מקור"
+          }
+        }
+      }
+    },
+    "Square Script (Ktav Ashuri)" : {
+
+    },
+    "Standard Values" : {
+      "comment" : "Gematria standard values section header"
+    },
+    "Strip Niqqud" : {
+
+    },
+    "Stripping Niqqud" : {
+
+    },
+    "System" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מערכת"
+          }
+        }
+      }
+    },
+    "Tap a letter to explore" : {
+      "comment" : "Alphabet chart instruction"
+    },
+    "Tap a letter to see its Paleo-Hebrew form" : {
+      "comment" : "Paleo alphabet chart instruction"
+    },
+    "Tap any key to see its mapping" : {
+      "comment" : "Keyboard chart instruction"
+    },
+    "Text" : {
+
+    },
+    "Text Reversal (RTL Fix)" : {
+
+    },
+    "The “Strip Niqqud” tool removes all these diacritical marks, converting fully vocalized text into the standard unpointed form used in everyday writing." : {
+
+    },
+    "The ancient letterforms of Israel" : {
+
+    },
+    "The first 9 letters represent 1–9, the next 9 represent 10–90, and the final 4 represent 100–400. Final letter forms (sofit) typically carry the same value as their non-final counterparts." : {
+
+    },
+    "The Hebrew Alphabet" : {
+
+    },
+    "The Hebrew alphabet (aleph-bet) consists of 22 consonant letters. It is an abjad — a writing system where vowels are typically omitted or indicated with optional diacritical marks called niqqud." : {
+
+    },
+    "The modern Hebrew letterforms are formally known as Ktav Ashuri (“Assyrian script”). After the Babylonian exile in the 6th century BCE, Jewish scribes gradually adopted the Aramaic square letterforms in place of the older Paleo-Hebrew script. By the Second Temple period, square script had become the standard for everyday writing." : {
+
+    },
+    "The name comes from the blocky, rectangular shape of the letters. Unlike Paleo-Hebrew’s angular, pictographic forms, square script has consistent vertical and horizontal strokes that sit neatly on a baseline. This regularity made it well-suited for scribal copying." : {
+
+    },
+    "The Number System" : {
+
+    },
+    "The numerical value of Hebrew words" : {
+
+    },
+    "The problem, visualized" : {
+      "comment" : "Reversal demo section header"
+    },
+    "The RTL problem appears across many categories:\n\n• Game engines — Unity (legacy UI), older Godot, RPG Maker, GameMaker\n• 3D software — Cinema 4D text objects, Blender (pre-3.1), 3ds Max\n• Subtitles — SRT files have no directionality metadata; some players render Hebrew reversed\n• LED signage — Many sign controllers are LTR-only\n• Laser/CNC engraving — Label printers and engravers often lack BiDi" : {
+
+    },
+    "The SI 1452 Hebrew keyboard layout is the standard used in Israel. Each QWERTY key maps to a specific Hebrew letter." : {
+      "comment" : "Keyboard layout explanation"
+    },
+    "The Siloam Inscription" : {
+
+    },
+    "The standard Hebrew keyboard layout maps each key on a QWERTY keyboard to a Hebrew letter. When someone types in English while their keyboard is set to Hebrew (or vice versa), the result is gibberish that maps letter-for-letter to the other layout." : {
+
+    },
+    "The Tel Dan Stele" : {
+
+    },
+    "This happens frequently to bilingual typists. You start typing a URL or password and realize your keyboard was set to the wrong language. The “To Hebrew” and “To English” tools reverse this mapping, recovering the intended text without retyping." : {
+
+    },
+    "To add a Hebrew keyboard on macOS:\n\n1. Open System Settings\n2. Go to Keyboard › Input Sources\n3. Click the + button\n4. Search for and add Hebrew\n\nUse the input menu in the menu bar (or press Control+Space) to switch layouts. With the Hebrew layout active, each key press shows the Hebrew mapping — try the interactive widget above to preview it." : {
+
+    },
+    "To English" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לאנגלית"
+          }
+        }
+      }
+    },
+    "To Hebrew" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לעברית"
+          }
+        }
+      }
+    },
+    "To Modern" : {
+
+    },
+    "To Modern Hebrew" : {
+
+    },
+    "To Paleo" : {
+
+    },
+    "To Paleo-Hebrew" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לכתב עברי קדום"
+          }
+        }
+      }
+    },
+    "To Square Hebrew" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לעברית מרובעת"
+          }
+        }
+      }
+    },
+    "Transform" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "המרה"
+          }
+        }
+      }
+    },
+    "Transform Hebrew Text" : {
+
+    },
+    "Transform text using Aleph Tools" : {
+
+    },
+    "Transformation" : {
+
+    },
+    "Transformation mode" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "סוג המרה"
+          }
+        }
+      }
+    },
+    "Try it yourself" : {
+      "comment" : "Gematria calculator prompt"
+    },
+    "Type Hebrew text…" : {
+
+    },
+    "Type shortcut…" : {
+      "comment" : "Shortcut recording prompt",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקלד קיצור…"
+          }
+        }
+      }
+    },
+    "Type חי for a famous one" : {
+      "comment" : "Gematria calculator hint"
+    },
+    "Undo" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ביטול"
+          }
+        }
+      }
+    },
+    "Use Selection for Find" : {
+
+    },
+    "Used when opening the app and for new windows." : {
+      "comment" : "Default transformation footer",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בשימוש בעת פתיחת האפליקציה ועבור חלונות חדשים."
+          }
+        }
+      }
+    },
+    "Version %@ (%@)" : {
+      "comment" : "App version label",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גרסה %@ (%@)"
+          }
+        }
+      }
+    },
+    "Video Editors" : {
+
+    },
+    "Website" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אתר אינטרנט"
+          }
+        }
+      }
+    },
+    "When It’s Used" : {
+
+    },
+    "Why “Square”?" : {
+
+    },
+    "with" : {
+      "comment" : "About footer attribution connector",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "עם"
+          }
+        }
+      }
+    },
+    "With Niqqud" : {
+
+    },
+    "Without" : {
+
+    },
+    "Without RTL support" : {
+
+    },
+    "אידיש" : {
+
+    },
+    "םלוע םולש" : {
+
+    },
+    "עברית" : {
+
+    },
+    "שלום" : {
+
+    },
+    "שָׁלוֹם" : {
+
+    },
+    "שלום עולם" : {
+
+    }
+  },
+  "version" : "1.0"
+}

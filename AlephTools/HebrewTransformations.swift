@@ -18,6 +18,19 @@ enum TransformationType: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    var localizedName: String {
+        switch self {
+        case .hebrewKeyboard: return String(localized: "To Hebrew")
+        case .englishKeyboard: return String(localized: "To English")
+        case .removeNiqqud: return String(localized: "Remove Niqqud")
+        case .addNiqqud: return String(localized: "Add Niqqud")
+        case .squareHebrew: return String(localized: "To Square Hebrew")
+        case .paleoHebrew: return String(localized: "To Paleo-Hebrew")
+        case .gematria: return String(localized: "Gematria")
+        case .reverse: return String(localized: "Reverse")
+        }
+    }
+
     var subtitle: String {
         if self == .addNiqqud { return "Nakdimon \u{00B7} On-device" }
         return "\(inputLabel) \u{2192} \(outputLabel)"

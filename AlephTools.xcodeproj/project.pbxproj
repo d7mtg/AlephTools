@@ -36,6 +36,10 @@
 		K000000100000005 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000002 /* KeyboardViewController.swift */; };
 		K000000100000006 /* PaleoKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K000000100000003 /* PaleoKeyboardView.swift */; };
 		K000000100000012 /* AlephKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = K000000100000001 /* AlephKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		L000000100000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = L000000100000002 /* Localizable.xcstrings */; };
+		L000000100000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = L000000100000004 /* Localizable.xcstrings */; };
+		L000000100000005 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = L000000100000006 /* Localizable.xcstrings */; };
+		L000000100000007 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = L000000100000008 /* Localizable.xcstrings */; };
 		S000000100000005 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = S000000100000002 /* ShareViewController.swift */; };
 		S000000100000006 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = S000000100000003 /* ShareView.swift */; };
 		S000000100000012 /* AlephShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = S000000100000001 /* AlephShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -44,13 +48,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		T00000010000000F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E81000012B00000100000000 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E81000012B00000100000006;
-			remoteInfo = AlephTools;
-		};
 		K00000010000000F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E81000012B00000100000000 /* Project object */;
@@ -64,6 +61,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = S00000010000000B;
 			remoteInfo = AlephShare;
+		};
+		T00000010000000F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E81000012B00000100000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E81000012B00000100000006;
+			remoteInfo = AlephTools;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -109,6 +113,10 @@
 		K000000100000002 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		K000000100000003 /* PaleoKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaleoKeyboardView.swift; sourceTree = "<group>"; };
 		K000000100000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		L000000100000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		L000000100000004 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		L000000100000006 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		L000000100000008 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		S000000100000001 /* AlephShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AlephShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		S000000100000002 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		S000000100000003 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
@@ -186,6 +194,7 @@
 				E1A2B3D400000001 /* Nakdimon.mlpackage */,
 				E81000012B0000010000000F /* Assets.xcassets */,
 				E81000012B00000100000011 /* AlephTools.entitlements */,
+				L000000100000002 /* Localizable.xcstrings */,
 			);
 			path = AlephTools;
 			sourceTree = "<group>";
@@ -210,6 +219,7 @@
 				0EC493E8FA6E6CF24E39B9B1 /* iOSSettingsView.swift */,
 				3F1A871DD6607C5DF4ECFEDA /* KeyboardSetupView.swift */,
 				30A9F7529A8D8277D0F4EE11 /* LearningCenterView.swift */,
+				L000000100000004 /* Localizable.xcstrings */,
 			);
 			path = AlephToolsiOS;
 			sourceTree = "<group>";
@@ -220,6 +230,7 @@
 				K000000100000002 /* KeyboardViewController.swift */,
 				K000000100000003 /* PaleoKeyboardView.swift */,
 				K000000100000004 /* Info.plist */,
+				L000000100000008 /* Localizable.xcstrings */,
 			);
 			path = AlephKeyboard;
 			sourceTree = "<group>";
@@ -230,6 +241,7 @@
 				S000000100000002 /* ShareViewController.swift */,
 				S000000100000003 /* ShareView.swift */,
 				S000000100000004 /* Info.plist */,
+				L000000100000006 /* Localizable.xcstrings */,
 			);
 			path = AlephShare;
 			sourceTree = "<group>";
@@ -343,6 +355,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 2630;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E81000012B00000100000006 = {
 						CreatedOnToolsVersion = 15.0;
@@ -370,6 +383,7 @@
 				en,
 				Base,
 				he,
+				yi,
 			);
 			mainGroup = E81000012B00000100000003;
 			productRefGroup = E81000012B00000100000005 /* Products */;
@@ -393,6 +407,7 @@
 				E81000012B0000010000000E /* Assets.xcassets in Resources */,
 				C1A2B3D400000006 /* AlephTools.sdef in Resources */,
 				80E8FB592F53E1B40055F722 /* aleph.icon in Resources */,
+				L000000100000001 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +417,7 @@
 			files = (
 				F00000010000000E /* Assets.xcassets in Resources */,
 				80E8FB572F53E1B40055F722 /* aleph.icon in Resources */,
+				L000000100000003 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80E8FB582F53E1B40055F722 /* aleph.icon in Resources */,
+				L000000100000007 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +434,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				L000000100000005 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

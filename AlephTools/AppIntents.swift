@@ -15,14 +15,14 @@ enum TransformationAppEnum: String, AppEnum {
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Transformation")
 
     static var caseDisplayRepresentations: [TransformationAppEnum: DisplayRepresentation] = [
-        .toHebrew: "To Hebrew",
-        .toEnglish: "To English",
-        .stripNiqqud: "Strip Niqqud",
-        .addNiqqud: "Add Niqqud",
-        .toModern: "To Modern",
-        .toPaleo: "To Paleo",
-        .gematria: "Gematria",
-        .reverse: "Reverse",
+        .toHebrew: DisplayRepresentation(title: "To Hebrew"),
+        .toEnglish: DisplayRepresentation(title: "To English"),
+        .stripNiqqud: DisplayRepresentation(title: "Strip Niqqud"),
+        .addNiqqud: DisplayRepresentation(title: "Add Niqqud"),
+        .toModern: DisplayRepresentation(title: "To Modern"),
+        .toPaleo: DisplayRepresentation(title: "To Paleo"),
+        .gematria: DisplayRepresentation(title: "Gematria"),
+        .reverse: DisplayRepresentation(title: "Reverse"),
     ]
 
     var transformationType: TransformationType {

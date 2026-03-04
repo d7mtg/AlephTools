@@ -1,0 +1,28 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "return" : {
+      "comment" : "Keyboard return key label",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חזרה"
+          }
+        }
+      }
+    },
+    "space" : {
+      "comment" : "Keyboard space bar label",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "רווח"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -4,6 +4,7 @@ import AppIntents
 struct iOSSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
+    @AppStorage("languageOverride") private var languageOverride = "system"
     @State private var showKeyboardSetup = false
 
     private var appVersion: String {
@@ -19,16 +20,29 @@ struct iOSSettingsView: View {
             List {
                 // MARK: - General
                 Section {
-                    Picker("Default Transformation", selection: $defaultTransformRaw) {
+                    Picker(String(localized: "Default Transformation"), selection: $defaultTransformRaw) {
                         ForEach(TransformationType.allCases) { t in
-                            Label(t.rawValue, systemImage: t.icon)
+                            Label(t.localizedName, systemImage: t.icon)
                                 .tag(t.rawValue)
                         }
                     }
+                    Picker(String(localized: "Language"), selection: $languageOverride) {
+                        Text(String(localized: "System")).tag("system")
+                        Text("English").tag("en")
+                        Text("עברית").tag("he")
+                        Text("אידיש").tag("yi")
+                    }
+                    .onChange(of: languageOverride) { _, newValue in
+                        if newValue == "system" {
+                            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+                        } else {
+                            UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
+                        }
+                    }
                 } header: {
-                    Text("General")
+                    Text("General", comment: "Settings section header")
                 } footer: {
-                    Text("Used when opening the app.")
+                    Text("Used when opening the app.", comment: "Default transformation footer")
                 }
 
                 // MARK: - Keyboard
@@ -37,7 +51,7 @@ struct iOSSettingsView: View {
                         showKeyboardSetup = true
                     } label: {
                         HStack {
-                            Label("Paleo-Hebrew Keyboard", systemImage: "keyboard")
+                            Label(String(localized: "Paleo-Hebrew Keyboard"), systemImage: "keyboard")
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .font(.caption)
@@ -45,9 +59,9 @@ struct iOSSettingsView: View {
                         }
                     }
                 } header: {
-                    Text("Keyboard")
+                    Text("Keyboard", comment: "Settings section header")
                 } footer: {
-                    Text("Set up the Paleo-Hebrew keyboard extension.")
+                    Text("Set up the Paleo-Hebrew keyboard extension.", comment: "Keyboard section footer")
                 }
 
                 // MARK: - About
@@ -55,12 +69,12 @@ struct iOSSettingsView: View {
                     NavigationLink {
                         LearningCenterView()
                     } label: {
-                        Label("Learning Center", systemImage: "book")
+                        Label(String(localized: "Learning Center"), systemImage: "book")
                     }
 
                     Link(destination: URL(string: "https://github.com/d7mtg/AlephTools")!) {
                         HStack {
-                            Label("Source Code", systemImage: "chevron.left.forwardslash.chevron.right")
+                            Label(String(localized: "Source Code"), systemImage: "chevron.left.forwardslash.chevron.right")
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .font(.caption)
@@ -70,7 +84,7 @@ struct iOSSettingsView: View {
 
                     Link(destination: URL(string: "https://github.com/d7mtg/AlephTools/issues")!) {
                         HStack {
-                            Label("Report Issue", systemImage: "ladybug")
+                            Label(String(localized: "Report Issue"), systemImage: "ladybug")
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .font(.caption)
@@ -89,15 +103,15 @@ struct iOSSettingsView: View {
                     }
 
                     HStack {
-                        Text("Version")
+                        Text("Version", comment: "Settings version label")
                         Spacer()
                         Text("\(appVersion) (\(buildNumber))")
                             .foregroundStyle(.secondary)
                     }
                 } header: {
-                    Text("About")
+                    Text("About", comment: "Settings section header")
                 } footer: {
-                    Text("Made by D7mtg with Claude Code")
+                    Text("Made by D7mtg with Claude Code", comment: "Settings footer attribution")
                 }
 
                 // MARK: - Open-Source Libraries
@@ -112,9 +126,9 @@ struct iOSSettingsView: View {
                         }
                     }
                 } header: {
-                    Text("Open-Source Libraries")
+                    Text("Open-Source Libraries", comment: "Settings section header")
                 } footer: {
-                    Text("Hebrew diacritization model by Elazar Gershuni \u{00B7} MIT License")
+                    Text("Hebrew diacritization model by Elazar Gershuni \u{00B7} MIT License", comment: "Nakdimon library description")
                 }
 
                 // MARK: - Shortcuts
@@ -125,11 +139,11 @@ struct iOSSettingsView: View {
                 }
                 .listRowBackground(Color.clear)
             }
-            .navigationTitle("Settings")
+            .navigationTitle(String(localized: "Settings"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "Done")) { dismiss() }
                 }
             }
             .fullScreenCover(isPresented: $showKeyboardSetup) {
