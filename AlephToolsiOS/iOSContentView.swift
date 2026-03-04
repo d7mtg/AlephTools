@@ -10,8 +10,8 @@ struct iOSContentView: View {
     @State private var cleanPunctuation = false
     @State private var showSettings = false
     @State private var showCopiedToast = false
-    @AppStorage("hasCompletedKeyboardSetup") private var hasCompletedKeyboardSetup = false
-    @State private var showKeyboardSetup = false
+    @AppStorage("hasSeenWelcome_2.0") private var hasSeenWelcome = false
+    @State private var showWelcome = false
     @FocusState private var isInputFocused: Bool
     @Environment(\.horizontalSizeClass) private var sizeClass
     @StateObject private var niqqudGenerator = NiqqudGenerator()
@@ -43,16 +43,17 @@ struct iOSContentView: View {
             .sheet(isPresented: $showSettings) {
                 iOSSettingsView()
             }
-            .fullScreenCover(isPresented: $showKeyboardSetup) {
-                KeyboardSetupView()
+            .sheet(isPresented: $showWelcome) {
+                WelcomeSheet(onContinue: { hasSeenWelcome = true; showWelcome = false })
+                    .interactiveDismissDisabled()
             }
         }
         .onAppear {
             if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
                 selectedTransform = saved
             }
-            if !hasCompletedKeyboardSetup {
-                showKeyboardSetup = true
+            if !hasSeenWelcome {
+                showWelcome = true
             }
         }
         .onChange(of: selectedTransform) { _, newValue in
@@ -88,6 +89,9 @@ struct iOSContentView: View {
             if let punc = info["keepPunctuation"] as? Bool {
                 keepPunctuation = punc
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .showWelcomeSheet)) { _ in
+            showWelcome = true
         }
         .overlay(alignment: .bottom) {
             if showCopiedToast {

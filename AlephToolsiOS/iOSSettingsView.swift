@@ -131,6 +131,18 @@ struct iOSSettingsView: View {
                     Text("Hebrew diacritization model by Elazar Gershuni \u{00B7} MIT License", comment: "Nakdimon library description")
                 }
 
+                // MARK: - Debug
+                #if DEBUG
+                Section {
+                    Button("Show Welcome Sheet") {
+                        NotificationCenter.default.post(name: .showWelcomeSheet, object: nil)
+                        dismiss()
+                    }
+                } header: {
+                    Text("Debug")
+                }
+                #endif
+
                 // MARK: - Shortcuts
                 Section {
                     ShortcutsLink()

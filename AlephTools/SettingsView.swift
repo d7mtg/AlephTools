@@ -9,20 +9,16 @@ struct SettingsView: View {
                 .tabItem {
                     Label(String(localized: "General"), systemImage: "gearshape")
                 }
-            ShortcutsSettingsTab()
+            IntegrationsSettingsTab()
                 .tabItem {
                     Label(String(localized: "Shortcuts"), systemImage: "command")
-                }
-            ServicesSettingsTab()
-                .tabItem {
-                    Label(String(localized: "Services"), systemImage: "square.and.arrow.up.on.square")
                 }
             AboutSettingsTab()
                 .tabItem {
                     Label(String(localized: "About"), systemImage: "info.circle")
                 }
         }
-        .frame(width: 520, height: 520)
+        .frame(width: 560, height: 580)
     }
 }
 
@@ -42,23 +38,16 @@ private struct GeneralSettingsTab: View {
                     .onChange(of: launchAtLogin) { _, newValue in
                         LaunchAtLoginManager.setEnabled(newValue)
                     }
-            }
 
-            Section {
-                Picker(String(localized: "Default transformation:"), selection: $defaultTransform) {
+                Picker(String(localized: "Default transformation"), selection: $defaultTransform) {
                     ForEach(TransformationType.allCases) { t in
                         Text(t.localizedName).tag(t.rawValue)
                     }
                 }
-                .fixedSize()
-            } footer: {
-                Text(String(localized: "Used when opening the app and for new windows."))
-            }
 
-            Section {
                 Toggle(String(localized: "Show in menu bar"), isOn: $showInMenuBar)
             } footer: {
-                Text(String(localized: "Quick access to transformations from the menu bar."))
+                Text(String(localized: "Default transformation is used when opening the app."))
             }
 
             Section {
@@ -68,7 +57,6 @@ private struct GeneralSettingsTab: View {
                     Text("עברית").tag("he")
                     Text("אידיש").tag("yi")
                 }
-                .fixedSize()
                 .onChange(of: languageOverride) { _, newValue in
                     if newValue == "system" {
                         UserDefaults.standard.removeObject(forKey: "AppleLanguages")
@@ -76,15 +64,21 @@ private struct GeneralSettingsTab: View {
                         UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
                     }
                 }
-            } header: {
-                Text(String(localized: "Language"))
             } footer: {
-                Text(String(localized: "Restart the app to fully apply."))
+                Text(String(localized: "Restart the app to fully apply language changes."))
             }
 
             Section(String(localized: "Appearance")) {
                 AppearancePicker(selection: $appearanceOverride)
             }
+
+            #if DEBUG
+            Section("Debug") {
+                Button("Show Welcome Sheet") {
+                    NotificationCenter.default.post(name: .showWelcomeSheet, object: nil)
+                }
+            }
+            #endif
         }
         .formStyle(.grouped)
     }
@@ -109,7 +103,7 @@ enum LaunchAtLoginManager {
 
 // MARK: - Appearance Picker
 
-private struct AppearancePicker: View {
+struct AppearancePicker: View {
     @Binding var selection: String
 
     private var options: [(id: String, label: String)] {
@@ -145,7 +139,7 @@ private struct AppearancePicker: View {
     }
 }
 
-private struct AppearanceThumbnail: View {
+struct AppearanceThumbnail: View {
     let mode: String
     let isSelected: Bool
 
@@ -285,10 +279,10 @@ private struct AppearanceThumbnail: View {
     }
 }
 
-// MARK: - Shortcuts Tab
+// MARK: - Integrations Tab
 
-private struct ShortcutsSettingsTab: View {
-    @StateObject private var manager = GlobalShortcutManager.shared
+private struct IntegrationsSettingsTab: View {
+    @StateObject private var shortcutManager = GlobalShortcutManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -300,10 +294,35 @@ private struct ShortcutsSettingsTab: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
+            // Accessibility warning — above the list, it's a prerequisite
+            if !AXIsProcessTrusted() {
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.accentColor)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(String(localized: "Accessibility Access Required"))
+                            .font(.callout.weight(.medium))
+                        Text(String(localized: "Global shortcuts need Accessibility permission to work in other apps."))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button(String(localized: "Open Settings")) {
+                        let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
+                        AXIsProcessTrustedWithOptions(options)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+                .padding(10)
+                .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
+            }
+
             ScrollView {
                 VStack(spacing: 0) {
                     ForEach(TransformationType.allCases) { t in
-                        ShortcutRow(transform: t, manager: manager)
+                        ShortcutRow(transform: t, manager: shortcutManager)
+
                         if t != TransformationType.allCases.last {
                             Divider()
                                 .padding(.leading, 36)
@@ -318,35 +337,37 @@ private struct ShortcutsSettingsTab: View {
                 )
             }
 
-            if !AXIsProcessTrusted() {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(.accentColor)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(String(localized: "Accessibility Access Required"))
-                            .font(.callout.weight(.medium))
-                        Text(String(localized: "Global shortcuts need Accessibility permission to simulate copy/paste in other apps."))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Button(String(localized: "Open Settings")) {
-                        let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
-                        AXIsProcessTrustedWithOptions(options)
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                }
-                .padding(10)
-                .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
-            } else {
-                HStack(spacing: 6) {
+            // Other integrations
+            HStack(spacing: 6) {
+                if AXIsProcessTrusted() {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                     Text(String(localized: "Accessibility access granted. Shortcuts work system-wide."))
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                } else {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(.secondary)
+                    Text(String(localized: "Shortcuts require Accessibility access to work."))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+            }
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text(String(localized: "Also available via"))
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.tertiary)
+
+                HStack(spacing: 16) {
+                    Label(String(localized: "Services Menu"), systemImage: "contextualmenu.and.cursorarrow")
+                    Label(String(localized: "Shortcuts"), systemImage: "apple.shortcuts")
+                    Label(String(localized: "Siri"), systemImage: "siri")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
         }
         .padding(20)
@@ -382,74 +403,84 @@ private struct ShortcutRow: View {
 
             Spacer()
 
-            if isRecording {
-                Text(String(localized: "Type shortcut…"))
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-                    .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 5))
-                    .onAppear { startLocalMonitor() }
-                    .onDisappear { stopLocalMonitor() }
-
-                Button(String(localized: "Cancel")) {
-                    stopRecording()
+            // Unified shortcut field — always the same size, zero layout shift
+            shortcutField
+                .onAppear { if isRecording { startLocalMonitor() } }
+                .onChange(of: isRecording) { _, recording in
+                    if recording { startLocalMonitor() } else { stopLocalMonitor() }
                 }
-                .buttonStyle(.borderless)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            } else if let shortcut {
-                HStack(spacing: 4) {
-                    if showRecorded {
-                        Label(String(localized: "Recorded"), systemImage: "checkmark.circle.fill")
-                            .font(.system(.caption, design: .rounded).weight(.medium))
-                            .foregroundStyle(.green)
-                            .transition(.opacity)
-                    } else {
-                        Text(shortcut.displayString)
-                            .font(.system(.caption, design: .rounded).weight(.medium))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
-                            .transition(.opacity)
-                    }
-
-                    Button {
-                        manager.removeShortcut(for: transform)
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .animation(.easeInOut(duration: 0.2), value: showRecorded)
-                .onTapGesture {
-                    isRecording = true
-                }
-            } else {
-                Button(String(localized: "Record Shortcut")) {
-                    isRecording = true
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-            }
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 4)
+    }
+
+    private var shortcutField: some View {
+        HStack(spacing: 0) {
+            ZStack {
+                if isRecording {
+                    Text(String(localized: "Type shortcut…"))
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .transition(.blurReplace)
+                } else if showRecorded {
+                    Label(String(localized: "Recorded"), systemImage: "checkmark.circle.fill")
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundStyle(.green)
+                        .transition(.blurReplace)
+                } else if let shortcut {
+                    Text(shortcut.displayString)
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundStyle(.primary)
+                        .transition(.blurReplace)
+                } else {
+                    Text(String(localized: "Record Shortcut"))
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .transition(.blurReplace)
+                }
+            }
+            .animation(.easeInOut(duration: 0.15), value: isRecording)
+            .animation(.easeInOut(duration: 0.15), value: showRecorded)
+            .animation(.easeInOut(duration: 0.15), value: shortcut == nil)
+            .padding(.horizontal, 8)
+
+            if shortcut != nil && !isRecording && !showRecorded {
+                Button {
+                    manager.removeShortcut(for: transform)
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 11))
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .padding(.trailing, 4)
+                .transition(.opacity)
+            }
+        }
+        .frame(minWidth: 120, minHeight: 24)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
+        .overlay(
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(isRecording ? Color.accentColor : .clear, lineWidth: 1.5)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if !isRecording {
+                isRecording = true
+            }
+        }
     }
 
     private func startLocalMonitor() {
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
 
-            // Escape cancels
             if event.keyCode == 53 {
                 stopRecording()
                 return nil
             }
 
-            // Require at least one modifier (not just shift)
             guard mods.contains(.command) || mods.contains(.control) || mods.contains(.option) else {
                 return event
             }
@@ -468,7 +499,7 @@ private struct ShortcutRow: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                 showRecorded = false
             }
-            return nil // consume the event
+            return nil
         }
     }
 
@@ -482,93 +513,6 @@ private struct ShortcutRow: View {
             NSEvent.removeMonitor(localMonitor)
         }
         localMonitor = nil
-    }
-}
-
-// MARK: - Services Tab
-
-private struct ServicesSettingsTab: View {
-    @AppStorage("enabledServices") private var enabledServicesData = Data()
-
-    private var enabledServices: Set<String> {
-        get {
-            (try? JSONDecoder().decode(Set<String>.self, from: enabledServicesData))
-                ?? Set(TransformationType.allCases.map(\.rawValue))
-        }
-    }
-
-    private func setEnabled(_ transform: TransformationType, enabled: Bool) {
-        var current = enabledServices
-        if enabled {
-            current.insert(transform.rawValue)
-        } else {
-            current.remove(transform.rawValue)
-        }
-        enabledServicesData = (try? JSONEncoder().encode(current)) ?? Data()
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(String(localized: "Services Menu"))
-                .font(.headline)
-
-            Text(String(localized: "Aleph Tools registers transformations in the system Services menu. Select text in any app, then use the app menu → Services → Aleph Tools."))
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            VStack(spacing: 0) {
-                ForEach(TransformationType.allCases) { t in
-                    HStack(spacing: 10) {
-                        Image(systemName: t.icon)
-                            .frame(width: 20)
-                            .foregroundStyle(.secondary)
-
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(t.localizedName)
-                                .font(.body.weight(.medium))
-                            Text(t.subtitle)
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
-
-                        Spacer()
-
-                        Toggle(t.localizedName, isOn: Binding(
-                            get: { enabledServices.contains(t.rawValue) },
-                            set: { setEnabled(t, enabled: $0) }
-                        ))
-                        .labelsHidden()
-                        .toggleStyle(.switch)
-                        .controlSize(.small)
-                    }
-                    .padding(.vertical, 6)
-                    .padding(.horizontal, 12)
-
-                    if t != TransformationType.allCases.last {
-                        Divider()
-                            .padding(.leading, 44)
-                    }
-                }
-            }
-            .padding(8)
-            .background(.background, in: RoundedRectangle(cornerRadius: 8))
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.separator, lineWidth: 0.5)
-            )
-
-            HStack(spacing: 6) {
-                Image(systemName: "info.circle")
-                    .foregroundStyle(.secondary)
-                Text(String(localized: "Services are registered when the app launches. Restart may be needed after changes."))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-        }
-        .padding(20)
     }
 }
 

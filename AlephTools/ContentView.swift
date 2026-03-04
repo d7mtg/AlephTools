@@ -83,7 +83,6 @@ struct ContentView: View {
     @StateObject private var outputHandle = OutputViewHandle()
     @StateObject private var niqqudGenerator = NiqqudGenerator()
     @StateObject private var scrollSync = ScrollSyncCoordinator()
-
     private var outputText: String {
         guard !inputText.isEmpty else { return "" }
         if selectedTransform == .addNiqqud {

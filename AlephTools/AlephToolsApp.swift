@@ -14,7 +14,6 @@ struct AlephToolsApp: App {
     @AppStorage("appearanceOverride") private var appearanceOverride = "system"
     @AppStorage("showInMenuBar") private var showInMenuBar = false
     @AppStorage("languageOverride") private var languageOverride = "system"
-
     init() {
         let lang = UserDefaults.standard.string(forKey: "languageOverride") ?? "system"
         if lang != "system" {
@@ -43,9 +42,11 @@ struct AlephToolsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .preferredColorScheme(colorScheme)
-                .optionalLocale(localeOverride)
+            WelcomeGate {
+                ContentView()
+            }
+            .preferredColorScheme(colorScheme)
+            .optionalLocale(localeOverride)
         }
         .windowStyle(.automatic)
         .windowToolbarStyle(.unified)
@@ -311,6 +312,31 @@ struct MenuBarContentView: View {
 }
 
 // MARK: - Locale Override Helper
+
+// MARK: - Welcome Gate
+
+struct WelcomeGate<Content: View>: View {
+    @ViewBuilder let content: Content
+    @AppStorage("hasSeenWelcome_2.0") private var hasSeenWelcome = false
+    @State private var showWelcome = false
+
+    var body: some View {
+        ZStack {
+            content
+        }
+        .onAppear {
+            showWelcome = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .showWelcomeSheet)) { _ in
+            showWelcome = true
+        }
+        .sheet(isPresented: $showWelcome) {
+            WelcomeSheet(onContinue: {
+                showWelcome = false
+            })
+        }
+    }
+}
 
 private extension View {
     @ViewBuilder
