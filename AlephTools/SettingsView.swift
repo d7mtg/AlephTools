@@ -363,7 +363,7 @@ private struct IntegrationsSettingsTab: View {
 
                 HStack(spacing: 16) {
                     Label(String(localized: "Services Menu"), systemImage: "contextualmenu.and.cursorarrow")
-                    Label(String(localized: "Shortcuts"), systemImage: "apple.shortcuts")
+                    Label(String(localized: "Shortcuts"), systemImage: "command")
                     Label(String(localized: "Siri"), systemImage: "siri")
                 }
                 .font(.caption)
@@ -515,10 +515,141 @@ private struct ShortcutRow: View {
     }
 }
 
+// MARK: - Confetti Particle
+
+private struct ConfettiParticle: Identifiable {
+    let id = UUID()
+    let letter: String
+    let color: Color
+    let fontSize: CGFloat
+    let burstX: CGFloat
+    let burstY: CGFloat
+    let rotation: Double
+    let gravityY: CGFloat = 180
+}
+
+private let confettiColors: [Color] = ConfettiData.colorComponents.map {
+    Color(red: $0.r, green: $0.g, blue: $0.b)
+}
+
+// MARK: - Confetti Batch State
+
+private enum ConfettiPhase {
+    case idle      // at center, fully visible
+    case burst     // flying outward
+    case gravity   // falling + fading
+}
+
+private struct ConfettiBatch: Identifiable {
+    let id = UUID()
+    let particles: [ConfettiParticle]
+    var phase: ConfettiPhase = .idle
+}
+
+// MARK: - Single Particle View
+
+private struct ConfettiParticleView: View {
+    let particle: ConfettiParticle
+    let phase: ConfettiPhase
+
+    var body: some View {
+        Text(particle.letter)
+            .font(.system(size: particle.fontSize, weight: .bold))
+            .foregroundStyle(particle.color)
+            .offset(x: offsetX, y: offsetY)
+            .rotationEffect(.degrees(phase == .idle ? 0 : particle.rotation * 60))
+            .opacity(phase == .gravity ? 0 : 1)
+            .scaleEffect(phase == .gravity ? 0.3 : 1)
+    }
+
+    private var offsetX: CGFloat {
+        phase == .idle ? 0 : particle.burstX
+    }
+
+    private var offsetY: CGFloat {
+        switch phase {
+        case .idle: return 0
+        case .burst: return particle.burstY
+        case .gravity: return particle.burstY + particle.gravityY
+        }
+    }
+}
+
+// MARK: - Click & Hold Gesture (AppKit — works reliably for press-and-hold)
+
+private struct ClickAndHoldView: NSViewRepresentable {
+    let onTap: () -> Void
+    let onHoldTick: () -> Void
+    let onHoldEnd: () -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        let click = NSClickGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.clicked(_:)))
+        let press = NSPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.pressed(_:)))
+        press.minimumPressDuration = 0.25
+        view.addGestureRecognizer(click)
+        view.addGestureRecognizer(press)
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(onTap: onTap, onHoldTick: onHoldTick, onHoldEnd: onHoldEnd) }
+
+    class Coordinator: NSObject {
+        let onTap: () -> Void
+        let onHoldTick: () -> Void
+        let onHoldEnd: () -> Void
+        private var timer: Timer?
+        private var interval: TimeInterval = 0.15
+
+        init(onTap: @escaping () -> Void, onHoldTick: @escaping () -> Void, onHoldEnd: @escaping () -> Void) {
+            self.onTap = onTap
+            self.onHoldTick = onHoldTick
+            self.onHoldEnd = onHoldEnd
+        }
+
+        @objc func clicked(_ g: NSClickGestureRecognizer) {
+            onTap()
+        }
+
+        @objc func pressed(_ g: NSPressGestureRecognizer) {
+            switch g.state {
+            case .began:
+                interval = 0.15
+                onHoldTick()
+                startTimer()
+            case .ended, .cancelled, .failed:
+                stopTimer()
+                onHoldEnd()
+            default: break
+            }
+        }
+
+        private func startTimer() {
+            stopTimer()
+            timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+                guard let self else { return }
+                self.onHoldTick()
+                self.interval = max(0.04, self.interval * 0.85)
+                self.startTimer()
+            }
+        }
+
+        private func stopTimer() {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+}
+
 // MARK: - About Tab
 
 private struct AboutSettingsTab: View {
     @Environment(\.openWindow) private var openWindow
+    @State private var iconScale = 1.0
+    @State private var iconAngle = 0.0
+    @State private var batches: [ConfettiBatch] = []
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -532,9 +663,30 @@ private struct AboutSettingsTab: View {
         VStack(spacing: 0) {
             // App identity
             VStack(spacing: 12) {
-                Image(nsImage: NSApp.applicationIconImage)
+                Image("AboutIcon")
                     .resizable()
                     .frame(width: 80, height: 80)
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .shadow(color: .primary.opacity(0.15), radius: 12, y: 6)
+                    .scaleEffect(iconScale)
+                    .rotationEffect(.degrees(iconAngle))
+                    .overlay {
+                        ZStack {
+                            ForEach(batches) { batch in
+                                ForEach(batch.particles) { p in
+                                    ConfettiParticleView(particle: p, phase: batch.phase)
+                                }
+                            }
+                        }
+                        .allowsHitTesting(false)
+                    }
+                    .overlay {
+                        ClickAndHoldView(
+                            onTap: { fireConfetti(withHaptics: true) },
+                            onHoldTick: { fireConfetti(withHaptics: true) },
+                            onHoldEnd: {}
+                        )
+                    }
 
                 VStack(spacing: 2) {
                     Text(String(localized: "Aleph Tools"))
@@ -648,6 +800,68 @@ private struct AboutSettingsTab: View {
         }
         .frame(maxWidth: .infinity)
     }
+
+    private func fireConfetti(withHaptics: Bool) {
+        let count = Int.random(in: 20...30)
+        let particles = (0..<count).map { _ in
+            let angle = CGFloat.random(in: 0 ... .pi * 2)
+            let distance = CGFloat.random(in: 100...280)
+            return ConfettiParticle(
+                letter: ConfettiData.letters.randomElement()!,
+                color: confettiColors.randomElement()!,
+                fontSize: CGFloat.random(in: 14...28),
+                burstX: cos(angle) * distance,
+                burstY: sin(angle) * distance - 100,
+                rotation: Double.random(in: -3...3)
+            )
+        }
+        let batch = ConfettiBatch(particles: particles)
+        let batchID = batch.id
+        batches.append(batch)
+
+        // Phase 1: burst outward
+        DispatchQueue.main.async {
+            withAnimation(.easeOut(duration: 0.6)) {
+                if let i = batches.firstIndex(where: { $0.id == batchID }) {
+                    batches[i].phase = .burst
+                }
+            }
+        }
+
+        // Phase 2: gravity fall + fade
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            withAnimation(.easeIn(duration: 0.5)) {
+                if let i = batches.firstIndex(where: { $0.id == batchID }) {
+                    batches[i].phase = .gravity
+                }
+            }
+        }
+
+        // Clean up
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            batches.removeAll { $0.id == batchID }
+        }
+
+        // Icon squish + bounce
+        iconScale = 0.75
+        iconAngle = Double.random(in: -8...8)
+        withAnimation(.spring(duration: 0.5, bounce: 0.6)) {
+            iconScale = 1.0
+            iconAngle = 0
+        }
+
+        // Trackpad haptics — varied intensity like iOS
+        if withHaptics {
+            NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .now)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+                NSHapticFeedbackManager.defaultPerformer.perform(.levelChange, performanceTime: .now)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.14) {
+                NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+            }
+        }
+    }
+
 
     private func aboutRow(icon: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {

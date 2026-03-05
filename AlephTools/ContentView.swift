@@ -260,6 +260,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .frame(height: 22)
                 .disabled(NSPasteboard.general.string(forType: .string) == nil)
                 .help(String(localized: "Paste from clipboard"))
                 .accessibilityLabel(String(localized: "Paste from clipboard"))
@@ -276,6 +277,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .frame(height: 22)
                 .disabled(inputText.isEmpty)
                 .help(String(localized: "Clear input"))
                 .accessibilityLabel(String(localized: "Clear input"))

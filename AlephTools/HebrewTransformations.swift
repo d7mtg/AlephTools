@@ -438,3 +438,23 @@ struct ChangeStats {
         }
     }
 }
+
+// MARK: - Confetti Data (shared across platforms)
+
+enum ConfettiData {
+    static let letters: [String] = [
+        "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ", "ק", "ר", "ש", "ת",
+        "A", "B", "C", "D", "E", "F", "G", "H",
+        "\u{05B0}", "\u{05B4}", "\u{05B5}", "\u{05B7}", "\u{05B8}", "\u{05B9}", "\u{05BB}", "\u{05BC}",
+        "\u{10900}", "\u{10901}", "\u{10902}", "\u{10903}", "\u{10904}", "\u{10905}",
+    ]
+
+    static let colorComponents: [(r: Double, g: Double, b: Double)] = [
+        (0x61/255.0, 0xBB/255.0, 0x46/255.0), // green
+        (0xFD/255.0, 0xB8/255.0, 0x27/255.0), // yellow
+        (0xF5/255.0, 0x82/255.0, 0x1F/255.0), // orange
+        (0xE0/255.0, 0x3A/255.0, 0x3E/255.0), // red
+        (0x96/255.0, 0x3D/255.0, 0x97/255.0), // purple
+        (0x00/255.0, 0x9D/255.0, 0xDC/255.0), // blue
+    ]
+}

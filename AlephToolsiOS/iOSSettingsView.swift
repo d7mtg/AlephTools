@@ -131,21 +131,9 @@ struct iOSSettingsView: View {
 // MARK: - Confetti Burst (UIKit overlay — escapes all SwiftUI clipping)
 
 private enum LetterConfetti {
-    static let letters: [String] = [
-        "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ", "ק", "ר", "ש", "ת",
-        "A", "B", "C", "D", "E", "F", "G", "H",
-        "\u{05B0}", "\u{05B4}", "\u{05B5}", "\u{05B7}", "\u{05B8}", "\u{05B9}", "\u{05BB}", "\u{05BC}",
-        "\u{10900}", "\u{10901}", "\u{10902}", "\u{10903}", "\u{10904}", "\u{10905}",
-    ]
-
-    static let colors: [UIColor] = [
-        UIColor(red: 0x61/255, green: 0xBB/255, blue: 0x46/255, alpha: 1), // green
-        UIColor(red: 0xFD/255, green: 0xB8/255, blue: 0x27/255, alpha: 1), // yellow
-        UIColor(red: 0xF5/255, green: 0x82/255, blue: 0x1F/255, alpha: 1), // orange
-        UIColor(red: 0xE0/255, green: 0x3A/255, blue: 0x3E/255, alpha: 1), // red
-        UIColor(red: 0x96/255, green: 0x3D/255, blue: 0x97/255, alpha: 1), // purple
-        UIColor(red: 0x00/255, green: 0x9D/255, blue: 0xDC/255, alpha: 1), // blue
-    ]
+    static let colors: [UIColor] = ConfettiData.colorComponents.map {
+        UIColor(red: $0.r, green: $0.g, blue: $0.b, alpha: 1)
+    }
 
     /// Spray letter confetti from a point in screen coordinates using plain UIView animation.
     static func spray(from point: CGPoint) {
@@ -156,7 +144,7 @@ private enum LetterConfetti {
         var labels: [UILabel] = []
 
         for _ in 0..<count {
-            let letter = letters.randomElement()!
+            let letter = ConfettiData.letters.randomElement()!
             let color = colors.randomElement()!
             let fontSize = CGFloat.random(in: 22...38)
 
