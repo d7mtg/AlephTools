@@ -325,13 +325,16 @@ struct WelcomeGate<Content: View>: View {
             content
         }
         .onAppear {
-            showWelcome = true
+            if !hasSeenWelcome {
+                showWelcome = true
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .showWelcomeSheet)) { _ in
             showWelcome = true
         }
         .sheet(isPresented: $showWelcome) {
             WelcomeSheet(onContinue: {
+                hasSeenWelcome = true
                 showWelcome = false
             })
         }

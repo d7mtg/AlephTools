@@ -83,6 +83,14 @@ struct ContentView: View {
     @StateObject private var outputHandle = OutputViewHandle()
     @StateObject private var niqqudGenerator = NiqqudGenerator()
     @StateObject private var scrollSync = ScrollSyncCoordinator()
+
+    private static let gematriaFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.groupingSeparator = ","
+        return f
+    }()
+
     private var outputText: String {
         guard !inputText.isEmpty else { return "" }
         if selectedTransform == .addNiqqud {
@@ -103,6 +111,49 @@ struct ContentView: View {
     }
 
     var body: some View {
+        mainContent
+            .onAppear {
+                if let lastRaw = UserDefaults.standard.string(forKey: "lastUsedTransform"),
+                   let last = TransformationType.allCases.first(where: { $0.rawValue == lastRaw }) {
+                    selectedTransform = last
+                } else if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
+                    selectedTransform = saved
+                }
+            }
+            .onChange(of: selectedTransform) { _, newValue in
+                UserDefaults.standard.set(newValue.rawValue, forKey: "lastUsedTransform")
+                if newValue == .addNiqqud {
+                    niqqudGenerator.generate(from: inputText)
+                } else {
+                    niqqudGenerator.cancel()
+                }
+            }
+            .onChange(of: inputText) { _, newValue in
+                if selectedTransform == .addNiqqud {
+                    niqqudGenerator.generate(from: newValue)
+                }
+            }
+            .userActivity(handoffActivityType) { activity in
+                activity.isEligibleForHandoff = true
+                activity.title = "Aleph Tools — \(selectedTransform.localizedName)"
+                activity.userInfo = [
+                    "inputText": inputText,
+                    "transformationType": selectedTransform.rawValue,
+                    "keepPunctuation": keepPunctuation,
+                ]
+            }
+            .onContinueUserActivity(handoffActivityType) { activity in
+                guard let info = activity.userInfo else { return }
+                if let text = info["inputText"] as? String { inputText = text }
+                if let rawTransform = info["transformationType"] as? String,
+                   let transform = TransformationType.allCases.first(where: { $0.rawValue == rawTransform }) {
+                    selectedTransform = transform
+                }
+                if let punc = info["keepPunctuation"] as? Bool { keepPunctuation = punc }
+            }
+    }
+
+    private var mainContent: some View {
         HSplitView {
             inputPanel
             outputPanel
@@ -110,14 +161,6 @@ struct ContentView: View {
         .frame(minWidth: 640, minHeight: 400)
         .navigationTitle(String(localized: "Aleph Tools"))
         .toolbar { toolbarContent }
-        .overlay(alignment: .bottom) {
-            if showCopiedToast {
-                copiedToast
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .padding(.bottom, 16)
-            }
-        }
-        .animation(.easeInOut(duration: 0.2), value: showCopiedToast)
         .focusedSceneValue(\.selectedTransform, $selectedTransform)
         .focusedSceneValue(\.inputText, $inputText)
         .focusedSceneValue(\.outputText, outputText)
@@ -125,50 +168,6 @@ struct ContentView: View {
         .focusedSceneValue(\.editorCommand, editorCommand)
         .focusedSceneValue(\.printHandle, outputHandle)
         .focusedSceneValue(\.editorFontSize, $editorFontSize)
-        .onAppear {
-            // Restore last used transform, falling back to default
-            if let lastRaw = UserDefaults.standard.string(forKey: "lastUsedTransform"),
-               let last = TransformationType.allCases.first(where: { $0.rawValue == lastRaw }) {
-                selectedTransform = last
-            } else if let saved = TransformationType.allCases.first(where: { $0.rawValue == defaultTransformRaw }) {
-                selectedTransform = saved
-            }
-        }
-        .onChange(of: selectedTransform) { _, newValue in
-            UserDefaults.standard.set(newValue.rawValue, forKey: "lastUsedTransform")
-            if newValue == .addNiqqud {
-                niqqudGenerator.generate(from: inputText)
-            } else {
-                niqqudGenerator.cancel()
-            }
-        }
-        .onChange(of: inputText) { _, newValue in
-            if selectedTransform == .addNiqqud {
-                niqqudGenerator.generate(from: newValue)
-            }
-        }
-        .userActivity(handoffActivityType) { activity in
-            activity.isEligibleForHandoff = true
-            activity.title = "Aleph Tools — \(selectedTransform.localizedName)"
-            activity.userInfo = [
-                "inputText": inputText,
-                "transformationType": selectedTransform.rawValue,
-                "keepPunctuation": keepPunctuation,
-            ]
-        }
-        .onContinueUserActivity(handoffActivityType) { activity in
-            guard let info = activity.userInfo else { return }
-            if let text = info["inputText"] as? String {
-                inputText = text
-            }
-            if let rawTransform = info["transformationType"] as? String,
-               let transform = TransformationType.allCases.first(where: { $0.rawValue == rawTransform }) {
-                selectedTransform = transform
-            }
-            if let punc = info["keepPunctuation"] as? Bool {
-                keepPunctuation = punc
-            }
-        }
     }
 
     // MARK: - Toolbar
@@ -319,14 +318,18 @@ struct ContentView: View {
                     copyToClipboard()
                 } label: {
                     HStack(spacing: 4) {
-                        Image(systemName: "doc.on.doc")
-                        Text(String(localized: "Copy"))
+                        Image(systemName: showCopiedToast ? "checkmark" : "doc.on.doc")
+                            .contentTransition(.symbolEffect(.replace.byLayer.downUp))
+                        Text(showCopiedToast ? String(localized: "Copied") : String(localized: "Copy"))
+                            .contentTransition(.numericText())
                     }
                     .font(.caption.weight(.medium))
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .disabled(outputText.isEmpty)
+                .tint(showCopiedToast ? .green : nil)
+                .frame(width: 70, height: 22)
+                .disabled(outputText.isEmpty && !showCopiedToast)
                 .accessibilityLabel(String(localized: "Copy output"))
                 .accessibilityHint(String(localized: "Copies the transformed text to clipboard"))
             }
@@ -353,10 +356,7 @@ struct ContentView: View {
 
     private var formattedGematria: String {
         guard let number = Int(outputText) else { return outputText }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        return formatter.string(from: NSNumber(value: number)) ?? outputText
+        return Self.gematriaFormatter.string(from: NSNumber(value: number)) ?? outputText
     }
 
     private var gematriaOutput: some View {
@@ -442,16 +442,6 @@ struct ContentView: View {
         .fixedSize()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(statsAccessibilityLabel)
-    }
-
-    // MARK: - Toast
-
-    private var copiedToast: some View {
-        Label(String(localized: "Copied"), systemImage: "checkmark")
-            .font(.caption.weight(.medium))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(.ultraThinMaterial, in: Capsule())
     }
 
     // MARK: - Actions

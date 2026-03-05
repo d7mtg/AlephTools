@@ -320,6 +320,7 @@ struct LineNumberOutputView: NSViewRepresentable {
 
     class OutputCoordinator {
         var boundsObserver: NSObjectProtocol?
+        var lastFont: NSFont?
 
         deinit {
             if let boundsObserver {
@@ -358,6 +359,7 @@ struct LineNumberOutputView: NSViewRepresentable {
 
         scrollView.documentView = textView
         textView.textStorage?.setAttributedString(highlightedOutput(text: text, inputText: inputText, font: font))
+        context.coordinator.lastFont = font
 
         scrollSync?.register(scrollView)
 
@@ -379,8 +381,12 @@ struct LineNumberOutputView: NSViewRepresentable {
 
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         guard let textView = scrollView.documentView as? NSTextView else { return }
-        if textView.string != text {
+        if textView.string != text || context.coordinator.lastFont != font {
             textView.textStorage?.setAttributedString(highlightedOutput(text: text, inputText: inputText, font: font))
+            context.coordinator.lastFont = font
+            if let ruler = scrollView.verticalRulerView as? LineNumberRulerView {
+                ruler.font = font
+            }
         }
         scrollView.verticalRulerView?.needsDisplay = true
 

@@ -44,6 +44,18 @@ extension Notification.Name {
     static let showWelcomeSheet = Notification.Name("showWelcomeSheet")
 }
 
+#if os(iOS)
+extension Bundle {
+    var icon: UIImage? {
+        guard let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
+              let primary = icons["CFBundlePrimaryIcon"] as? [String: Any],
+              let files = primary["CFBundleIconFiles"] as? [String],
+              let name = files.last else { return nil }
+        return UIImage(named: name)
+    }
+}
+#endif
+
 // MARK: - Welcome Sheet
 
 struct WelcomeSheet: View {
@@ -178,8 +190,6 @@ struct WelcomeSheet: View {
         }
         .buttonStyle(.borderedProminent)
         .controlSize(.large)
-        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: currentStep)
-        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: isKeyboardInstalled)
     }
     #endif
 
@@ -188,11 +198,19 @@ struct WelcomeSheet: View {
     private var welcomePage: some View {
         VStack(alignment: .leading, spacing: 0) {
             #if os(iOS)
-            Image("AppIcon")
-                .resizable()
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
-                .padding(.top, 32)
+            Group {
+                if let icon = UIImage(named: "AppIcon60x60") ?? UIImage(named: "AppIcon") ?? Bundle.main.icon {
+                    Image(uiImage: icon)
+                        .resizable()
+                } else {
+                    Image(systemName: "app.fill")
+                        .resizable()
+                        .foregroundStyle(.accent)
+                }
+            }
+            .frame(width: 64, height: 64)
+            .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .padding(.top, 32)
             #else
             Image(nsImage: NSApp.applicationIconImage)
                 .resizable()

@@ -282,7 +282,7 @@ struct AppearanceThumbnail: View {
 // MARK: - Integrations Tab
 
 private struct IntegrationsSettingsTab: View {
-    @StateObject private var shortcutManager = GlobalShortcutManager.shared
+    @ObservedObject private var shortcutManager = GlobalShortcutManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -308,7 +308,7 @@ private struct IntegrationsSettingsTab: View {
                     }
                     Spacer()
                     Button(String(localized: "Open Settings")) {
-                        let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
+                        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue(): true] as CFDictionary
                         AXIsProcessTrustedWithOptions(options)
                     }
                     .buttonStyle(.bordered)
@@ -439,9 +439,6 @@ private struct ShortcutRow: View {
                         .transition(.blurReplace)
                 }
             }
-            .animation(.easeInOut(duration: 0.15), value: isRecording)
-            .animation(.easeInOut(duration: 0.15), value: showRecorded)
-            .animation(.easeInOut(duration: 0.15), value: shortcut == nil)
             .padding(.horizontal, 8)
 
             if shortcut != nil && !isRecording && !showRecorded {
@@ -467,7 +464,7 @@ private struct ShortcutRow: View {
         .contentShape(Rectangle())
         .onTapGesture {
             if !isRecording {
-                isRecording = true
+                withAnimation(.easeInOut(duration: 0.15)) { isRecording = true }
             }
         }
     }
@@ -494,10 +491,12 @@ private struct ShortcutRow: View {
                 modifiers: mods.rawValue
             )
             manager.setShortcut(recorded, for: transform)
-            stopRecording()
-            showRecorded = true
+            withAnimation(.easeInOut(duration: 0.15)) {
+                stopRecording()
+                showRecorded = true
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                showRecorded = false
+                withAnimation(.easeInOut(duration: 0.15)) { showRecorded = false }
             }
             return nil
         }

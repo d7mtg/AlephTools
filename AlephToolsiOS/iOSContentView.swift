@@ -1,6 +1,26 @@
 import SwiftUI
 import UIKit
 
+private extension View {
+    @ViewBuilder
+    func glassCard(cornerRadius: CGFloat = 20) -> some View {
+        if #available(iOS 26, *) {
+            self.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+        } else {
+            self.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius))
+        }
+    }
+
+    @ViewBuilder
+    func glassCapsule() -> some View {
+        if #available(iOS 26, *) {
+            self.glassEffect(.regular, in: .capsule)
+        } else {
+            self.background(.ultraThinMaterial, in: Capsule())
+        }
+    }
+}
+
 struct iOSContentView: View {
     @State private var inputText = ""
     @AppStorage("defaultTransform") private var defaultTransformRaw = TransformationType.hebrewKeyboard.rawValue
@@ -15,6 +35,13 @@ struct iOSContentView: View {
     @FocusState private var isInputFocused: Bool
     @Environment(\.horizontalSizeClass) private var sizeClass
     @StateObject private var niqqudGenerator = NiqqudGenerator()
+
+    private static let gematriaFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.groupingSeparator = ","
+        return f
+    }()
 
     private var outputText: String {
         guard !inputText.isEmpty else { return "" }
@@ -116,7 +143,6 @@ struct iOSContentView: View {
         }
         .padding(.horizontal, 16)
         .padding(.bottom, 8)
-        .scrollDismissesKeyboard(.interactively)
         .background(Color(.systemGroupedBackground))
     }
 
@@ -198,7 +224,7 @@ struct iOSContentView: View {
             .padding(.horizontal, 12)
             .padding(.bottom, 12)
         }
-        .glassEffect(.regular, in: .rect(cornerRadius: 20))
+        .glassCard()
     }
 
     // MARK: - Transform Pill
@@ -271,7 +297,7 @@ struct iOSContentView: View {
         .geometryGroup()
         .animation(.smooth, value: selectedTransform.supportsPunctuationToggle)
         .animation(.smooth, value: selectedTransform.supportsSquareOptions)
-        .glassEffect(.regular, in: .capsule)
+        .glassCapsule()
     }
 
     // MARK: - Output Card
@@ -325,7 +351,7 @@ struct iOSContentView: View {
                 }
             }
         }
-        .glassEffect(.regular, in: .rect(cornerRadius: 20))
+        .glassCard()
         .animation(.smooth, value: selectedTransform)
     }
 
@@ -333,10 +359,7 @@ struct iOSContentView: View {
 
     private var formattedGematria: String {
         guard let number = Int(outputText) else { return outputText }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        return formatter.string(from: NSNumber(value: number)) ?? outputText
+        return Self.gematriaFormatter.string(from: NSNumber(value: number)) ?? outputText
     }
 
     private var gematriaDisplay: some View {
@@ -428,7 +451,7 @@ struct iOSContentView: View {
             .font(.subheadline.weight(.medium))
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
-            .glassEffect(.regular, in: .capsule)
+            .glassCapsule()
     }
 
     // MARK: - Toolbar
